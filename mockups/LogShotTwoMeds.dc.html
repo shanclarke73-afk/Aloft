@@ -18,9 +18,11 @@ a{color:#237A85}a:hover{color:#1B5F67}
 .pick.on{border-color:#1D3557;background:#EEF6F7}
 .seg{flex:1;height:38px;border:none;border-radius:10px;font:600 14px Inter,sans-serif;color:#5B6878;background:transparent}
 .seg.on{background:#FFFFFF;color:#12263A;box-shadow:0 1px 3px rgba(18,38,58,.12)}
+.rng{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;margin:0;background:linear-gradient(#E07A4F,#E07A4F) 0/0% 100% no-repeat,#E3E8EF}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:2px solid #E07A4F;box-shadow:0 1px 3px rgba(18,38,58,.2)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 52px 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 46px 20px 16px; display: flex; flex-direction: column; gap: 10px">
   <div style="display: flex; align-items: center; justify-content: space-between">
     <a href="MainTwoMeds.dc.html" style="font-size: 16px; text-decoration: none; padding: 12px 0">Cancel</a>
     <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-weight: 700; font-size: 17px">Log shot</span>
@@ -48,11 +50,11 @@ a{color:#237A85}a:hover{color:#1B5F67}
     </div>
     <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px">
       <label for="amt" style="position: absolute; left: -9999px">Amount in mg</label>
-      <input id="amt" value="5" inputmode="decimal" style="width: 110px; border: none; background: transparent; text-align: right; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 60px; font-weight: 800; color: #12263A; padding: 0">
+      <input id="amt" value="5" inputmode="decimal" style="width: 110px; border: none; background: transparent; text-align: right; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 52px; font-weight: 800; color: #12263A; padding: 0">
       <span style="font-size: 22px; font-weight: 600; color: #5B6878">mg</span>
     </div>
     <div style="background: #E4F1F2; border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px">
-      <span style="font-size: 15px; font-weight: 700; color: #1B5F67">= 0.5 mL tirzepatide (Zepbound 5 mg pen)</span>
+      <span style="font-size: 15px; font-weight: 700; color: #1B5F67">= 0.5 mL tirzepatide (5 mg pen)</span>
       <span style="font-size: 12px; color: #4A5A6B">Single-dose pen · 3 left after this</span>
     </div>
     <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #1E6B3C; font-weight: 600">
@@ -62,7 +64,7 @@ a{color:#237A85}a:hover{color:#1B5F67}
   </div>
 
   <div class="card" style="display: flex; gap: 14px; align-items: center">
-    <svg width="100" height="160" viewBox="0 0 110 170" fill="none" role="img" aria-label="Body map: NAD+ in left thigh this morning, suggested Zepbound site lower right abdomen">
+    <svg width="88" height="136" viewBox="0 0 110 170" fill="none" role="img" aria-label="Body map: NAD+ in left thigh this morning, suggested Zepbound site lower right abdomen">
       <circle cx="55" cy="18" r="13" stroke="#B7C3D0" stroke-width="1.6"/>
       <path d="M32 38 Q55 30 78 38 L86 92 L80 94 L76 62 L74 110 L80 166 L64 166 L57 116 L53 116 L46 166 L30 166 L36 110 L34 62 L30 94 L24 92 Z" stroke="#B7C3D0" stroke-width="1.6" stroke-linejoin="round"/>
       <circle cx="47" cy="84" r="5" fill="#CBD5E0"/>
@@ -85,9 +87,16 @@ a{color:#237A85}a:hover{color:#1B5F67}
     </div>
   </div>
 
-  <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 4px 16px; min-height: 52px">
-    <span style="font-size: 15px">When</span>
-    <button style="border: none; background: none; font: 600 15px Inter, sans-serif; color: #237A85; padding: 12px 0">Today, 8:04 PM</button>
+  <div class="card" style="display: flex; flex-direction: column; padding: 2px 16px">
+    <div style="display: flex; justify-content: space-between; align-items: center; min-height: 46px; border-bottom: 1px solid #EEF2F6">
+      <span style="font-size: 15px">When</span>
+      <button style="border: none; background: none; font: 600 15px Inter, sans-serif; color: #237A85; padding: 12px 0">Today, 8:04 PM</button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; min-height: 48px">
+      <label for="pain" style="font-size: 15px; white-space: nowrap">Pain</label>
+      <input id="pain" class="rng" type="range" min="0" max="10" step="1" value="0" aria-label="Injection pain, optional: 0 = none or not set, 10 = worst">
+      <span style="font: 600 15px Inter, sans-serif; color: #8C9BAB; width: 42px; text-align: right">0/10</span>
+    </div>
   </div>
 
   <span style="font-size: 12px; color: #5B6878; text-align: center; line-height: 1.4">Aloft converts what your label says. It never suggests a dose.</span>

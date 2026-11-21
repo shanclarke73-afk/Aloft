@@ -17,16 +17,17 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
-   Still needed: an export with side effects filled in, to confirm that column format. Keep real exports out of git
+   Side-effect values are 1–10 whole numbers (confirmed Nov 21). Keep real exports out of git
    (`samples/` is git-ignored). General CSV import moved to Release 1.5.
 2. Done: app screens use the icon's navy + teal palette (icon: Summit trail, files in [brand/](brand/)).
 3. All 1.0 screens are mocked up, including Settings, My medications, side effects, edit/delete, late shot, day 1
-   and the lock screen. Widgets (Release 1.5) when wanted; decide which widgets are free vs Pro.
+   and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, bundle ID, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
 6. Start 1.0 build step 1 (Flutter project + database + app lock) on the Mac mini.
 
 ## Not done / not verified
 - No trademark check, no code yet.
-- Shotsy's side-effect and pain-level column formats are unconfirmed (the sample export had none filled in).
+- Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that
+  starts at 0, in Shotsy and in Aloft.
 - Drug half-life/Tmax defaults in the spec must be checked against prescribing information before release.

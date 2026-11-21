@@ -17,11 +17,11 @@ Examples below are made up and only show the format.
 | `Time` | `20:40` | 24-hour local time of the shot. Empty when no shot. |
 | `Site` | `Left Thigh`, `Stomach - Upper Right` | Injection site (values below) |
 | `Shot Notes` | free text | Note on the shot |
-| `Pain Level` | `0` | Injection pain. Only `0` seen so far, so the scale's maximum is unknown. |
+| `Pain Level` | `0` | Injection pain from Shotsy's **0–10 slider**, whole numbers (confirmed in the Shotsy app, Nov 21). `0` = slider not touched (every shot in the sample). |
 | `Recorded Weight (lbs)` | `187.80` | Weight in pounds, 2 decimals. Empty when not weighed. Can appear on shot rows too. |
 | `Calories`, `Protein`, `Water` | | Food and water tracking (Aloft doesn't track these) |
 | `Day Notes` | `felt great today ` | Free-text note for the day (may have trailing spaces) |
-| 15 symptom columns | | `Nausea, Heartburn, Food Noise, Suppressed Appetite, Constipation, Diarrhea, Belching, Injection Site Reaction, Mood Swings, Indigestion, Metallic Taste, Stomach Pain, Hair Loss, Fatigue, Migraine`. **All empty in the sample**, so the value format (severity number? yes/no?) is not confirmed yet. |
+| 15 symptom columns | | `Nausea, Heartburn, Food Noise, Suppressed Appetite, Constipation, Diarrhea, Belching, Injection Site Reaction, Mood Swings, Indigestion, Metallic Taste, Stomach Pain, Hair Loss, Fatigue, Migraine`. Severity as a **whole number 1–10** (confirmed in the Shotsy app, Nov 21); empty = not logged that day. All empty in the sample file. |
 
 Example (made up):
 ```
@@ -50,11 +50,12 @@ Date,Shot,Time,Site,Shot Notes,Pain Level,Recorded Weight (lbs),Calories,Protein
      For a compounded vial, optionally ask its strength (mg/mL) so units can be shown; otherwise store mg only
      and mark the shots "imported (mg only)".
    - Date + `Time` → local date-time. Site → mapping above. `Shot Notes` → dose note.
-     `Pain Level` → injection pain (store the number as-is).
+     `Pain Level` → injection pain: 0–10 kept as-is (Aloft's slider also starts at 0); empty → 0.
 3. **Weight** (when `Recorded Weight (lbs)` is not empty): weight entry on that date (no time; date-only),
    converted from lb. A row with both a shot and a weight creates both.
 4. **Day Notes** → a note on that date (trim spaces).
-5. **Symptoms** → side-effect entries on that date once the value format is confirmed (see open items).
+5. **Symptoms** → one side-effect entry per filled column on that date, severity 1–10 kept as-is (Aloft also uses
+   1–10, so nothing is lost). Non-numbers or values outside 1–10 become a note, not an error.
 6. **Calories / Protein / Water** → skipped (Aloft doesn't track food); the preview says how many were skipped.
 7. **Dose history**: dose changes found in the shots (e.g. 2.5 → 5 → 7.5 → 5 mg) become the medication's
    dose-change history, and the most recent dose becomes the usual dose (user confirms).
@@ -75,7 +76,9 @@ Date,Shot,Time,Site,Shot Notes,Pain Level,Recorded Weight (lbs),Calories,Protein
 - Re-importing the same file twice adds nothing
 
 ## Open items
-- [ ] Get a Shotsy export with **side effects** filled in to confirm the symptom value format.
-- [ ] Confirm the `Pain Level` scale (0–10?) and how Shotsy exports **brand vs compounded** medications and
+- [x] Symptom value format: whole numbers 1–10 (confirmed in the Shotsy app, Nov 21). A sample file with
+      symptoms filled in would still be nice for a unit test.
+- [x] `Pain Level` scale: 0–10 slider, 0 = not touched (confirmed Nov 21).
+- [ ] Confirm how Shotsy exports **brand vs compounded** medications and
       other drugs (semaglutide, pills, multiple medications).
 - [ ] Check whether Shotsy exports photos or measurements in another file.

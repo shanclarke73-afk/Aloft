@@ -104,7 +104,8 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 - `supplyId`, `takenAt`, `amountEntered` + `unitEntered` (units | mL | mg)
 - Calculated and stored at log time: `volumeMl`, `drugMg`, `additiveAmounts` (frozen so later edits to the supply
   don't rewrite history)
-- `injectionPain` (optional number; Shotsy exports a "Pain Level")
+- `injectionPain` (whole number 0–10, same as Shotsy's "Pain Level" slider; the slider starts at 0 and 0 means
+  none / not set)
 - `injectionSite` (abdomen upper/lower × left/middle/right, thigh L/R, **back of upper arm** L/R, buttock L/R, custom),
   `syringeType` (U-100 default). Body map shows front sites plus the back-of-arm sites (drawn dashed, since they're
   on the back); rotation spans **all** medications so two shots never land on the same spot.
@@ -117,7 +118,7 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 
 **SideEffect**: `occurredAt`, `type` (nausea, constipation, diarrhea, fatigue, headache / migraine, heartburn,
 indigestion, stomach pain, belching / sulfur burps, injection-site reaction, low appetite, food noise, mood swings,
-metallic taste, hair shedding, custom; covers every symptom Shotsy exports), `severity` 1–5, `medicationId`
+metallic taste, hair shedding, custom; covers every symptom Shotsy exports), `severity` 1–10 (same as Shotsy), `medicationId`
 (optional, "after which medication"), `notes`
 
 **PhotoSet**: `takenAt`, `weightAtTime` (linked if logged that day), `photos`: list of
@@ -250,7 +251,7 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - Optional goal weight and BMI (BMI shown only if the user enables it).
 
 ### 6.8 Side effects
-- Quick-log chips + severity 1–5 + notes.
+- Quick-log chips + severity 1–10 + notes.
 - Timeline view; overlay on the level chart (e.g. nausea vs. days after the shot).
 
 ### 6.9 Progress photos

@@ -349,6 +349,14 @@
       "w": 390,
       "x": 6110,
       "y": 3564
+    },
+    "Widgets.dc.html": {
+      "h": 760,
+      "radius": 24,
+      "title": "Widgets (Release 1.5): home screen + Lock Screen",
+      "w": 1600,
+      "x": -470,
+      "y": 6808
     }
   },
   "createdOnFiles": {
@@ -420,7 +428,8 @@
     "EditEntryDelete.dc.html",
     "TodayLate.dc.html",
     "TodayFirst.dc.html",
-    "LockScreen.dc.html"
+    "LockScreen.dc.html",
+    "Widgets.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
