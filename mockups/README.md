@@ -28,6 +28,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `History.dc.html` | History timeline |
 | `HistoryTwoMeds.dc.html` | History with two medications (color per medication, filter chips, Pro) |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
+| `ExportTwoMeds.dc.html` | Export & backup with two medications (choose medications for PDF/CSV, Pro) |
 | `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |
 | `canvas.json` | Canvas layout (positions of the screens) |
 

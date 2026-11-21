@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Export and backup with two medications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;background:#FFFFFF;border-top:1px solid #E3E8EF;display:flex;justify-content:space-around;padding-top:8px;box-sizing:border-box}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#5B6878;text-decoration:none;width:64px;min-height:44px}
+.tab:hover{color:#12263A}
+.tab.on{color:#2F6FA3;font-weight:600}
+.group{background:#FFFFFF;border-radius:18px;box-shadow:0 1px 2px rgba(18,38,58,.06);display:flex;flex-direction:column;overflow:hidden}
+.item{display:flex;align-items:center;gap:12px;padding:8px 14px;min-height:50px;border:none;border-bottom:1px solid #EEF2F6;background:#FFFFFF;text-align:left;font-family:Inter,sans-serif;color:#12263A;width:100%;box-sizing:border-box}
+.item:last-child{border-bottom:none}
+.fmt{width:46px;height:30px;border-radius:8px;background:#EEF2F6;color:#33475B;font:700 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0.3px}
+.free{font-size:11px;font-weight:700;color:#1E6B3C;background:#E7F3EC;padding:3px 8px;border-radius:999px}
+.pro{font-size:11px;font-weight:700;color:#FFFFFF;background:#12263A;padding:3px 8px;border-radius:999px;letter-spacing:0.4px}
+.sec{font-size:13px;font-weight:700;color:#4A5A6B;text-transform:uppercase;letter-spacing:0.4px;margin:2px 4px 0}
+.it{font-size:15px;font-weight:600}
+.is{font-size:12px;color:#5B6878}
+.mchip{height:34px;padding:0 12px;border-radius:999px;border:1.5px solid #1F5F8F;background:#F3F8FC;color:#12263A;font:600 13px Inter,sans-serif;display:flex;align-items:center;gap:6px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 56px 20px 100px; display: flex; flex-direction: column; gap: 9px">
+  <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 28px; font-weight: 800">Export &amp; backup</h1>
+
+  <div style="background: #FFFFFF; border-radius: 18px; box-shadow: 0 1px 2px rgba(18,38,58,.06); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 40px; height: 40px; border-radius: 12px; background: #E8F1F8; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6FA3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/><path d="M12 15v-4M10 13l2-2 2 2"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; flex-grow: 1">
+        <label for="autobk" style="font-size: 15px; font-weight: 700">Automatic backup</label>
+        <span style="font-size: 12px; color: #5B6878">To your iCloud · today, 8:05 PM · both medications</span>
+      </div>
+      <input id="autobk" type="checkbox" checked style="width: 22px; height: 22px; accent-color: #1F5F8F">
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <button style="height: 40px; border-radius: 12px; border: none; background: #1F5F8F; color: #FFFFFF; font: 700 14px Inter, sans-serif">Back up now</button>
+      <button style="height: 40px; border-radius: 12px; border: 1px solid #D5DDE6; background: #FFFFFF; color: #12263A; font: 700 14px Inter, sans-serif">Restore</button>
+    </div>
+  </div>
+
+  <span class="sec">Export</span>
+  <div class="group">
+    <div class="item" style="flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 14px">
+      <span style="font-size: 13px; font-weight: 600; color: #4A5A6B">Medications to include</span>
+      <div style="display: flex; gap: 8px" role="group" aria-label="Medications to include">
+        <button class="mchip" aria-pressed="true"><span style="width: 8px; height: 8px; border-radius: 4px; background: #2F6FA3"></span>Zepbound ✓</button>
+        <button class="mchip" aria-pressed="true"><span style="width: 8px; height: 8px; border-radius: 4px; background: #1E6B3C"></span>NAD+ ✓</button>
+      </div>
+    </div>
+    <button class="item"><span class="fmt">PDF</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">Report for your provider</span><span class="is">Each med's doses + side effects by medication</span></span><span class="pro">PRO</span></button>
+    <button class="item"><span class="fmt">CSV</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">Spreadsheets</span><span class="is">Shots file has a medication column</span></span><span class="pro">PRO</span></button>
+    <button class="item"><span class="fmt">ZIP</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">Full backup</span><span class="is">All data + photos · 378 MB</span></span><span class="free">FREE</span></button>
+    <button class="item"><span class="fmt">JSON</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">All data</span><span class="is">Everything except photos</span></span><span class="free">FREE</span></button>
+  </div>
+
+  <span class="sec">Import</span>
+  <div class="group">
+    <button class="item"><span class="fmt">ZIP</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">Restore from a backup file</span><span class="is">Also for moving between iPhone and Android</span></span></button>
+    <button class="item"><span class="fmt">CSV</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span class="it">From a spreadsheet or Shotsy</span><span class="is">Pick which medication each row belongs to</span></span><span class="free">FREE</span></button>
+  </div>
+
+  <nav class="tabs" aria-label="Main">
+    <a class="tab" href="MainTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</a>
+    <a class="tab" href="HistoryTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</a>
+    <a class="tab" href="PhotoCompareTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>Progress</a>
+    <a class="tab" href="ChartsTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8M20 16v-3"/></svg>Charts</a>
+    <a class="tab on" href="ExportTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>More</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
