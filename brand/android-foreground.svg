@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="432" height="432">
+  <title>Aloft Android adaptive icon, foreground layer (108dp canvas; flag and peak sit inside the 72dp visible area)</title>
+  <g transform="translate(4 14)">
+    <path d="M-4 104 L50 28 L104 104 Z" fill="#3E8E8A"/>
+    <path d="M50 28 L104 104 L60 104 Z" fill="#2F6F6C"/>
+    <path d="M30 104 Q44 90 38 78 Q32 66 48 58 Q58 52 51 42 L50 34" fill="none" stroke="#F4E3CC" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="0.5 6.2"/>
+    <path d="M50 28 V12" stroke="#F4EDE4" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M50 12 L63 16.5 L50 21 Z" fill="#E8956B"/>
+  </g>
+</svg>

@@ -41,5 +41,6 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 These are design references for the Flutter build, not app code. If the canvas changes, copy the files again so
 this folder stays in sync.
 
-Colors: ink `#12263A`, primary `#1F5F8F` / `#2F6FA3`, background `#F6F8FB`, accent peach `#E07A4F`,
+Colors (navy + teal, matching the app icon): ink `#12263A`, primary navy `#1D3557`, teal accent `#237A85`
+(dark `#1B5F67`, tint `#E4F1F2`), background `#F6F8FB`, accent peach `#E07A4F`,
 success `#1E6B3C`. Fonts: Plus Jakarta Sans (headings), Inter (body).

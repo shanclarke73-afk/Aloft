@@ -421,29 +421,60 @@ Takeaways:
 
 ---
 
-## 10. Out of scope for v1
+## 10. Out of scope for all three planned releases
 
 - Food, water, protein, calories, steps
 - Aloft accounts, live sync between devices (backup/restore only), sharing with a provider portal
-- Apple Watch / Wear OS, home-screen widgets (consider for v1.1)
 - AI (cloud) label scanning (possible opt-in later)
 - Community, coaching, content articles
 - Non-GLP-1 peptides as a focus (the "other" medication type allows them, but no marketing)
 
 ---
 
-## 11. Build plan (milestones)
+## 11. Releases and build plan
 
-1. **Foundation:** Flutter project, folder structure, drift database + encryption, settings, app lock, theme.
-2. **Medications + vials + dose math** (with unit tests for section 5) + shot logging + rotation.
-3. **Today screen, history, reminders, supply tracking.**
-4. **Weight, measurements, side effects, Health integration, charts, level chart.**
-5. **Progress photos:** capture with outline, import, gallery, compare.
-6. **Export/import + automatic backup:** JSON, backup zip, CSV, PDF; iCloud and Google Drive backup/restore, tested
-   on a second device.
-7. **Label scan** (needs real label photos).
-8. **Pro + RevenueCat**, store listings, privacy/terms pages, screenshots.
-9. **Testing:** own use for a few weeks (real shots), TestFlight + Play closed testing, then submit.
+Decided Nov 20, 2026. Goal: get 1.0 into the owner's hands quickly (the owner is switching from Shotsy), then two
+major releases.
+
+### Release 1.0, MVP: "Track it right"
+- Onboarding (all 6 steps; pen, compounded vial and pill paths), Today (incl. late/missed dose and first-day states),
+  quick-add menu
+- Log shot / log dose: units ⇄ mL ⇄ mg, added ingredients, site rotation incl. back of arm, typed doses only
+- Vial/pen/pill setup **typed in (no scanning yet)**, compounded medication picker, supply + reorder reminders
+- Per-medication schedules and reminders
+- Weight (manual + Apple Health / Health Connect), side effects
+- Progress photos: capture with outline, gallery, side-by-side compare
+- History (with edit/delete), medication level chart
+- **Import: Shotsy + any CSV** (column mapping, preview, duplicate check), plus backup zip / JSON restore.
+  **Moved into 1.0 at the owner's request** so her Shotsy history comes over on day one.
+- App lock, automatic iCloud / Google Drive backup + restore (tested on a second device), JSON + backup-zip export
+- Settings (units, lock, reminders, Manage subscription, Restore purchases, Delete all data, disclaimer, terms,
+  privacy, support) and My medications (change usual dose, finish/start vial, pause)
+- **Pro at launch** ($1.99/mo, $14.99/yr, $29.99 lifetime): second medication + PDF report for your provider
+
+### Release 1.5: "Smarter"
+- Label / prescription scanning (on-device), built and tested against real labels
+- Measurements screen + Charts Body and Effects tabs
+- Dose-change history and "Update your usual dose?" prompt
+- Pro additions: CSV export, compare slider
+
+### Release 2.0: "Delight"
+- Pro: timelapse, custom poses
+- Home-screen widgets; possibly Apple Watch / Wear OS quick-log
+- Optional backup password (end-to-end encrypted backups)
+- Insights (e.g. side effects vs. level curve), iPad layout, more languages
+
+### Build order for 1.0
+1. **Foundation:** Flutter project, drift database + encryption, theme, settings, app lock.
+2. **Medications + supplies + dose math** (unit tests for section 5), log shot / log dose, site rotation.
+3. **Today, quick-add, History (edit/delete), schedules, reminders, supply tracking.**
+4. **Weight, side effects, Health integration, level chart.**
+5. **Progress photos:** capture with outline, gallery, side-by-side compare.
+6. **Import (Shotsy + CSV) and export/backup:** JSON, zip, iCloud / Google Drive backup and restore. Build the
+   Shotsy import from a real Shotsy export file (kept out of git in `samples/`).
+7. **Pro + RevenueCat** (second medication, PDF report), store listings, privacy/terms pages, screenshots.
+8. **Testing:** owner's own daily use (real shots, imported Shotsy history), TestFlight + Play closed testing,
+   then submit.
 
 ---
 
