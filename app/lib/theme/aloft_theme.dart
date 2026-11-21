@@ -92,6 +92,25 @@ ThemeData aloftTheme(Brightness brightness) {
         (states) => states.contains(WidgetState.selected) ? Colors.white : null,
       ),
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: scheme.surface,
+      suffixStyle: TextStyle(color: scheme.onSurfaceVariant),
+      hintStyle: TextStyle(color: scheme.outline),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: scheme.outlineVariant),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: scheme.outlineVariant),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: dark ? AloftColors.tealLight : AloftColors.teal, width: 2),
+      ),
+    ),
     dividerTheme: DividerThemeData(color: scheme.outlineVariant, space: 1, thickness: 1),
   );
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../features/more/more_screen.dart';
+import '../features/today/today_screen.dart';
 
-/// The five bottom tabs (SPEC section 7). Only More is built so far.
+/// The five bottom tabs (SPEC section 7). Today and More are built so far.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -27,7 +28,8 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(
         index: _index,
         children: [
-          for (final tab in _tabs.take(4)) _ComingSoon(title: tab.label),
+          const TodayScreen(),
+          for (final tab in _tabs.skip(1).take(3)) _ComingSoon(title: tab.label),
           const MoreScreen(),
         ],
       ),

@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database.dart';
 import '../../security/app_lock.dart';
 import '../../settings/settings.dart';
+import '../../util/format.dart';
+import '../medications/my_medications_screen.dart';
 
 const medicalDisclaimer =
     'Aloft is a personal tracking tool, not a medical device. It does not provide medical advice or tell you '
@@ -24,6 +26,25 @@ class MoreScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         children: [
+          const _SectionTitle('Your medications'),
+          _Section(
+            children: [
+              ListTile(
+                title: const Text('My medications'),
+                subtitle: switch (ref.watch(medicationsProvider).value) {
+                  null || [] => const Text('None yet'),
+                  final list => Text(
+                    [
+                      for (final d in list) [d.medication.name, ?describeUsualDose(d)].join(' · '),
+                    ].join('\n'),
+                  ),
+                },
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () =>
+                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MyMedicationsScreen())),
+              ),
+            ],
+          ),
           const _SectionTitle('Preferences'),
           _Section(
             children: [
