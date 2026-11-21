@@ -31,22 +31,25 @@ a{color:#2F6FA3}a:hover{color:#1F4E75}
     <span style="width: 44px"></span>
   </div>
   <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 28px; font-weight: 800; line-height: 1.15">Your dose and schedule</h1>
-  <p style="margin: 0; font-size: 15px; color: #4A5A6B; line-height: 1.4">Choose what your prescriber ordered.</p>
+  <p style="margin: 0; font-size: 15px; color: #4A5A6B; line-height: 1.4">Enter exactly what your prescriber ordered, whatever the amount.</p>
 
   <div class="card" style="display: flex; flex-direction: column; gap: 12px">
     <div style="display: flex; flex-direction: column; gap: 5px">
       <label class="lbl" for="med">Medication</label>
       <select id="med" class="inp"><option>Zepbound® (tirzepatide)</option></select>
     </div>
-    <span class="lbl">Pen strength</span>
-    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px" role="radiogroup" aria-label="Pen strength">
-      <button class="pill" role="radio" aria-checked="false">2.5 mg</button>
-      <button class="pill on" role="radio" aria-checked="true">5 mg</button>
-      <button class="pill" role="radio" aria-checked="false">7.5 mg</button>
-      <button class="pill" role="radio" aria-checked="false">10 mg</button>
-      <button class="pill" role="radio" aria-checked="false">12.5 mg</button>
-      <button class="pill" role="radio" aria-checked="false">15 mg</button>
+    <div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 10px; align-items: end">
+      <div style="display: flex; flex-direction: column; gap: 5px">
+        <label class="lbl" for="dose">Your dose</label>
+        <input id="dose" class="inp" value="3.75" inputmode="decimal" style="font-size: 20px; font-weight: 700">
+      </div>
+      <div style="display: flex; background: #EEF2F6; border-radius: 12px; padding: 3px; gap: 3px; height: 46px; box-sizing: border-box" role="group" aria-label="Dose unit">
+        <button aria-pressed="true" style="flex: 1; border: none; border-radius: 9px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(18,38,58,.12); font: 600 14px Inter, sans-serif; color: #12263A">mg</button>
+        <button aria-pressed="false" style="flex: 1; border: none; border-radius: 9px; background: transparent; font: 600 14px Inter, sans-serif; color: #5B6878">units</button>
+        <button aria-pressed="false" style="flex: 1; border: none; border-radius: 9px; background: transparent; font: 600 14px Inter, sans-serif; color: #5B6878">mL</button>
+      </div>
     </div>
+    <span style="font-size: 12px; color: #5B6878; line-height: 1.4">Any amount works, including split, micro or in-between doses. Aloft never suggests a dose.</span>
   </div>
 
   <div class="card" style="display: flex; flex-direction: column; gap: 12px">

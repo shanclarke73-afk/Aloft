@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Pill dose and schedule</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.card{background:#FFFFFF;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.lbl{font-size:13px;font-weight:600;color:#4A5A6B}
+.inp{box-sizing:border-box;width:100%;height:46px;border:1px solid #D5DDE6;border-radius:12px;padding:0 12px;font:500 16px Inter,sans-serif;color:#12263A;background:#FFFFFF}
+.fld{display:flex;flex-direction:column;gap:5px}
+.step{width:44px;height:46px;border:1px solid #D5DDE6;background:#FFFFFF;border-radius:12px;font:700 20px Inter,sans-serif;color:#2F6FA3;flex-shrink:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 52px 24px 28px; display: flex; flex-direction: column; gap: 12px">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="OnbMedication.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2F6FA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </a>
+    <span style="font-size: 13px; font-weight: 600; color: #5B6878">Step 3 of 6</span>
+    <span style="width: 44px"></span>
+  </div>
+  <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 28px; font-weight: 800; line-height: 1.15">Your pill and schedule</h1>
+  <p style="margin: 0; font-size: 15px; color: #4A5A6B; line-height: 1.4">Enter what's on your bottle and what your prescriber ordered.</p>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 12px">
+    <div class="fld">
+      <label class="lbl" for="med">Medication</label>
+      <select id="med" class="inp"><option>Rybelsus® (semaglutide)</option></select>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: end">
+      <div class="fld">
+        <label class="lbl" for="str">Strength per pill</label>
+        <div style="position: relative">
+          <input id="str" class="inp" value="7" inputmode="decimal" style="font-size: 20px; font-weight: 700; padding-right: 44px">
+          <span style="position: absolute; right: 12px; top: 13px; font-size: 15px; font-weight: 600; color: #5B6878">mg</span>
+        </div>
+      </div>
+      <div class="fld">
+        <span class="lbl" id="qtyl">How many</span>
+        <div style="display: flex; gap: 6px; align-items: center" role="group" aria-labelledby="qtyl">
+          <button class="step" aria-label="Fewer">−</button>
+          <span style="flex-grow: 1; text-align: center; font-size: 18px; font-weight: 700">1</span>
+          <button class="step" aria-label="More">+</button>
+        </div>
+      </div>
+    </div>
+    <div style="background: #E8F1F8; border-radius: 12px; padding: 10px 12px; font-size: 15px; font-weight: 700; color: #1F4E75">= 7 mg semaglutide each time</div>
+    <span style="font-size: 12px; color: #5B6878; line-height: 1.4">Any strength, and half tablets too. Aloft never suggests a dose.</span>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 12px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div class="fld">
+        <label class="lbl" for="freq">How often</label>
+        <select id="freq" class="inp"><option>Daily</option><option>Every N days</option><option>Weekly</option></select>
+      </div>
+      <div class="fld">
+        <label class="lbl" for="time">Time</label>
+        <select id="time" class="inp"><option>7:00 AM</option></select>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px">
+      <span style="display: flex; flex-direction: column"><label for="wait" style="font-size: 15px; font-weight: 600">Wait timer after taking</label><span style="font-size: 12px; color: #5B6878">Reminds you when your label's wait time is up</span></span>
+      <select id="wait" class="inp" style="width: 96px; flex-shrink: 0"><option>30 min</option><option>Off</option></select>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+      <span style="display: flex; flex-direction: column"><label for="cnt" style="font-size: 15px; font-weight: 600">Pills left in bottle</label><span style="font-size: 12px; color: #5B6878">For your reorder reminder</span></span>
+      <input id="cnt" class="inp" value="30" inputmode="numeric" style="width: 96px; flex-shrink: 0; text-align: center">
+    </div>
+  </div>
+
+  <a href="OnbWeight.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; height: 54px; border-radius: 16px; background: #1F5F8F; color: #FFFFFF; font-weight: 700; font-size: 17px; text-decoration: none">Continue</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

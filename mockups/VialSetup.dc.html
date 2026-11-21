@@ -41,7 +41,25 @@ a{color:#2F6FA3}a:hover{color:#1F4E75}
   <div class="card" style="display: flex; flex-direction: column; gap: 12px">
     <div class="fld">
       <label class="lbl" for="drug">Medication <span class="tag">Check</span></label>
-      <input id="drug" class="inp scan" value="Tirzepatide">
+      <select id="drug" class="inp scan">
+        <optgroup label="GLP-1 (shows level chart)">
+          <option>Semaglutide</option>
+          <option selected>Tirzepatide</option>
+          <option>Retatrutide</option>
+          <option>Liraglutide</option>
+        </optgroup>
+        <optgroup label="Add-on injections">
+          <option>NAD+</option>
+          <option>B12 (cyanocobalamin)</option>
+          <option>L-carnitine</option>
+          <option>Glutathione</option>
+          <option>Lipo-B / MIC</option>
+        </optgroup>
+        <optgroup label="Other">
+          <option>Type a name…</option>
+        </optgroup>
+      </select>
+      <span style="font-size: 12px; color: #5B6878">GLP-1s get a level chart. Add-ons like NAD+ get logging and reminders.</span>
     </div>
     <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
       <div class="fld">

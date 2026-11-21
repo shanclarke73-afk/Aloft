@@ -80,8 +80,9 @@ Drive backup, Health sync and purchases.
 All records have `id` (UUID), `createdAt`, `updatedAt`.
 
 **Medication** (what the drug is)
-- `name` (e.g. "Tirzepatide", "Zepbound"), `activeIngredient` (semaglutide | tirzepatide | liraglutide |
-  dulaglutide | retatrutide | other), `form` (brandPen | compoundedVial | oral | other)
+- `name` (e.g. "Tirzepatide", "Zepbound", "NAD+"), `activeIngredient` (semaglutide | tirzepatide | liraglutide |
+  dulaglutide | retatrutide | nad | b12 | lcarnitine | glutathione | lipoB | other), `isGlp1` (drives level chart),
+  `form` (brandPen | compoundedVial | oral | other)
 - `halfLifeHours`, `tmaxHours` (pre-filled from the built-in list for known drugs; editable; used only for the
   level chart)
 - `scheduleType` (weekly | everyNDays | daily | custom), `scheduleInterval`, `preferredDay`, `preferredTime`
@@ -160,9 +161,27 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 7. Medical disclaimer acknowledgement (one screen, plain language).
 
 ### 6.2 Vial / pen setup
-- **Brand pen:** choose medication + dose strength from a built-in list. Done.
-- **Compounded vial:** drug, concentration (mg/mL), additives (add rows: name + amount per mL, with common ones
-  suggested), vial size, pharmacy, lot, opened date, beyond-use date, cost.
+- **Brand pen:** choose the medication from a list, then **type the dose** (mg, units or mL). Never limit doses to
+  preset buttons: split, micro and in-between doses must be as easy as standard ones (core reason the app exists).
+- **Pill (oral GLP-1):** medication, **strength per pill** (typed, mg), **how many** (stepper, halves allowed),
+  how often (daily default) and time. Never use "units" for pills: in Aloft "units" always means U-100 syringe
+  units. Optional **wait timer** after taking (user sets the minutes from their own label; off by default), and
+  **pills left** for reorder reminders. Logging a pill is one tap ("Took it"), editable for skipped/half doses.
+- **Something else:** typed amount + user-chosen unit (mg, mcg, units, mL, tablets) + schedule. No level chart.
+- **Compounded vial:** medication from a **picker** (below), concentration (mg/mL), additives (add rows: name +
+  amount per mL, with common ones suggested), vial size, pharmacy, lot, opened date, beyond-use date, cost.
+- **Compounded medication picker:**
+  - GLP-1 (gets a level chart): semaglutide, tirzepatide, retatrutide, liraglutide
+  - Add-on injections (logging + reminders, no level chart): NAD+, B12 (cyanocobalamin), L-carnitine,
+    glutathione, lipo-B / MIC
+  - Other: type any name
+- **Same syringe vs separate shot:**
+  - Ingredients **mixed in one vial** (e.g. tirzepatide + B12) = one medication; extras go in "Other ingredients"
+    and are logged with every shot automatically.
+  - A **separate injection** (e.g. Zepbound + an NAD+ vial, or Zepbound + B12 shots) = a second medication with its
+    own setup, dose, schedule and reminders. Today lists each; "Log shot" asks which (or logs both the same day).
+  - A second active medication is **Pro** (decided Nov 20, 2026; deliberate upgrade reason). Adding one shows the Pro
+    screen with a line like "Track NAD+ alongside Zepbound with Pro."
 - **Your dose** card (saved as the Prescription record): amount + unit switch (units / mL / mg), live conversion
   ("= 0.25 mL = 2.5 mg + 0.125 mg B12"), how often (weekly / every N days / daily) and shot day/time. Filled from the
   label or prescription scan when the directions are found. Pre-fills Log shot and drives doses-left and reorder.
@@ -204,6 +223,9 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - Shows past + projected curve to the next scheduled dose; overlays weight and side effects.
 - Clearly labelled "Estimate for illustration only, not a blood level."
 - Handles switching drugs (e.g. Zepbound → compounded tirzepatide): same active ingredient continues one curve.
+- **Oral and injected doses are never combined** on one curve (oral semaglutide absorbs only a small fraction, so
+  7 mg by mouth ≠ 7 mg injected). Pills get their own curve or a simple "taken daily" streak; "something else"
+  medications get no curve.
 
 ### 6.7 Weight and measurements
 - Manual entry or sync from Apple Health / Health Connect (read; writing back is optional).

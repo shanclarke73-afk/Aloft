@@ -10,7 +10,8 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 |---|---|
 | `Onboarding.dc.html` | 1. Welcome |
 | `OnbMedication.dc.html` | 2. What are you taking? |
-| `OnbDose.dc.html` | 3. Dose & schedule (brand pens) |
+| `OnbDose.dc.html` | 3. Dose & schedule (brand pens, typed dose) |
+| `OnbDosePill.dc.html` | 3. Dose & schedule (pills: strength per pill, how many, wait timer) |
 | `OnbWeight.dc.html` | 4. Starting weight |
 | `OnbPhotos.dc.html` | 5. Starting photos |
 | `OnbFinish.dc.html` | 6. Privacy, reminders, disclaimer |
@@ -22,6 +23,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `PhotoCompare.dc.html` | Progress compare |
 | `History.dc.html` | History timeline |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
+| `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |
 | `canvas.json` | Canvas layout (positions of the screens) |
 
 These are design references for the Flutter build, not app code. If the canvas changes, copy the files again so

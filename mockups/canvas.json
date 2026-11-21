@@ -2,6 +2,24 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "OnbDosePill.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 3: dose & schedule (pills)",
+      "w": 390,
+      "x": 0,
+      "y": 3564
+    },
+    "Paywall.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Aloft Pro upgrade",
+      "w": 390,
+      "x": -470,
+      "y": 1400
+    },
     "Charts.dc.html": {
       "h": 844,
       "is_interactive": true,
@@ -173,7 +191,9 @@
     "OnbDose.dc.html",
     "OnbWeight.dc.html",
     "OnbPhotos.dc.html",
-    "OnbFinish.dc.html"
+    "OnbFinish.dc.html",
+    "Paywall.dc.html",
+    "OnbDosePill.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
