@@ -43,7 +43,15 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Step 6a, Shotsy import** (Nov 21): More → Import from Shotsy reads the CSV export, shows a preview (date
       range, counts, pen or compounded vial for each medication), and brings in shots, weights, day notes and
       side effects. Importing the same file twice adds nothing. Tested with made-up data only.
-- [ ] Step 6b: export, backup zip, iCloud / Google Drive backup and restore
+- [x] **Step 6b-1, backup file and restore** (Nov 21): More → Backup and restore. "Save a backup file" makes one
+      zip (all records as JSON, plus the photo files unless switched off) and opens the share sheet; an optional
+      password locks the whole file (AES-256). "Restore from a backup file" shows what's in the file first, then
+      either adds what's missing (the default; doing it twice adds nothing) or replaces everything after a
+      confirmation. Records restore all-or-nothing. App-lock choices always stay as set on the phone.
+- [ ] Step 6b-2: automatic backup to the person's own iCloud / Google Drive with snapshots, the "no backup in 7
+      days" warning on Today, and restore during onboarding. Needs the iCloud capability, a Google sign-in setup
+      and real phones.
+- [ ] CSV and PDF export (Pro, step 7).
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -56,8 +64,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
 6. **Try the Shotsy import with the real export** on the Mac mini or a phone, and compare the totals with
    Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
-7. Build step 6b (backup, which must include the photos folder), step 5b (outline camera), then Health sync on a
-   real phone.
+7. Build step 6b-2 (automatic iCloud / Google Drive backup), step 5b (outline camera), then Health sync, all of
+   which need a real phone.
 
 ## Not done / not verified
 - No trademark check.
@@ -78,8 +86,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
   edited by hand yet (long-press deletes one).
 - Progress photos were checked on the iPhone simulator with library photos only. The simulator has no camera, so
   taking a photo has not been tried, and nothing has run on Android. Photos are saved at up to 2400 pixels on the
-  long side. They are not in any backup yet (step 6b), so deleting the app deletes them. A photo has no note field,
+  long side. They are only backed up when a backup file is saved by hand, so deleting the app without one deletes them. A photo has no note field,
   and a day's photos are grouped by date instead of being stored as a named set.
+- Backup and restore were checked on the iPhone simulator only (save to Files, open, add missing, replace). Not
+  tried: a real phone, Android, moving a file between iPhone and Android, a backup with hundreds of photos, or
+  opening a password-locked file in another zip app. There is no automatic backup yet, and no reminder to make one.
+  A forgotten backup password can't be recovered.
 - Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
 - App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that

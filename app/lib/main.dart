@@ -8,6 +8,7 @@ import 'app.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import 'backup/backup_files.dart';
 import 'data/encrypted_database.dart';
 import 'photos/photo_picker.dart';
 import 'reminders/reminders.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
           appLockProvider.overrideWithValue(lock),
           remindersProvider.overrideWithValue(DeviceReminders()),
           photoPickerProvider.overrideWithValue(DevicePhotoPicker()),
+          backupFilesProvider.overrideWithValue(DeviceBackupFiles()),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],
         child: const AloftApp(),

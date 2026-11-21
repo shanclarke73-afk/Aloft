@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../backup/backup_screen.dart';
+
 import '../../data/database.dart';
 import '../../import/shotsy_import_screen.dart';
 import '../../security/app_lock.dart';
@@ -49,6 +51,13 @@ class MoreScreen extends ConsumerWidget {
           const _SectionTitle('Data'),
           _Section(
             children: [
+              ListTile(
+                key: const Key('backup-and-restore'),
+                title: const Text('Backup and restore'),
+                subtitle: const Text('Save everything to a file, or bring a backup back'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
+              ),
               ListTile(
                 title: const Text('Import from Shotsy'),
                 subtitle: const Text('Bring your shots, weights and notes from Shotsy\'s CSV export'),
