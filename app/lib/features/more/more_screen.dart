@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/database.dart';
+import '../../import/shotsy_import_screen.dart';
 import '../../security/app_lock.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
@@ -42,6 +43,17 @@ class MoreScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () =>
                     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MyMedicationsScreen())),
+              ),
+            ],
+          ),
+          const _SectionTitle('Data'),
+          _Section(
+            children: [
+              ListTile(
+                title: const Text('Import from Shotsy'),
+                subtitle: const Text('Bring your shots, weights and notes from Shotsy\'s CSV export'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => pickShotsyFile(context),
               ),
             ],
           ),

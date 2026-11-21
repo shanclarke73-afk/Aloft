@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/body_store.dart';
 import '../data/database.dart';
 import '../data/medication_store.dart';
+import '../import/shotsy_import.dart';
 
 /// Both are set in main() once the encrypted database is open.
 final databaseProvider = Provider<AloftDatabase>((ref) => throw UnimplementedError('database not opened'));
@@ -43,3 +44,6 @@ final weightsProvider = StreamProvider<List<Weight>>((ref) => ref.watch(database
 
 /// Side effects, newest first.
 final sideEffectsProvider = StreamProvider<List<SideEffect>>((ref) => ref.watch(databaseProvider).watchSideEffects());
+
+/// Day notes, newest first.
+final dayNotesProvider = StreamProvider<List<DayNote>>((ref) => ref.watch(databaseProvider).watchDayNotes());

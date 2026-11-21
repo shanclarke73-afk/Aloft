@@ -4194,6 +4194,308 @@ class SideEffectsCompanion extends UpdateCompanion<SideEffect> {
   }
 }
 
+class $DayNotesTable extends DayNotes with TableInfo<$DayNotesTable, DayNote> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DayNotesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: newId,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _noteDateMeta = const VerificationMeta('noteDate');
+  @override
+  late final GeneratedColumn<DateTime> noteDate = GeneratedColumn<DateTime>(
+    'note_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, createdAt, updatedAt, noteDate, body];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'day_notes';
+  @override
+  VerificationContext validateIntegrity(Insertable<DayNote> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta, createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta, updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    if (data.containsKey('note_date')) {
+      context.handle(_noteDateMeta, noteDate.isAcceptableOrUnknown(data['note_date']!, _noteDateMeta));
+    } else if (isInserting) {
+      context.missing(_noteDateMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(_bodyMeta, body.isAcceptableOrUnknown(data['body']!, _bodyMeta));
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DayNote map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DayNote(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      createdAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      noteDate: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}note_date'])!,
+      body: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}body'])!,
+    );
+  }
+
+  @override
+  $DayNotesTable createAlias(String alias) {
+    return $DayNotesTable(attachedDatabase, alias);
+  }
+}
+
+class DayNote extends DataClass implements Insertable<DayNote> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime noteDate;
+  final String body;
+  const DayNote({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.noteDate,
+    required this.body,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['note_date'] = Variable<DateTime>(noteDate);
+    map['body'] = Variable<String>(body);
+    return map;
+  }
+
+  DayNotesCompanion toCompanion(bool nullToAbsent) {
+    return DayNotesCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      noteDate: Value(noteDate),
+      body: Value(body),
+    );
+  }
+
+  factory DayNote.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DayNote(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      noteDate: serializer.fromJson<DateTime>(json['noteDate']),
+      body: serializer.fromJson<String>(json['body']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'noteDate': serializer.toJson<DateTime>(noteDate),
+      'body': serializer.toJson<String>(body),
+    };
+  }
+
+  DayNote copyWith({String? id, DateTime? createdAt, DateTime? updatedAt, DateTime? noteDate, String? body}) => DayNote(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    noteDate: noteDate ?? this.noteDate,
+    body: body ?? this.body,
+  );
+  DayNote copyWithCompanion(DayNotesCompanion data) {
+    return DayNote(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      noteDate: data.noteDate.present ? data.noteDate.value : this.noteDate,
+      body: data.body.present ? data.body.value : this.body,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DayNote(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('noteDate: $noteDate, ')
+          ..write('body: $body')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, createdAt, updatedAt, noteDate, body);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DayNote &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.noteDate == this.noteDate &&
+          other.body == this.body);
+}
+
+class DayNotesCompanion extends UpdateCompanion<DayNote> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> noteDate;
+  final Value<String> body;
+  final Value<int> rowid;
+  const DayNotesCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.noteDate = const Value.absent(),
+    this.body = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DayNotesCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    required DateTime noteDate,
+    required String body,
+    this.rowid = const Value.absent(),
+  }) : noteDate = Value(noteDate),
+       body = Value(body);
+  static Insertable<DayNote> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? noteDate,
+    Expression<String>? body,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (noteDate != null) 'note_date': noteDate,
+      if (body != null) 'body': body,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DayNotesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime>? noteDate,
+    Value<String>? body,
+    Value<int>? rowid,
+  }) {
+    return DayNotesCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      noteDate: noteDate ?? this.noteDate,
+      body: body ?? this.body,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (noteDate.present) {
+      map['note_date'] = Variable<DateTime>(noteDate.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DayNotesCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('noteDate: $noteDate, ')
+          ..write('body: $body, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AloftDatabase extends GeneratedDatabase {
   _$AloftDatabase(QueryExecutor e) : super(e);
   $AloftDatabaseManager get managers => $AloftDatabaseManager(this);
@@ -4204,6 +4506,7 @@ abstract class _$AloftDatabase extends GeneratedDatabase {
   late final $DosesTable doses = $DosesTable(this);
   late final $WeightsTable weights = $WeightsTable(this);
   late final $SideEffectsTable sideEffects = $SideEffectsTable(this);
+  late final $DayNotesTable dayNotes = $DayNotesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables => allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
@@ -4215,6 +4518,7 @@ abstract class _$AloftDatabase extends GeneratedDatabase {
     doses,
     weights,
     sideEffects,
+    dayNotes,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -6843,6 +7147,169 @@ typedef $$SideEffectsTableProcessedTableManager =
       SideEffect,
       PrefetchHooks Function({bool medicationId})
     >;
+typedef $$DayNotesTableCreateCompanionBuilder = DayNotesCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  required DateTime noteDate,
+  required String body,
+  Value<int> rowid,
+});
+typedef $$DayNotesTableUpdateCompanionBuilder = DayNotesCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime> noteDate,
+  Value<String> body,
+  Value<int> rowid,
+});
+
+class $$DayNotesTableFilterComposer extends Composer<_$AloftDatabase, $DayNotesTable> {
+  $$DayNotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get noteDate =>
+      $composableBuilder(column: $table.noteDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get body => $composableBuilder(column: $table.body, builder: (column) => ColumnFilters(column));
+}
+
+class $$DayNotesTableOrderingComposer extends Composer<_$AloftDatabase, $DayNotesTable> {
+  $$DayNotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get noteDate =>
+      $composableBuilder(column: $table.noteDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => ColumnOrderings(column));
+}
+
+class $$DayNotesTableAnnotationComposer extends Composer<_$AloftDatabase, $DayNotesTable> {
+  $$DayNotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id => $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt => $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt => $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get noteDate => $composableBuilder(column: $table.noteDate, builder: (column) => column);
+
+  GeneratedColumn<String> get body => $composableBuilder(column: $table.body, builder: (column) => column);
+}
+
+class $$DayNotesTableTableManager
+    extends
+        RootTableManager<
+          _$AloftDatabase,
+          $DayNotesTable,
+          DayNote,
+          $$DayNotesTableFilterComposer,
+          $$DayNotesTableOrderingComposer,
+          $$DayNotesTableAnnotationComposer,
+          $$DayNotesTableCreateCompanionBuilder,
+          $$DayNotesTableUpdateCompanionBuilder,
+          (DayNote, BaseReferences<_$AloftDatabase, $DayNotesTable, DayNote>),
+          DayNote,
+          PrefetchHooks Function()
+        > {
+  $$DayNotesTableTableManager(_$AloftDatabase db, $DayNotesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () => $$DayNotesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$DayNotesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$DayNotesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime> noteDate = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DayNotesCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                noteDate: noteDate,
+                body: body,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                required DateTime noteDate,
+                required String body,
+                Value<int> rowid = const Value.absent(),
+              }) => DayNotesCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                noteDate: noteDate,
+                body: body,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DayNotesTable, DayNote>(table),
+                  BaseReferences<_$AloftDatabase, $DayNotesTable, DayNote>(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DayNotesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AloftDatabase,
+      $DayNotesTable,
+      DayNote,
+      $$DayNotesTableFilterComposer,
+      $$DayNotesTableOrderingComposer,
+      $$DayNotesTableAnnotationComposer,
+      $$DayNotesTableCreateCompanionBuilder,
+      $$DayNotesTableUpdateCompanionBuilder,
+      (DayNote, BaseReferences<_$AloftDatabase, $DayNotesTable, DayNote>),
+      DayNote,
+      PrefetchHooks Function()
+    >;
 
 class $AloftDatabaseManager {
   final _$AloftDatabase _db;
@@ -6855,4 +7322,5 @@ class $AloftDatabaseManager {
   $$DosesTableTableManager get doses => $$DosesTableTableManager(_db, _db.doses);
   $$WeightsTableTableManager get weights => $$WeightsTableTableManager(_db, _db.weights);
   $$SideEffectsTableTableManager get sideEffects => $$SideEffectsTableTableManager(_db, _db.sideEffects);
+  $$DayNotesTableTableManager get dayNotes => $$DayNotesTableTableManager(_db, _db.dayNotes);
 }
