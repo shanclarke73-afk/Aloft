@@ -24,6 +24,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `ChartsTwoMeds.dc.html` | Charts with two medications (GLP-1 level, add-on doses taken, side effects by med, Pro) |
 | `PhotoCapture.dc.html` | Progress photo capture with outline |
 | `PhotoCompare.dc.html` | Progress compare |
+| `PhotoCompareTwoMeds.dc.html` | Progress compare with "What you were taking" medication timeline (Pro) |
 | `History.dc.html` | History timeline |
 | `HistoryTwoMeds.dc.html` | History with two medications (color per medication, filter chips, Pro) |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
