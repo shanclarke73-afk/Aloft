@@ -2,6 +2,50 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "LogMeasurements.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Log measurements",
+      "w": 390,
+      "x": 2350,
+      "y": 3564
+    },
+    "QuickAdd.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Today: quick-add menu",
+      "w": 390,
+      "x": 1410,
+      "y": 3564
+    },
+    "LogWeight.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Log weight",
+      "w": 390,
+      "x": 1880,
+      "y": 3564
+    },
+    "IconConcepts.dc.html": {
+      "h": 640,
+      "radius": 24,
+      "title": "App icon concepts",
+      "w": 1600,
+      "x": -470,
+      "y": 4528
+    },
+    "HistoryPill.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "History: pill",
+      "w": 390,
+      "x": 940,
+      "y": 3564
+    },
     "LogPill.dc.html": {
       "h": 844,
       "is_interactive": true,
@@ -273,7 +317,12 @@
     "PhotoCompareTwoMeds.dc.html",
     "ExportTwoMeds.dc.html",
     "VialSetupTwoMeds.dc.html",
-    "LogPill.dc.html"
+    "LogPill.dc.html",
+    "HistoryPill.dc.html",
+    "IconConcepts.dc.html",
+    "QuickAdd.dc.html",
+    "LogWeight.dc.html",
+    "LogMeasurements.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"

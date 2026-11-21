@@ -111,7 +111,8 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 
 **Weight**: `measuredAt`, `kg` (displayed in user's unit), `source` (manual | appleHealth | healthConnect)
 
-**Measurement**: `measuredAt`, `type` (waist | hips | chest | neck | arm | thigh | custom), `cm`
+**Measurement**: `measuredAt`, `type` (waist | hips | chest | neck | upperArm | thigh | custom), `side`
+(left | right | none), `customName`, `cm`
 
 **SideEffect**: `occurredAt`, `type` (nausea, constipation, diarrhea, fatigue, headache, heartburn, injection-site
 reaction, low appetite, sulfur burps, hair shedding, custom), `severity` 1–5, `notes`
@@ -235,7 +236,14 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 ### 6.7 Weight and measurements
 - Manual entry or sync from Apple Health / Health Connect (read; writing back is optional).
 - Charts: weight over time with dose changes marked, moving average, total change, change since last dose increase.
-- Measurements: waist, hips, chest, neck, arm, thigh, custom.
+- Measurements: **waist** (the suggested main one, shown first with a "where to measure" figure), hips, chest,
+  neck, upper arm and thigh (each with a left/right choice that's remembered), plus custom ones the user names
+  (e.g. under bust, calf). Every field is optional. Each shows change since the comparison date. An "i" button
+  explains where to measure so it's the same spot each time. Optional reminder every 4 weeks, on the same day as
+  the photo reminder. Units follow the in/cm setting.
+- Logging: a **+ button on Today** opens a quick-add menu (shot or dose, weight, side effect, measurements, progress
+  photos, note); tapping the Weight card opens weight entry directly. Weight entry shows change since the last
+  weigh-in and since starting, and can save to Apple Health / Health Connect.
 - Optional goal weight and BMI (BMI shown only if the user enables it).
 
 ### 6.8 Side effects

@@ -17,6 +17,9 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `OnbFinish.dc.html` | 6. Privacy, reminders, disclaimer |
 | `Main.dc.html` | Today |
 | `MainTwoMeds.dc.html` | Today with two medications (Zepbound + NAD+, Pro) |
+| `QuickAdd.dc.html` | Quick-add menu from the Today "+" button (shot, weight, side effect, measurements, photos, note) |
+| `LogWeight.dc.html` | Log weight (lb/kg, change since last, save to Apple Health) |
+| `LogMeasurements.dc.html` | Log measurements (waist first with where-to-measure figure, left/right, custom, reminder) |
 | `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
 | `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
 | `LogPill.dc.html` | Log a pill dose (one-tap "Took it", tablets stepper, wait timer) |
@@ -29,6 +32,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `PhotoCompareTwoMeds.dc.html` | Progress compare with "What you were taking" medication timeline (Pro) |
 | `History.dc.html` | History timeline |
 | `HistoryTwoMeds.dc.html` | History with two medications (color per medication, filter chips, Pro) |
+| `HistoryPill.dc.html` | History for a daily pill (week strip, half tablet, skipped day) |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
 | `ExportTwoMeds.dc.html` | Export & backup with two medications (choose medications for PDF/CSV, Pro) |
 | `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |
