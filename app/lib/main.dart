@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
 import 'data/encrypted_database.dart';
+import 'photos/photo_picker.dart';
 import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
 import 'settings/settings.dart';
@@ -14,6 +21,8 @@ Future<void> main() async {
     final settings = await database.loadSettings(
       countryCode: WidgetsBinding.instance.platformDispatcher.locale.countryCode,
     );
+    // Private to the app: not the camera roll, and not visible in the Files app.
+    final photoFolder = Directory(p.join((await getApplicationSupportDirectory()).path, 'photos'));
     final lock = AppLock(authenticator: DeviceAuthenticator(), enabled: settings.appLock, lockAfter: settings.lockAfter)
       ..detectMethod();
     runApp(
@@ -23,6 +32,8 @@ Future<void> main() async {
           initialSettingsProvider.overrideWithValue(settings),
           appLockProvider.overrideWithValue(lock),
           remindersProvider.overrideWithValue(DeviceReminders()),
+          photoPickerProvider.overrideWithValue(DevicePhotoPicker()),
+          photoFolderProvider.overrideWithValue(photoFolder),
         ],
         child: const AloftApp(),
       ),

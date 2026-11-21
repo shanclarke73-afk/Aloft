@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/body_store.dart';
 import '../data/database.dart';
 import '../data/medication_store.dart';
+import '../data/photo_store.dart';
 import '../import/shotsy_import.dart';
 
 /// Both are set in main() once the encrypted database is open.
@@ -47,3 +48,6 @@ final sideEffectsProvider = StreamProvider<List<SideEffect>>((ref) => ref.watch(
 
 /// Day notes, newest first.
 final dayNotesProvider = StreamProvider<List<DayNote>>((ref) => ref.watch(databaseProvider).watchDayNotes());
+
+/// Progress photos, newest first.
+final photosProvider = StreamProvider<List<ProgressPhoto>>((ref) => ref.watch(databaseProvider).watchPhotos());

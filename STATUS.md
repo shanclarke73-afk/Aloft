@@ -33,7 +33,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       liraglutide and dulaglutide, with a projection to the next scheduled dose, always labelled as an estimate;
       weight chart; an estimated-level card on Today.
 - [ ] Step 4c: Apple Health / Health Connect (needs the HealthKit capability set up in Xcode and a real phone)
-- [ ] Step 5: progress photos
+- [x] **Step 5a, progress photos** (Nov 21): the Progress tab. Add photos with the phone's camera or choose older
+      ones from the library (they keep the date stored inside the photo; pose and date can be changed). Gallery by
+      day with that day's weight; Compare shows two days of one pose side by side with the time and weight change
+      between them; full-screen view with zoom, edit and delete. Files are kept in the app's private folder, never
+      the camera roll, and the chooser only hands Aloft the photos picked.
+- [ ] Step 5b: Aloft's own camera screen with the faint outline of the last photo and the 3 / 10 second timer;
+      the swipe slider and timelapse (both Pro); the monthly photo reminder and the Today "Photo check-in" card.
 - [x] **Step 6a, Shotsy import** (Nov 21): More → Import from Shotsy reads the CSV export, shows a preview (date
       range, counts, pen or compounded vial for each medication), and brings in shots, weights, day notes and
       side effects. Importing the same file twice adds nothing. Tested with made-up data only.
@@ -50,7 +56,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
 6. **Try the Shotsy import with the real export** on the Mac mini or a phone, and compare the totals with
    Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
-7. Build step 5 (progress photos), step 6b (backup), then Health sync on a real phone.
+7. Build step 6b (backup, which must include the photos folder), step 5b (outline camera), then Health sync on a
+   real phone.
 
 ## Not done / not verified
 - No trademark check.
@@ -69,6 +76,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - The Shotsy import has only been run on made-up files in Shotsy's format. The real export is on the laptop
   (`samples/`, git-ignored) and hasn't been tried. Day notes come in as notes in History; notes can't be added or
   edited by hand yet (long-press deletes one).
+- Progress photos were checked on the iPhone simulator with library photos only. The simulator has no camera, so
+  taking a photo has not been tried, and nothing has run on Android. Photos are saved at up to 2400 pixels on the
+  long side. They are not in any backup yet (step 6b), so deleting the app deletes them. A photo has no note field,
+  and a day's photos are grouped by date instead of being stored as a named set.
 - Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
 - App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that

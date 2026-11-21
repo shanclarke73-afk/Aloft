@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../progress/add_photos_screen.dart';
+
 import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
@@ -136,6 +138,15 @@ Future<void> showQuickAdd(BuildContext context, List<MedicationDetail> medicatio
             onTap: () {
               Navigator.pop(sheet);
               openLogSideEffect(context);
+            },
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            leading: const Icon(Icons.photo_camera_outlined),
+            title: const Text('Progress photos', style: TextStyle(fontWeight: FontWeight.w700)),
+            onTap: () {
+              Navigator.pop(sheet);
+              startAddPhotos(context);
             },
           ),
           const SizedBox(height: 8),

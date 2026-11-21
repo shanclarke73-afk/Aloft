@@ -19,6 +19,9 @@ String formatWhen(BuildContext context, DateTime when, {DateTime? now}) {
 String formatLongDay(BuildContext context, DateTime when) =>
     '${weekdayShort[when.weekday - 1]}, ${MaterialLocalizations.of(context).formatShortMonthDay(when)}';
 
+/// "Nov 20, 2026": for dates that may be in another year.
+String formatFullDate(BuildContext context, DateTime when) => MaterialLocalizations.of(context).formatShortDate(when);
+
 const weekdayLong = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 String formatDay(BuildContext context, DateTime when, {DateTime? now}) {
