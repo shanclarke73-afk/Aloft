@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
 import '../../dose/dose_math.dart';
@@ -9,6 +10,8 @@ import '../../schedule/schedule.dart';
 import '../../settings/settings.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/format.dart';
+import '../body/log_side_effect_screen.dart';
+import '../body/log_weight_screen.dart';
 import '../log/log_dose_screen.dart';
 import '../medications/medication_setup_screen.dart';
 
@@ -62,6 +65,7 @@ class TodayScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 if (SupplyCard.hasSomethingToShow(d)) ...[SupplyCard(detail: d), const SizedBox(height: 12)],
               ],
+              const WeightCard(),
             ],
           );
         },
@@ -110,6 +114,25 @@ Future<void> showQuickAdd(BuildContext context, List<MedicationDetail> medicatio
                   openLogDose(context, d);
                 },
               ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            leading: const Icon(Icons.monitor_weight_outlined),
+            title: const Text('Weight', style: TextStyle(fontWeight: FontWeight.w700)),
+            onTap: () {
+              Navigator.pop(sheet);
+              openLogWeight(context);
+            },
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            leading: const Icon(Icons.sick_outlined),
+            title: const Text('Side effect', style: TextStyle(fontWeight: FontWeight.w700)),
+            subtitle: const Text('Nausea, fatigue…'),
+            onTap: () {
+              Navigator.pop(sheet);
+              openLogSideEffect(context);
+            },
+          ),
           const SizedBox(height: 8),
         ],
       ),
@@ -123,7 +146,7 @@ String describeDue(BuildContext context, DueStatus status) {
   final weekday = weekdayLong[status.due.weekday - 1];
   return switch (status.state) {
     DueState.today => 'Due today, $time',
-    DueState.upcoming => status.days == 1 ? 'Due tomorrow, $time' : 'Due $weekday, $time',
+    DueState.upcoming => status.days == 1 ? 'Next: tomorrow, $time' : 'Next: $weekday, $time',
     DueState.late => 'Not logged yet · due ${status.days == 1 ? 'yesterday' : '${status.days} days ago'}',
   };
 }
@@ -343,6 +366,57 @@ class SupplyCard extends StatelessWidget {
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Latest weight and the change since the first weigh-in (mockups/Main).
+class WeightCard extends ConsumerWidget {
+  const WeightCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheme = Theme.of(context).colorScheme;
+    final unit = ref.watch(settingsProvider.select((s) => s.weightUnit));
+    final weights = ref.watch(weightsProvider).value ?? const <Weight>[];
+    final latest = weights.firstOrNull, first = weights.lastOrNull;
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => openLogWeight(context),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Weight',
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: scheme.onSurfaceVariant),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      latest == null ? 'Add your starting weight' : formatWeight(latest.kg, unit),
+                      style: TextStyle(fontSize: latest == null ? 16 : 20, fontWeight: FontWeight.w800),
+                    ),
+                    if (latest != null && first != null && first.id != latest.id)
+                      Text(
+                        '${formatWeightChange(first.kg, latest.kg, unit)} since '
+                        '${MaterialLocalizations.of(context).formatShortMonthDay(first.measuredAt)}',
+                        style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
+                      )
+                    else if (latest != null)
+                      Text('Starting point', style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
+                  ],
+                ),
+              ),
+              Icon(Icons.add_circle_outline, color: scheme.secondary),
+            ],
+          ),
         ),
       ),
     );

@@ -3332,6 +3332,868 @@ class DosesCompanion extends UpdateCompanion<Dose> {
   }
 }
 
+class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WeightsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: newId,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _measuredAtMeta = const VerificationMeta('measuredAt');
+  @override
+  late final GeneratedColumn<DateTime> measuredAt = GeneratedColumn<DateTime>(
+    'measured_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kgMeta = const VerificationMeta('kg');
+  @override
+  late final GeneratedColumn<double> kg = GeneratedColumn<double>(
+    'kg',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<WeightSource, String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('manual'),
+  ).withConverter<WeightSource>($WeightsTable.$convertersource);
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, createdAt, updatedAt, measuredAt, kg, source, notes];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'weights';
+  @override
+  VerificationContext validateIntegrity(Insertable<Weight> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta, createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta, updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    if (data.containsKey('measured_at')) {
+      context.handle(_measuredAtMeta, measuredAt.isAcceptableOrUnknown(data['measured_at']!, _measuredAtMeta));
+    } else if (isInserting) {
+      context.missing(_measuredAtMeta);
+    }
+    if (data.containsKey('kg')) {
+      context.handle(_kgMeta, kg.isAcceptableOrUnknown(data['kg']!, _kgMeta));
+    } else if (isInserting) {
+      context.missing(_kgMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(_notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Weight map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Weight(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      createdAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      measuredAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}measured_at'])!,
+      kg: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}kg'])!,
+      source: $WeightsTable.$convertersource.fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}source'])!,
+      ),
+      notes: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}notes']),
+    );
+  }
+
+  @override
+  $WeightsTable createAlias(String alias) {
+    return $WeightsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<WeightSource, String, String> $convertersource = const EnumNameConverter<WeightSource>(
+    WeightSource.values,
+  );
+}
+
+class Weight extends DataClass implements Insertable<Weight> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime measuredAt;
+  final double kg;
+  final WeightSource source;
+  final String? notes;
+  const Weight({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.measuredAt,
+    required this.kg,
+    required this.source,
+    this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['measured_at'] = Variable<DateTime>(measuredAt);
+    map['kg'] = Variable<double>(kg);
+    {
+      map['source'] = Variable<String>($WeightsTable.$convertersource.toSql(source));
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  WeightsCompanion toCompanion(bool nullToAbsent) {
+    return WeightsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      measuredAt: Value(measuredAt),
+      kg: Value(kg),
+      source: Value(source),
+      notes: notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+    );
+  }
+
+  factory Weight.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Weight(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      measuredAt: serializer.fromJson<DateTime>(json['measuredAt']),
+      kg: serializer.fromJson<double>(json['kg']),
+      source: $WeightsTable.$convertersource.fromJson(serializer.fromJson<String>(json['source'])),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'measuredAt': serializer.toJson<DateTime>(measuredAt),
+      'kg': serializer.toJson<double>(kg),
+      'source': serializer.toJson<String>($WeightsTable.$convertersource.toJson(source)),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  Weight copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? measuredAt,
+    double? kg,
+    WeightSource? source,
+    Value<String?> notes = const Value.absent(),
+  }) => Weight(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    measuredAt: measuredAt ?? this.measuredAt,
+    kg: kg ?? this.kg,
+    source: source ?? this.source,
+    notes: notes.present ? notes.value : this.notes,
+  );
+  Weight copyWithCompanion(WeightsCompanion data) {
+    return Weight(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      measuredAt: data.measuredAt.present ? data.measuredAt.value : this.measuredAt,
+      kg: data.kg.present ? data.kg.value : this.kg,
+      source: data.source.present ? data.source.value : this.source,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Weight(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('measuredAt: $measuredAt, ')
+          ..write('kg: $kg, ')
+          ..write('source: $source, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, createdAt, updatedAt, measuredAt, kg, source, notes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Weight &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.measuredAt == this.measuredAt &&
+          other.kg == this.kg &&
+          other.source == this.source &&
+          other.notes == this.notes);
+}
+
+class WeightsCompanion extends UpdateCompanion<Weight> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> measuredAt;
+  final Value<double> kg;
+  final Value<WeightSource> source;
+  final Value<String?> notes;
+  final Value<int> rowid;
+  const WeightsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.measuredAt = const Value.absent(),
+    this.kg = const Value.absent(),
+    this.source = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WeightsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    required DateTime measuredAt,
+    required double kg,
+    this.source = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : measuredAt = Value(measuredAt),
+       kg = Value(kg);
+  static Insertable<Weight> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? measuredAt,
+    Expression<double>? kg,
+    Expression<String>? source,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (measuredAt != null) 'measured_at': measuredAt,
+      if (kg != null) 'kg': kg,
+      if (source != null) 'source': source,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WeightsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime>? measuredAt,
+    Value<double>? kg,
+    Value<WeightSource>? source,
+    Value<String?>? notes,
+    Value<int>? rowid,
+  }) {
+    return WeightsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      measuredAt: measuredAt ?? this.measuredAt,
+      kg: kg ?? this.kg,
+      source: source ?? this.source,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (measuredAt.present) {
+      map['measured_at'] = Variable<DateTime>(measuredAt.value);
+    }
+    if (kg.present) {
+      map['kg'] = Variable<double>(kg.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>($WeightsTable.$convertersource.toSql(source.value));
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WeightsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('measuredAt: $measuredAt, ')
+          ..write('kg: $kg, ')
+          ..write('source: $source, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SideEffectsTable extends SideEffects with TableInfo<$SideEffectsTable, SideEffect> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SideEffectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: newId,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _occurredAtMeta = const VerificationMeta('occurredAt');
+  @override
+  late final GeneratedColumn<DateTime> occurredAt = GeneratedColumn<DateTime>(
+    'occurred_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<SideEffectType, String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  ).withConverter<SideEffectType>($SideEffectsTable.$convertertype);
+  static const VerificationMeta _customNameMeta = const VerificationMeta('customName');
+  @override
+  late final GeneratedColumn<String> customName = GeneratedColumn<String>(
+    'custom_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _severityMeta = const VerificationMeta('severity');
+  @override
+  late final GeneratedColumn<int> severity = GeneratedColumn<int>(
+    'severity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _medicationIdMeta = const VerificationMeta('medicationId');
+  @override
+  late final GeneratedColumn<String> medicationId = GeneratedColumn<String>(
+    'medication_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('REFERENCES medications (id) ON DELETE SET NULL'),
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    occurredAt,
+    type,
+    customName,
+    severity,
+    medicationId,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'side_effects';
+  @override
+  VerificationContext validateIntegrity(Insertable<SideEffect> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta, createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta, updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    if (data.containsKey('occurred_at')) {
+      context.handle(_occurredAtMeta, occurredAt.isAcceptableOrUnknown(data['occurred_at']!, _occurredAtMeta));
+    } else if (isInserting) {
+      context.missing(_occurredAtMeta);
+    }
+    if (data.containsKey('custom_name')) {
+      context.handle(_customNameMeta, customName.isAcceptableOrUnknown(data['custom_name']!, _customNameMeta));
+    }
+    if (data.containsKey('severity')) {
+      context.handle(_severityMeta, severity.isAcceptableOrUnknown(data['severity']!, _severityMeta));
+    } else if (isInserting) {
+      context.missing(_severityMeta);
+    }
+    if (data.containsKey('medication_id')) {
+      context.handle(_medicationIdMeta, medicationId.isAcceptableOrUnknown(data['medication_id']!, _medicationIdMeta));
+    }
+    if (data.containsKey('notes')) {
+      context.handle(_notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SideEffect map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SideEffect(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      createdAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      occurredAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}occurred_at'])!,
+      type: $SideEffectsTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      ),
+      customName: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}custom_name']),
+      severity: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}severity'])!,
+      medicationId: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}medication_id']),
+      notes: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}notes']),
+    );
+  }
+
+  @override
+  $SideEffectsTable createAlias(String alias) {
+    return $SideEffectsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SideEffectType, String, String> $convertertype = const EnumNameConverter<SideEffectType>(
+    SideEffectType.values,
+  );
+}
+
+class SideEffect extends DataClass implements Insertable<SideEffect> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime occurredAt;
+  final SideEffectType type;
+
+  /// The name typed for [SideEffectType.custom].
+  final String? customName;
+
+  /// 1 (barely) to 10 (severe), the same scale Shotsy uses.
+  final int severity;
+
+  /// "Likely from": optional.
+  final String? medicationId;
+  final String? notes;
+  const SideEffect({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.occurredAt,
+    required this.type,
+    this.customName,
+    required this.severity,
+    this.medicationId,
+    this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['occurred_at'] = Variable<DateTime>(occurredAt);
+    {
+      map['type'] = Variable<String>($SideEffectsTable.$convertertype.toSql(type));
+    }
+    if (!nullToAbsent || customName != null) {
+      map['custom_name'] = Variable<String>(customName);
+    }
+    map['severity'] = Variable<int>(severity);
+    if (!nullToAbsent || medicationId != null) {
+      map['medication_id'] = Variable<String>(medicationId);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  SideEffectsCompanion toCompanion(bool nullToAbsent) {
+    return SideEffectsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      occurredAt: Value(occurredAt),
+      type: Value(type),
+      customName: customName == null && nullToAbsent ? const Value.absent() : Value(customName),
+      severity: Value(severity),
+      medicationId: medicationId == null && nullToAbsent ? const Value.absent() : Value(medicationId),
+      notes: notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+    );
+  }
+
+  factory SideEffect.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SideEffect(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      occurredAt: serializer.fromJson<DateTime>(json['occurredAt']),
+      type: $SideEffectsTable.$convertertype.fromJson(serializer.fromJson<String>(json['type'])),
+      customName: serializer.fromJson<String?>(json['customName']),
+      severity: serializer.fromJson<int>(json['severity']),
+      medicationId: serializer.fromJson<String?>(json['medicationId']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'occurredAt': serializer.toJson<DateTime>(occurredAt),
+      'type': serializer.toJson<String>($SideEffectsTable.$convertertype.toJson(type)),
+      'customName': serializer.toJson<String?>(customName),
+      'severity': serializer.toJson<int>(severity),
+      'medicationId': serializer.toJson<String?>(medicationId),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  SideEffect copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? occurredAt,
+    SideEffectType? type,
+    Value<String?> customName = const Value.absent(),
+    int? severity,
+    Value<String?> medicationId = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+  }) => SideEffect(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    occurredAt: occurredAt ?? this.occurredAt,
+    type: type ?? this.type,
+    customName: customName.present ? customName.value : this.customName,
+    severity: severity ?? this.severity,
+    medicationId: medicationId.present ? medicationId.value : this.medicationId,
+    notes: notes.present ? notes.value : this.notes,
+  );
+  SideEffect copyWithCompanion(SideEffectsCompanion data) {
+    return SideEffect(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      occurredAt: data.occurredAt.present ? data.occurredAt.value : this.occurredAt,
+      type: data.type.present ? data.type.value : this.type,
+      customName: data.customName.present ? data.customName.value : this.customName,
+      severity: data.severity.present ? data.severity.value : this.severity,
+      medicationId: data.medicationId.present ? data.medicationId.value : this.medicationId,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SideEffect(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('occurredAt: $occurredAt, ')
+          ..write('type: $type, ')
+          ..write('customName: $customName, ')
+          ..write('severity: $severity, ')
+          ..write('medicationId: $medicationId, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, createdAt, updatedAt, occurredAt, type, customName, severity, medicationId, notes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SideEffect &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.occurredAt == this.occurredAt &&
+          other.type == this.type &&
+          other.customName == this.customName &&
+          other.severity == this.severity &&
+          other.medicationId == this.medicationId &&
+          other.notes == this.notes);
+}
+
+class SideEffectsCompanion extends UpdateCompanion<SideEffect> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> occurredAt;
+  final Value<SideEffectType> type;
+  final Value<String?> customName;
+  final Value<int> severity;
+  final Value<String?> medicationId;
+  final Value<String?> notes;
+  final Value<int> rowid;
+  const SideEffectsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.occurredAt = const Value.absent(),
+    this.type = const Value.absent(),
+    this.customName = const Value.absent(),
+    this.severity = const Value.absent(),
+    this.medicationId = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SideEffectsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    required DateTime occurredAt,
+    required SideEffectType type,
+    this.customName = const Value.absent(),
+    required int severity,
+    this.medicationId = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : occurredAt = Value(occurredAt),
+       type = Value(type),
+       severity = Value(severity);
+  static Insertable<SideEffect> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? occurredAt,
+    Expression<String>? type,
+    Expression<String>? customName,
+    Expression<int>? severity,
+    Expression<String>? medicationId,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (occurredAt != null) 'occurred_at': occurredAt,
+      if (type != null) 'type': type,
+      if (customName != null) 'custom_name': customName,
+      if (severity != null) 'severity': severity,
+      if (medicationId != null) 'medication_id': medicationId,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SideEffectsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime>? occurredAt,
+    Value<SideEffectType>? type,
+    Value<String?>? customName,
+    Value<int>? severity,
+    Value<String?>? medicationId,
+    Value<String?>? notes,
+    Value<int>? rowid,
+  }) {
+    return SideEffectsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      occurredAt: occurredAt ?? this.occurredAt,
+      type: type ?? this.type,
+      customName: customName ?? this.customName,
+      severity: severity ?? this.severity,
+      medicationId: medicationId ?? this.medicationId,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (occurredAt.present) {
+      map['occurred_at'] = Variable<DateTime>(occurredAt.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>($SideEffectsTable.$convertertype.toSql(type.value));
+    }
+    if (customName.present) {
+      map['custom_name'] = Variable<String>(customName.value);
+    }
+    if (severity.present) {
+      map['severity'] = Variable<int>(severity.value);
+    }
+    if (medicationId.present) {
+      map['medication_id'] = Variable<String>(medicationId.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SideEffectsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('occurredAt: $occurredAt, ')
+          ..write('type: $type, ')
+          ..write('customName: $customName, ')
+          ..write('severity: $severity, ')
+          ..write('medicationId: $medicationId, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AloftDatabase extends GeneratedDatabase {
   _$AloftDatabase(QueryExecutor e) : super(e);
   $AloftDatabaseManager get managers => $AloftDatabaseManager(this);
@@ -3340,10 +4202,20 @@ abstract class _$AloftDatabase extends GeneratedDatabase {
   late final $SuppliesTable supplies = $SuppliesTable(this);
   late final $PrescriptionsTable prescriptions = $PrescriptionsTable(this);
   late final $DosesTable doses = $DosesTable(this);
+  late final $WeightsTable weights = $WeightsTable(this);
+  late final $SideEffectsTable sideEffects = $SideEffectsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables => allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [appSettingsTable, medications, supplies, prescriptions, doses];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    appSettingsTable,
+    medications,
+    supplies,
+    prescriptions,
+    doses,
+    weights,
+    sideEffects,
+  ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
     WritePropagation(
@@ -3361,6 +4233,10 @@ abstract class _$AloftDatabase extends GeneratedDatabase {
     WritePropagation(
       on: TableUpdateQuery.onTableName('supplies', limitUpdateKind: UpdateKind.delete),
       result: [TableUpdate('doses', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName('medications', limitUpdateKind: UpdateKind.delete),
+      result: [TableUpdate('side_effects', kind: UpdateKind.update)],
     ),
   ]);
 }
@@ -3677,6 +4553,19 @@ final class $$MedicationsTableReferences extends BaseReferences<_$AloftDatabase,
     final cache = $_typedResult.readTableOrNull(_dosesRefsTable($_db));
     return ProcessedTableManager(manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$SideEffectsTable, List<SideEffect>> _sideEffectsRefsTable(_$AloftDatabase db) =>
+      MultiTypedResultKey.fromTable(db.sideEffects, aliasName: 'medications__id__side_effects__medication_id');
+
+  $$SideEffectsTableProcessedTableManager get sideEffectsRefs {
+    final manager = $$SideEffectsTableTableManager(
+      $_db,
+      $_db.sideEffects,
+    ).filter((f) => f.medicationId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_sideEffectsRefsTable($_db));
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$MedicationsTableFilterComposer extends Composer<_$AloftDatabase, $MedicationsTable> {
@@ -3776,6 +4665,24 @@ class $$MedicationsTableFilterComposer extends Composer<_$AloftDatabase, $Medica
           $$DosesTableFilterComposer(
             $db: $db,
             $table: $db.doses,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> sideEffectsRefs(Expression<bool> Function($$SideEffectsTableFilterComposer f) f) {
+    final $$SideEffectsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.sideEffects,
+      getReferencedColumn: (t) => t.medicationId,
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$SideEffectsTableFilterComposer(
+            $db: $db,
+            $table: $db.sideEffects,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
@@ -3939,6 +4846,24 @@ class $$MedicationsTableAnnotationComposer extends Composer<_$AloftDatabase, $Me
     );
     return f(composer);
   }
+
+  Expression<T> sideEffectsRefs<T extends Object>(Expression<T> Function($$SideEffectsTableAnnotationComposer a) f) {
+    final $$SideEffectsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.sideEffects,
+      getReferencedColumn: (t) => t.medicationId,
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$SideEffectsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.sideEffects,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$MedicationsTableTableManager
@@ -3954,7 +4879,7 @@ class $$MedicationsTableTableManager
           $$MedicationsTableUpdateCompanionBuilder,
           (Medication, $$MedicationsTableReferences),
           Medication,
-          PrefetchHooks Function({bool suppliesRefs, bool prescriptionsRefs, bool dosesRefs})
+          PrefetchHooks Function({bool suppliesRefs, bool prescriptionsRefs, bool dosesRefs, bool sideEffectsRefs})
         > {
   $$MedicationsTableTableManager(_$AloftDatabase db, $MedicationsTable table)
     : super(
@@ -4041,53 +4966,69 @@ class $$MedicationsTableTableManager
                 (e) => (e.readTable<$MedicationsTable, Medication>(table), $$MedicationsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({suppliesRefs = false, prescriptionsRefs = false, dosesRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (suppliesRefs) db.supplies,
-                if (prescriptionsRefs) db.prescriptions,
-                if (dosesRefs) db.doses,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (suppliesRefs)
-                    await $_getPrefetchedDataByColumns<Medication, $MedicationsTable, Supply, $SuppliesTable>(
-                      currentTable: table,
-                      referencedTable: $$MedicationsTableReferences._suppliesRefsTable(db),
-                      managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).suppliesRefs,
-                      currentColumn: 'id',
-                      referencedColumn: 'medication_id',
-                      typedResults: items,
-                    ),
-                  if (prescriptionsRefs)
-                    await $_getPrefetchedDataByColumns<
-                      Medication,
-                      $MedicationsTable,
-                      Prescription,
-                      $PrescriptionsTable
-                    >(
-                      currentTable: table,
-                      referencedTable: $$MedicationsTableReferences._prescriptionsRefsTable(db),
-                      managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).prescriptionsRefs,
-                      currentColumn: 'id',
-                      referencedColumn: 'medication_id',
-                      typedResults: items,
-                    ),
-                  if (dosesRefs)
-                    await $_getPrefetchedDataByColumns<Medication, $MedicationsTable, Dose, $DosesTable>(
-                      currentTable: table,
-                      referencedTable: $$MedicationsTableReferences._dosesRefsTable(db),
-                      managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).dosesRefs,
-                      currentColumn: 'id',
-                      referencedColumn: 'medication_id',
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({suppliesRefs = false, prescriptionsRefs = false, dosesRefs = false, sideEffectsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (suppliesRefs) db.supplies,
+                    if (prescriptionsRefs) db.prescriptions,
+                    if (dosesRefs) db.doses,
+                    if (sideEffectsRefs) db.sideEffects,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (suppliesRefs)
+                        await $_getPrefetchedDataByColumns<Medication, $MedicationsTable, Supply, $SuppliesTable>(
+                          currentTable: table,
+                          referencedTable: $$MedicationsTableReferences._suppliesRefsTable(db),
+                          managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).suppliesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'medication_id',
+                          typedResults: items,
+                        ),
+                      if (prescriptionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Medication,
+                          $MedicationsTable,
+                          Prescription,
+                          $PrescriptionsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MedicationsTableReferences._prescriptionsRefsTable(db),
+                          managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).prescriptionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'medication_id',
+                          typedResults: items,
+                        ),
+                      if (dosesRefs)
+                        await $_getPrefetchedDataByColumns<Medication, $MedicationsTable, Dose, $DosesTable>(
+                          currentTable: table,
+                          referencedTable: $$MedicationsTableReferences._dosesRefsTable(db),
+                          managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).dosesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'medication_id',
+                          typedResults: items,
+                        ),
+                      if (sideEffectsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Medication,
+                          $MedicationsTable,
+                          SideEffect,
+                          $SideEffectsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MedicationsTableReferences._sideEffectsRefsTable(db),
+                          managerFromTypedResult: (p0) => $$MedicationsTableReferences(db, table, p0).sideEffectsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'medication_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -4104,7 +5045,7 @@ typedef $$MedicationsTableProcessedTableManager =
       $$MedicationsTableUpdateCompanionBuilder,
       (Medication, $$MedicationsTableReferences),
       Medication,
-      PrefetchHooks Function({bool suppliesRefs, bool prescriptionsRefs, bool dosesRefs})
+      PrefetchHooks Function({bool suppliesRefs, bool prescriptionsRefs, bool dosesRefs, bool sideEffectsRefs})
     >;
 typedef $$SuppliesTableCreateCompanionBuilder = SuppliesCompanion Function({
   Value<String> id,
@@ -5394,6 +6335,514 @@ typedef $$DosesTableProcessedTableManager =
       Dose,
       PrefetchHooks Function({bool medicationId, bool supplyId})
     >;
+typedef $$WeightsTableCreateCompanionBuilder = WeightsCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  required DateTime measuredAt,
+  required double kg,
+  Value<WeightSource> source,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+typedef $$WeightsTableUpdateCompanionBuilder = WeightsCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime> measuredAt,
+  Value<double> kg,
+  Value<WeightSource> source,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+
+class $$WeightsTableFilterComposer extends Composer<_$AloftDatabase, $WeightsTable> {
+  $$WeightsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get measuredAt =>
+      $composableBuilder(column: $table.measuredAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get kg => $composableBuilder(column: $table.kg, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<WeightSource, WeightSource, String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => ColumnFilters(column));
+}
+
+class $$WeightsTableOrderingComposer extends Composer<_$AloftDatabase, $WeightsTable> {
+  $$WeightsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get measuredAt =>
+      $composableBuilder(column: $table.measuredAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get kg => $composableBuilder(column: $table.kg, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => ColumnOrderings(column));
+}
+
+class $$WeightsTableAnnotationComposer extends Composer<_$AloftDatabase, $WeightsTable> {
+  $$WeightsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id => $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt => $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt => $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get measuredAt =>
+      $composableBuilder(column: $table.measuredAt, builder: (column) => column);
+
+  GeneratedColumn<double> get kg => $composableBuilder(column: $table.kg, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<WeightSource, String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get notes => $composableBuilder(column: $table.notes, builder: (column) => column);
+}
+
+class $$WeightsTableTableManager
+    extends
+        RootTableManager<
+          _$AloftDatabase,
+          $WeightsTable,
+          Weight,
+          $$WeightsTableFilterComposer,
+          $$WeightsTableOrderingComposer,
+          $$WeightsTableAnnotationComposer,
+          $$WeightsTableCreateCompanionBuilder,
+          $$WeightsTableUpdateCompanionBuilder,
+          (Weight, BaseReferences<_$AloftDatabase, $WeightsTable, Weight>),
+          Weight,
+          PrefetchHooks Function()
+        > {
+  $$WeightsTableTableManager(_$AloftDatabase db, $WeightsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () => $$WeightsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$WeightsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$WeightsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime> measuredAt = const Value.absent(),
+                Value<double> kg = const Value.absent(),
+                Value<WeightSource> source = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WeightsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                measuredAt: measuredAt,
+                kg: kg,
+                source: source,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                required DateTime measuredAt,
+                required double kg,
+                Value<WeightSource> source = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WeightsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                measuredAt: measuredAt,
+                kg: kg,
+                source: source,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WeightsTable, Weight>(table),
+                  BaseReferences<_$AloftDatabase, $WeightsTable, Weight>(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$WeightsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AloftDatabase,
+      $WeightsTable,
+      Weight,
+      $$WeightsTableFilterComposer,
+      $$WeightsTableOrderingComposer,
+      $$WeightsTableAnnotationComposer,
+      $$WeightsTableCreateCompanionBuilder,
+      $$WeightsTableUpdateCompanionBuilder,
+      (Weight, BaseReferences<_$AloftDatabase, $WeightsTable, Weight>),
+      Weight,
+      PrefetchHooks Function()
+    >;
+typedef $$SideEffectsTableCreateCompanionBuilder = SideEffectsCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  required DateTime occurredAt,
+  required SideEffectType type,
+  Value<String?> customName,
+  required int severity,
+  Value<String?> medicationId,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+typedef $$SideEffectsTableUpdateCompanionBuilder = SideEffectsCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime> occurredAt,
+  Value<SideEffectType> type,
+  Value<String?> customName,
+  Value<int> severity,
+  Value<String?> medicationId,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+
+final class $$SideEffectsTableReferences extends BaseReferences<_$AloftDatabase, $SideEffectsTable, SideEffect> {
+  $$SideEffectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $MedicationsTable _medicationIdTable(_$AloftDatabase db) =>
+      db.medications.createAlias('side_effects__medication_id__medications__id');
+
+  $$MedicationsTableProcessedTableManager? get medicationId {
+    final $_column = $_itemColumn<String>('medication_id');
+    if ($_column == null) return null;
+    final manager = $$MedicationsTableTableManager($_db, $_db.medications).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_medicationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$SideEffectsTableFilterComposer extends Composer<_$AloftDatabase, $SideEffectsTable> {
+  $$SideEffectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get occurredAt =>
+      $composableBuilder(column: $table.occurredAt, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<SideEffectType, SideEffectType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<String> get customName =>
+      $composableBuilder(column: $table.customName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get severity =>
+      $composableBuilder(column: $table.severity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  $$MedicationsTableFilterComposer get medicationId {
+    final $$MedicationsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.medicationId,
+      referencedTable: $db.medications,
+      getReferencedColumn: (t) => t.id,
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$MedicationsTableFilterComposer(
+            $db: $db,
+            $table: $db.medications,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SideEffectsTableOrderingComposer extends Composer<_$AloftDatabase, $SideEffectsTable> {
+  $$SideEffectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get occurredAt =>
+      $composableBuilder(column: $table.occurredAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get customName =>
+      $composableBuilder(column: $table.customName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get severity =>
+      $composableBuilder(column: $table.severity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  $$MedicationsTableOrderingComposer get medicationId {
+    final $$MedicationsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.medicationId,
+      referencedTable: $db.medications,
+      getReferencedColumn: (t) => t.id,
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$MedicationsTableOrderingComposer(
+            $db: $db,
+            $table: $db.medications,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SideEffectsTableAnnotationComposer extends Composer<_$AloftDatabase, $SideEffectsTable> {
+  $$SideEffectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id => $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt => $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt => $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get occurredAt =>
+      $composableBuilder(column: $table.occurredAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SideEffectType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get customName => $composableBuilder(column: $table.customName, builder: (column) => column);
+
+  GeneratedColumn<int> get severity => $composableBuilder(column: $table.severity, builder: (column) => column);
+
+  GeneratedColumn<String> get notes => $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$MedicationsTableAnnotationComposer get medicationId {
+    final $$MedicationsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.medicationId,
+      referencedTable: $db.medications,
+      getReferencedColumn: (t) => t.id,
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$MedicationsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.medications,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SideEffectsTableTableManager
+    extends
+        RootTableManager<
+          _$AloftDatabase,
+          $SideEffectsTable,
+          SideEffect,
+          $$SideEffectsTableFilterComposer,
+          $$SideEffectsTableOrderingComposer,
+          $$SideEffectsTableAnnotationComposer,
+          $$SideEffectsTableCreateCompanionBuilder,
+          $$SideEffectsTableUpdateCompanionBuilder,
+          (SideEffect, $$SideEffectsTableReferences),
+          SideEffect,
+          PrefetchHooks Function({bool medicationId})
+        > {
+  $$SideEffectsTableTableManager(_$AloftDatabase db, $SideEffectsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () => $$SideEffectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$SideEffectsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$SideEffectsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime> occurredAt = const Value.absent(),
+                Value<SideEffectType> type = const Value.absent(),
+                Value<String?> customName = const Value.absent(),
+                Value<int> severity = const Value.absent(),
+                Value<String?> medicationId = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SideEffectsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                occurredAt: occurredAt,
+                type: type,
+                customName: customName,
+                severity: severity,
+                medicationId: medicationId,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                required DateTime occurredAt,
+                required SideEffectType type,
+                Value<String?> customName = const Value.absent(),
+                required int severity,
+                Value<String?> medicationId = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SideEffectsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                occurredAt: occurredAt,
+                type: type,
+                customName: customName,
+                severity: severity,
+                medicationId: medicationId,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (e.readTable<$SideEffectsTable, SideEffect>(table), $$SideEffectsTableReferences(db, table, e)),
+              )
+              .toList(),
+          prefetchHooksCallback: ({medicationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (medicationId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.medicationId,
+                        referencedTable: $$SideEffectsTableReferences._medicationIdTable(db),
+                        referencedColumn: $$SideEffectsTableReferences._medicationIdTable(db).id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SideEffectsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AloftDatabase,
+      $SideEffectsTable,
+      SideEffect,
+      $$SideEffectsTableFilterComposer,
+      $$SideEffectsTableOrderingComposer,
+      $$SideEffectsTableAnnotationComposer,
+      $$SideEffectsTableCreateCompanionBuilder,
+      $$SideEffectsTableUpdateCompanionBuilder,
+      (SideEffect, $$SideEffectsTableReferences),
+      SideEffect,
+      PrefetchHooks Function({bool medicationId})
+    >;
 
 class $AloftDatabaseManager {
   final _$AloftDatabase _db;
@@ -5404,4 +6853,6 @@ class $AloftDatabaseManager {
   $$SuppliesTableTableManager get supplies => $$SuppliesTableTableManager(_db, _db.supplies);
   $$PrescriptionsTableTableManager get prescriptions => $$PrescriptionsTableTableManager(_db, _db.prescriptions);
   $$DosesTableTableManager get doses => $$DosesTableTableManager(_db, _db.doses);
+  $$WeightsTableTableManager get weights => $$WeightsTableTableManager(_db, _db.weights);
+  $$SideEffectsTableTableManager get sideEffects => $$SideEffectsTableTableManager(_db, _db.sideEffects);
 }

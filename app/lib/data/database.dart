@@ -166,12 +166,62 @@ class Doses extends Table with RecordColumns {
   BoolColumn get skipped => boolean().withDefault(const Constant(false))();
 }
 
-@DriftDatabase(tables: [AppSettingsTable, Medications, Supplies, Prescriptions, Doses])
+enum WeightSource { manual, appleHealth, healthConnect }
+
+/// Stored in kilograms; shown in the unit chosen in settings.
+@DataClassName('Weight')
+class Weights extends Table with RecordColumns {
+  DateTimeColumn get measuredAt => dateTime()();
+  RealColumn get kg => real()();
+  TextColumn get source => textEnum<WeightSource>().withDefault(const Constant('manual'))();
+  TextColumn get notes => text().nullable()();
+}
+
+/// Covers every symptom Shotsy exports, plus a custom one.
+enum SideEffectType {
+  nausea('Nausea'),
+  fatigue('Fatigue'),
+  constipation('Constipation'),
+  diarrhea('Diarrhea'),
+  heartburn('Heartburn'),
+  indigestion('Indigestion'),
+  headache('Headache'),
+  stomachPain('Stomach pain'),
+  lowAppetite('Low appetite'),
+  foodNoise('Food noise'),
+  burps('Burps'),
+  injectionSite('Injection site'),
+  mood('Mood'),
+  metallicTaste('Metallic taste'),
+  hairShedding('Hair shedding'),
+  custom('Other');
+
+  const SideEffectType(this.label);
+  final String label;
+}
+
+@DataClassName('SideEffect')
+class SideEffects extends Table with RecordColumns {
+  DateTimeColumn get occurredAt => dateTime()();
+  TextColumn get type => textEnum<SideEffectType>()();
+
+  /// The name typed for [SideEffectType.custom].
+  TextColumn get customName => text().nullable()();
+
+  /// 1 (barely) to 10 (severe), the same scale Shotsy uses.
+  IntColumn get severity => integer()();
+
+  /// "Likely from": optional.
+  TextColumn get medicationId => text().nullable().references(Medications, #id, onDelete: KeyAction.setNull)();
+  TextColumn get notes => text().nullable()();
+}
+
+@DriftDatabase(tables: [AppSettingsTable, Medications, Supplies, Prescriptions, Doses, Weights, SideEffects])
 class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -189,6 +239,10 @@ class AloftDatabase extends _$AloftDatabase {
         await m.addColumn(appSettingsTable, appSettingsTable.remindUseBy);
         // Version 2 already made supplies without lost_ml; version 1 never had the table.
         if (from == 2) await m.addColumn(supplies, supplies.lostMl);
+      }
+      if (from < 4) {
+        await m.createTable(weights);
+        await m.createTable(sideEffects);
       }
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
