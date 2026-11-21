@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 21, 2026 (1.0 build: steps 1–3 and half of 4 of 8 done)_
+_Last updated: November 21, 2026 (1.0 build: steps 1–4 of 8 done, except Health sync)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -29,7 +29,11 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Step 4a, weight and side effects** (Nov 21): log weight in lb or kg with the change since last time and since
       the start; log several side effects at once, each 1–10, with "likely from"; both show in History (with
       All / Shots / Weight / Effects filters) and in quick-add; Today has a weight card.
-- [ ] Step 4b: Apple Health / Health Connect, level chart and the Charts tab
+- [x] **Step 4b, level chart and Charts tab** (Nov 21): estimated level for injected semaglutide, tirzepatide,
+      liraglutide and dulaglutide, with a projection to the next scheduled dose, always labelled as an estimate;
+      weight chart; an estimated-level card on Today.
+- [ ] Step 4c: Apple Health / Health Connect (needs the HealthKit capability set up in Xcode and a real phone)
+- [ ] Step 5: progress photos
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -40,7 +44,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
-6. Build step 4b (Health, level chart, Charts tab).
+6. Build step 5 (progress photos), then Health sync on a real phone.
 
 ## Not done / not verified
 - No trademark check.
@@ -51,9 +55,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
   medication is Pro" limit (any number can be added until Pro is built in step 7).
 - Reminders have not been seen firing on a real phone. They are rebuilt each time the app opens or something is
   logged, and cover the next 14 doses per medication, so they'd stop if the app weren't opened for that long.
-- Half-life and Tmax are left empty for every medication until checked against prescribing information.
+- Half-life and time to peak for the level chart were read from section 12.3 of each US prescribing information on
+  DailyMed on Nov 21, 2026 (semaglutide 1 week / 1–3 days; tirzepatide 5 days / median 24 h; liraglutide 13 h /
+  8–12 h; dulaglutide 5 days / median 48 h). Shannon should look these over once, and they need re-checking before
+  each release. Retatrutide has no prescribing information, so it gets no curve. The numbers are built in and
+  can't be edited in the app yet.
 - Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
 - App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that
   starts at 0, in Shotsy and in Aloft.
-- Drug half-life/Tmax defaults in the spec must be checked against prescribing information before release.
