@@ -36,6 +36,9 @@ class AppSettingsTable extends Table {
   BoolColumn get remindReorder => boolean().withDefault(const Constant(true))();
   BoolColumn get remindUseBy => boolean().withDefault(const Constant(true))();
 
+  /// Set once the welcome screens are finished and the disclaimer has been acknowledged.
+  BoolColumn get onboardingDone => boolean().withDefault(const Constant(false))();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -261,7 +264,7 @@ class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -286,6 +289,13 @@ class AloftDatabase extends _$AloftDatabase {
       }
       if (from < 5) await m.createTable(dayNotes);
       if (from < 6) await m.createTable(progressPhotos);
+      // Phones set up before the welcome screens existed see them once, for the disclaimer.
+      if (from < 7) {
+        final columns = await customSelect('PRAGMA table_info(app_settings)').get();
+        if (!columns.any((c) => c.read<String>('name') == 'onboarding_done')) {
+          await m.addColumn(appSettingsTable, appSettingsTable.onboardingDone);
+        }
+      }
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );

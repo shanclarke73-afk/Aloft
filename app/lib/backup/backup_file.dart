@@ -219,11 +219,11 @@ extension BackupData on AloftDatabase {
                   if (known.contains(key)) key,
               ];
               if (table == appSettingsTable) {
-                // Units and reminder choices come back only when replacing. The lock and
-                // app-switcher choices always stay as they are on this phone.
+                // Units and reminder choices come back only when replacing. The lock and app-switcher
+                // choices, and whether the welcome screens are done, always stay as they are on this phone.
                 if (!replace) continue;
                 final keep = columns.where(
-                  (c) => !const {'id', 'app_lock', 'lock_after', 'hide_in_app_switcher'}.contains(c),
+                  (c) => !const {'id', 'app_lock', 'lock_after', 'hide_in_app_switcher', 'onboarding_done'}.contains(c),
                 );
                 if (keep.isEmpty) continue;
                 await customStatement('UPDATE "$name" SET ${keep.map((c) => '"$c" = ?').join(', ')}', [

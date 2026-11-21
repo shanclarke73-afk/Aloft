@@ -24,6 +24,7 @@ class SettingsController extends Notifier<AppSettings> {
   /// Reads the settings again after something changed them underneath (a restore).
   Future<void> reload() async => state = await ref.read(databaseProvider).loadSettings();
 
+  Future<void> finishOnboarding() => _save(const AppSettingsTableCompanion(onboardingDone: Value(true)));
   Future<void> setWeightUnit(WeightUnit unit) => _save(AppSettingsTableCompanion(weightUnit: Value(unit)));
   Future<void> setLengthUnit(LengthUnit unit) => _save(AppSettingsTableCompanion(lengthUnit: Value(unit)));
   Future<void> setAppearance(Appearance value) => _save(AppSettingsTableCompanion(appearance: Value(value)));
