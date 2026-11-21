@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/database.dart';
+import 'features/onboarding/onboarding_screen.dart';
 import 'reminders/reminder_plan.dart';
 import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
@@ -73,7 +74,7 @@ class _AloftAppState extends ConsumerState<AloftApp> with WidgetsBindingObserver
         Appearance.light => ThemeMode.light,
         Appearance.dark => ThemeMode.dark,
       },
-      home: const HomeShell(),
+      home: settings.onboardingDone ? const HomeShell() : const OnboardingScreen(),
       // The lock and the app-switcher cover sit above every screen, sheet and dialog.
       builder: (context, child) => ListenableBuilder(
         listenable: lock,

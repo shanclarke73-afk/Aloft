@@ -108,6 +108,17 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("remind_use_by" IN (0, 1))'),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _onboardingDoneMeta = const VerificationMeta('onboardingDone');
+  @override
+  late final GeneratedColumn<bool> onboardingDone = GeneratedColumn<bool>(
+    'onboarding_done',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("onboarding_done" IN (0, 1))'),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -120,6 +131,7 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     remindShots,
     remindReorder,
     remindUseBy,
+    onboardingDone,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -154,6 +166,12 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     if (data.containsKey('remind_use_by')) {
       context.handle(_remindUseByMeta, remindUseBy.isAcceptableOrUnknown(data['remind_use_by']!, _remindUseByMeta));
     }
+    if (data.containsKey('onboarding_done')) {
+      context.handle(
+        _onboardingDoneMeta,
+        onboardingDone.isAcceptableOrUnknown(data['onboarding_done']!, _onboardingDoneMeta),
+      );
+    }
     return context;
   }
 
@@ -184,6 +202,7 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
       remindShots: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_shots'])!,
       remindReorder: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_reorder'])!,
       remindUseBy: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_use_by'])!,
+      onboardingDone: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}onboarding_done'])!,
     );
   }
 
@@ -217,6 +236,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
   final bool remindShots;
   final bool remindReorder;
   final bool remindUseBy;
+
+  /// Set once the welcome screens are finished and the disclaimer has been acknowledged.
+  final bool onboardingDone;
   const AppSettings({
     required this.id,
     required this.weightUnit,
@@ -228,6 +250,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     required this.remindShots,
     required this.remindReorder,
     required this.remindUseBy,
+    required this.onboardingDone,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -250,6 +273,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     map['remind_shots'] = Variable<bool>(remindShots);
     map['remind_reorder'] = Variable<bool>(remindReorder);
     map['remind_use_by'] = Variable<bool>(remindUseBy);
+    map['onboarding_done'] = Variable<bool>(onboardingDone);
     return map;
   }
 
@@ -265,6 +289,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindShots: Value(remindShots),
       remindReorder: Value(remindReorder),
       remindUseBy: Value(remindUseBy),
+      onboardingDone: Value(onboardingDone),
     );
   }
 
@@ -281,6 +306,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindShots: serializer.fromJson<bool>(json['remindShots']),
       remindReorder: serializer.fromJson<bool>(json['remindReorder']),
       remindUseBy: serializer.fromJson<bool>(json['remindUseBy']),
+      onboardingDone: serializer.fromJson<bool>(json['onboardingDone']),
     );
   }
   @override
@@ -297,6 +323,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       'remindShots': serializer.toJson<bool>(remindShots),
       'remindReorder': serializer.toJson<bool>(remindReorder),
       'remindUseBy': serializer.toJson<bool>(remindUseBy),
+      'onboardingDone': serializer.toJson<bool>(onboardingDone),
     };
   }
 
@@ -311,6 +338,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     bool? remindShots,
     bool? remindReorder,
     bool? remindUseBy,
+    bool? onboardingDone,
   }) => AppSettings(
     id: id ?? this.id,
     weightUnit: weightUnit ?? this.weightUnit,
@@ -322,6 +350,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     remindShots: remindShots ?? this.remindShots,
     remindReorder: remindReorder ?? this.remindReorder,
     remindUseBy: remindUseBy ?? this.remindUseBy,
+    onboardingDone: onboardingDone ?? this.onboardingDone,
   );
   AppSettings copyWithCompanion(AppSettingsTableCompanion data) {
     return AppSettings(
@@ -335,6 +364,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindShots: data.remindShots.present ? data.remindShots.value : this.remindShots,
       remindReorder: data.remindReorder.present ? data.remindReorder.value : this.remindReorder,
       remindUseBy: data.remindUseBy.present ? data.remindUseBy.value : this.remindUseBy,
+      onboardingDone: data.onboardingDone.present ? data.onboardingDone.value : this.onboardingDone,
     );
   }
 
@@ -350,7 +380,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           ..write('hideInAppSwitcher: $hideInAppSwitcher, ')
           ..write('remindShots: $remindShots, ')
           ..write('remindReorder: $remindReorder, ')
-          ..write('remindUseBy: $remindUseBy')
+          ..write('remindUseBy: $remindUseBy, ')
+          ..write('onboardingDone: $onboardingDone')
           ..write(')'))
         .toString();
   }
@@ -367,6 +398,7 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     remindShots,
     remindReorder,
     remindUseBy,
+    onboardingDone,
   );
   @override
   bool operator ==(Object other) =>
@@ -381,7 +413,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           other.hideInAppSwitcher == this.hideInAppSwitcher &&
           other.remindShots == this.remindShots &&
           other.remindReorder == this.remindReorder &&
-          other.remindUseBy == this.remindUseBy);
+          other.remindUseBy == this.remindUseBy &&
+          other.onboardingDone == this.onboardingDone);
 }
 
 class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
@@ -395,6 +428,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
   final Value<bool> remindShots;
   final Value<bool> remindReorder;
   final Value<bool> remindUseBy;
+  final Value<bool> onboardingDone;
   const AppSettingsTableCompanion({
     this.id = const Value.absent(),
     this.weightUnit = const Value.absent(),
@@ -406,6 +440,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.remindShots = const Value.absent(),
     this.remindReorder = const Value.absent(),
     this.remindUseBy = const Value.absent(),
+    this.onboardingDone = const Value.absent(),
   });
   AppSettingsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -418,6 +453,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.remindShots = const Value.absent(),
     this.remindReorder = const Value.absent(),
     this.remindUseBy = const Value.absent(),
+    this.onboardingDone = const Value.absent(),
   }) : weightUnit = Value(weightUnit),
        lengthUnit = Value(lengthUnit);
   static Insertable<AppSettings> custom({
@@ -431,6 +467,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Expression<bool>? remindShots,
     Expression<bool>? remindReorder,
     Expression<bool>? remindUseBy,
+    Expression<bool>? onboardingDone,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -443,6 +480,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       if (remindShots != null) 'remind_shots': remindShots,
       if (remindReorder != null) 'remind_reorder': remindReorder,
       if (remindUseBy != null) 'remind_use_by': remindUseBy,
+      if (onboardingDone != null) 'onboarding_done': onboardingDone,
     });
   }
 
@@ -457,6 +495,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Value<bool>? remindShots,
     Value<bool>? remindReorder,
     Value<bool>? remindUseBy,
+    Value<bool>? onboardingDone,
   }) {
     return AppSettingsTableCompanion(
       id: id ?? this.id,
@@ -469,6 +508,7 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       remindShots: remindShots ?? this.remindShots,
       remindReorder: remindReorder ?? this.remindReorder,
       remindUseBy: remindUseBy ?? this.remindUseBy,
+      onboardingDone: onboardingDone ?? this.onboardingDone,
     );
   }
 
@@ -505,6 +545,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     if (remindUseBy.present) {
       map['remind_use_by'] = Variable<bool>(remindUseBy.value);
     }
+    if (onboardingDone.present) {
+      map['onboarding_done'] = Variable<bool>(onboardingDone.value);
+    }
     return map;
   }
 
@@ -520,7 +563,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
           ..write('hideInAppSwitcher: $hideInAppSwitcher, ')
           ..write('remindShots: $remindShots, ')
           ..write('remindReorder: $remindReorder, ')
-          ..write('remindUseBy: $remindUseBy')
+          ..write('remindUseBy: $remindUseBy, ')
+          ..write('onboardingDone: $onboardingDone')
           ..write(')'))
         .toString();
   }
@@ -4909,6 +4953,7 @@ typedef $$AppSettingsTableTableCreateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> remindShots,
   Value<bool> remindReorder,
   Value<bool> remindUseBy,
+  Value<bool> onboardingDone,
 });
 typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanion Function({
   Value<int> id,
@@ -4921,6 +4966,7 @@ typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> remindShots,
   Value<bool> remindReorder,
   Value<bool> remindUseBy,
+  Value<bool> onboardingDone,
 });
 
 class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -4959,6 +5005,9 @@ class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $A
 
   ColumnFilters<bool> get remindUseBy =>
       $composableBuilder(column: $table.remindUseBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get onboardingDone =>
+      $composableBuilder(column: $table.onboardingDone, builder: (column) => ColumnFilters(column));
 }
 
 class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -4997,6 +5046,9 @@ class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, 
 
   ColumnOrderings<bool> get remindUseBy =>
       $composableBuilder(column: $table.remindUseBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get onboardingDone =>
+      $composableBuilder(column: $table.onboardingDone, builder: (column) => ColumnOrderings(column));
 }
 
 class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -5032,6 +5084,9 @@ class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase
       $composableBuilder(column: $table.remindReorder, builder: (column) => column);
 
   GeneratedColumn<bool> get remindUseBy => $composableBuilder(column: $table.remindUseBy, builder: (column) => column);
+
+  GeneratedColumn<bool> get onboardingDone =>
+      $composableBuilder(column: $table.onboardingDone, builder: (column) => column);
 }
 
 class $$AppSettingsTableTableTableManager
@@ -5069,6 +5124,7 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> remindShots = const Value.absent(),
                 Value<bool> remindReorder = const Value.absent(),
                 Value<bool> remindUseBy = const Value.absent(),
+                Value<bool> onboardingDone = const Value.absent(),
               }) => AppSettingsTableCompanion(
                 id: id,
                 weightUnit: weightUnit,
@@ -5080,6 +5136,7 @@ class $$AppSettingsTableTableTableManager
                 remindShots: remindShots,
                 remindReorder: remindReorder,
                 remindUseBy: remindUseBy,
+                onboardingDone: onboardingDone,
               ),
           createCompanionCallback:
               ({
@@ -5093,6 +5150,7 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> remindShots = const Value.absent(),
                 Value<bool> remindReorder = const Value.absent(),
                 Value<bool> remindUseBy = const Value.absent(),
+                Value<bool> onboardingDone = const Value.absent(),
               }) => AppSettingsTableCompanion.insert(
                 id: id,
                 weightUnit: weightUnit,
@@ -5104,6 +5162,7 @@ class $$AppSettingsTableTableTableManager
                 remindShots: remindShots,
                 remindReorder: remindReorder,
                 remindUseBy: remindUseBy,
+                onboardingDone: onboardingDone,
               ),
           withReferenceMapper: (p0) => p0
               .map(

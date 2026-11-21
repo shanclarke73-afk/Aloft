@@ -5,6 +5,7 @@ import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/security/app_lock.dart';
 import 'package:aloft/settings/settings.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +20,9 @@ void main() {
     late AppSettings settings;
     await tester.runAsync(() async {
       db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
-      settings = await db.loadSettings(countryCode: 'US');
+      await db.loadSettings(countryCode: 'US');
+      // Past the welcome screens, which have their own test.
+      settings = await db.saveSettings(const AppSettingsTableCompanion(onboardingDone: Value(true)));
     });
     final lock = AppLock(authenticator: FakeAuthenticator(), enabled: false, lockAfter: LockAfter.immediately);
     await tester.runAsync(lock.detectMethod);
