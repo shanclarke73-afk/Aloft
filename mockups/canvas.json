@@ -2,6 +2,15 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "VialSetupTwoMeds.dc.html": {
+      "h": 1280,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "New vial: adding NAD+ as a second medication (Pro)",
+      "w": 390,
+      "x": 3290,
+      "y": 0
+    },
     "ExportTwoMeds.dc.html": {
       "h": 844,
       "is_interactive": true,
@@ -253,7 +262,8 @@
     "HistoryTwoMeds.dc.html",
     "ChartsTwoMeds.dc.html",
     "PhotoCompareTwoMeds.dc.html",
-    "ExportTwoMeds.dc.html"
+    "ExportTwoMeds.dc.html",
+    "VialSetupTwoMeds.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"

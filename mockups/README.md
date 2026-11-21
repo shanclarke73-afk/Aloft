@@ -20,6 +20,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
 | `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
 | `VialSetup.dc.html` | New vial from label scan, incl. "Your dose" |
+| `VialSetupTwoMeds.dc.html` | Adding NAD+ as a second medication (own dose and Mon & Thu schedule, Pro) |
 | `Charts.dc.html` | Medication level + weight |
 | `ChartsTwoMeds.dc.html` | Charts with two medications (GLP-1 level, add-on doses taken, side effects by med, Pro) |
 | `PhotoCapture.dc.html` | Progress photo capture with outline |
