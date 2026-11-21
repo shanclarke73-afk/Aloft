@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Log a shot, two medications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.card{background:#FFFFFF;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.pick{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-height:60px;border:2px solid #E3E8EF;background:#FFFFFF;border-radius:14px;padding:8px 12px;text-align:left;font-family:Inter,sans-serif;color:#12263A;box-sizing:border-box}
+.pick.on{border-color:#1F5F8F;background:#F3F8FC}
+.seg{flex:1;height:38px;border:none;border-radius:10px;font:600 14px Inter,sans-serif;color:#5B6878;background:transparent}
+.seg.on{background:#FFFFFF;color:#12263A;box-shadow:0 1px 3px rgba(18,38,58,.12)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 52px 20px 24px; display: flex; flex-direction: column; gap: 12px">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="MainTwoMeds.dc.html" style="font-size: 16px; text-decoration: none; padding: 12px 0">Cancel</a>
+    <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-weight: 700; font-size: 17px">Log shot</span>
+    <a href="MainTwoMeds.dc.html" style="font-size: 16px; font-weight: 700; text-decoration: none; padding: 12px 0">Save</a>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 13px; font-weight: 600; color: #4A5A6B">Which shot?</span>
+    <div style="display: flex; gap: 8px" role="radiogroup" aria-label="Medication">
+      <button class="pick on" role="radio" aria-checked="true">
+        <span style="font-size: 15px; font-weight: 700">Zepbound®</span>
+        <span style="font-size: 12px; color: #1F4E75; font-weight: 600">Due today, 8:00 PM</span>
+      </button>
+      <button class="pick" role="radio" aria-checked="false">
+        <span style="font-size: 15px; font-weight: 700">NAD+</span>
+        <span style="font-size: 12px; color: #1E6B3C; font-weight: 600">✓ Logged 9:10 AM</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; background: #EEF2F6; border-radius: 12px; padding: 4px; gap: 4px" role="group" aria-label="Enter dose in">
+      <button class="seg on" aria-pressed="true">mg</button>
+      <button class="seg" aria-pressed="false">mL</button>
+    </div>
+    <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px">
+      <label for="amt" style="position: absolute; left: -9999px">Amount in mg</label>
+      <input id="amt" value="5" inputmode="decimal" style="width: 110px; border: none; background: transparent; text-align: right; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 60px; font-weight: 800; color: #12263A; padding: 0">
+      <span style="font-size: 22px; font-weight: 600; color: #5B6878">mg</span>
+    </div>
+    <div style="background: #E8F1F8; border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px">
+      <span style="font-size: 15px; font-weight: 700; color: #1F4E75">= 0.5 mL tirzepatide (Zepbound 5 mg pen)</span>
+      <span style="font-size: 12px; color: #4A5A6B">Single-dose pen · 3 left after this</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #1E6B3C; font-weight: 600">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+      Same as your prescription and last dose
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; gap: 14px; align-items: center">
+    <svg width="100" height="160" viewBox="0 0 110 170" fill="none" role="img" aria-label="Body map: NAD+ in left thigh this morning, suggested Zepbound site lower right abdomen">
+      <circle cx="55" cy="18" r="13" stroke="#B7C3D0" stroke-width="1.6"/>
+      <path d="M32 38 Q55 30 78 38 L86 92 L80 94 L76 62 L74 110 L80 166 L64 166 L57 116 L53 116 L46 166 L30 166 L36 110 L34 62 L30 94 L24 92 Z" stroke="#B7C3D0" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="47" cy="84" r="5" fill="#CBD5E0"/>
+      <circle cx="63" cy="84" r="9" fill="#E07A4F" opacity="0.25"/>
+      <circle cx="63" cy="84" r="6" fill="#E07A4F"/>
+      <circle cx="44" cy="128" r="6" fill="#1E6B3C"/>
+      <circle cx="66" cy="128" r="4" fill="#E3E8EF"/>
+      <circle cx="47" cy="70" r="4" fill="#E3E8EF"/>
+      <circle cx="63" cy="70" r="4" fill="#E3E8EF"/>
+      <circle cx="29" cy="58" r="4" fill="#FFFFFF" stroke="#8C9BAB" stroke-width="1.4" stroke-dasharray="2 2"/>
+      <circle cx="81" cy="58" r="4" fill="#FFFFFF" stroke="#8C9BAB" stroke-width="1.4" stroke-dasharray="2 2"/>
+    </svg>
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <span style="font-size: 13px; color: #5B6878; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px">Injection site</span>
+      <span style="font-size: 17px; font-weight: 700">Abdomen, lower right</span>
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #33475B"><span style="width: 8px; height: 8px; border-radius: 4px; background: #1E6B3C; flex-shrink: 0"></span>NAD+ went in left thigh today</span>
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #33475B"><span style="width: 8px; height: 8px; border-radius: 4px; border: 1.4px dashed #8C9BAB; box-sizing: border-box; flex-shrink: 0"></span>Dashed = back of upper arm</span>
+      <span style="font-size: 12px; color: #5B6878">Rotation covers all your shots, so sites don't repeat.</span>
+      <button style="align-self: flex-start; border: 1px solid #D5DDE6; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font: 600 14px Inter, sans-serif; color: #12263A; min-height: 44px">Choose another</button>
+    </div>
+  </div>
+
+  <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 4px 16px; min-height: 52px">
+    <span style="font-size: 15px">When</span>
+    <button style="border: none; background: none; font: 600 15px Inter, sans-serif; color: #2F6FA3; padding: 12px 0">Today, 8:04 PM</button>
+  </div>
+
+  <span style="font-size: 12px; color: #5B6878; text-align: center; line-height: 1.4">Aloft converts what your label says. It never suggests a dose.</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -101,7 +101,9 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 - `supplyId`, `takenAt`, `amountEntered` + `unitEntered` (units | mL | mg)
 - Calculated and stored at log time: `volumeMl`, `drugMg`, `additiveAmounts` (frozen so later edits to the supply
   don't rewrite history)
-- `injectionSite` (abdomen L/R upper/lower, thigh L/R, arm L/R, buttock L/R), `syringeType` (U-100 default)
+- `injectionSite` (abdomen L/R upper/lower, thigh L/R, **back of upper arm** L/R, buttock L/R, custom),
+  `syringeType` (U-100 default). Body map shows front sites plus the back-of-arm sites (drawn dashed, since they're
+  on the back); rotation spans **all** medications so two shots never land on the same spot.
 - `notes`, `skipped` (bool, for "skipped this week")
 
 **Weight**: `measuredAt`, `kg` (displayed in user's unit), `source` (manual | appleHealth | healthConnect)

@@ -18,6 +18,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `Main.dc.html` | Today |
 | `MainTwoMeds.dc.html` | Today with two medications (Zepbound + NAD+, Pro) |
 | `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
+| `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
 | `VialSetup.dc.html` | New vial from label scan, incl. "Your dose" |
 | `Charts.dc.html` | Medication level + weight |
 | `PhotoCapture.dc.html` | Progress photo capture with outline |
