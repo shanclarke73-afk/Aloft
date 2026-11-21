@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/database.dart';
+import 'reminders/reminder_plan.dart';
+import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
 import 'security/lock_screen.dart';
 import 'security/screen_privacy.dart';
@@ -32,11 +34,20 @@ class _AloftAppState extends ConsumerState<AloftApp> with WidgetsBindingObserver
     super.dispose();
   }
 
+  void _syncReminders() {
+    final medications = ref.read(medicationsProvider).value;
+    if (medications == null) return;
+    ref
+        .read(remindersProvider)
+        .sync(planReminders(medications: medications, settings: ref.read(settingsProvider), now: DateTime.now()));
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final lock = ref.read(appLockProvider);
     if (state == AppLifecycleState.resumed) {
       lock.onForeground();
+      _syncReminders();
     } else if (state == AppLifecycleState.hidden || state == AppLifecycleState.paused) {
       lock.onBackground();
     }
@@ -48,6 +59,9 @@ class _AloftAppState extends ConsumerState<AloftApp> with WidgetsBindingObserver
     final settings = ref.watch(settingsProvider);
     final lock = ref.watch(appLockProvider);
     ref.listen(settingsProvider.select((s) => s.hideInAppSwitcher), (_, hide) => ScreenPrivacy.setHidden(hide));
+    // Reminders are rebuilt from scratch whenever medications, doses or the switches change.
+    ref.listen(medicationsProvider, (_, _) => _syncReminders());
+    ref.listen(settingsProvider, (_, _) => _syncReminders());
 
     return MaterialApp(
       title: 'Aloft',

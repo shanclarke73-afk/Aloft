@@ -45,6 +45,29 @@ class MoreScreen extends ConsumerWidget {
               ),
             ],
           ),
+          const _SectionTitle('Reminders'),
+          _Section(
+            children: [
+              SwitchListTile(
+                title: const Text('Shot and dose days'),
+                subtitle: const Text('At the time you set for each medication'),
+                value: settings.remindShots,
+                onChanged: controller.setRemindShots,
+              ),
+              SwitchListTile(
+                title: const Text('Reorder'),
+                subtitle: const Text('At 2 doses left'),
+                value: settings.remindReorder,
+                onChanged: controller.setRemindReorder,
+              ),
+              SwitchListTile(
+                title: const Text('Use-by date'),
+                subtitle: const Text('A week before'),
+                value: settings.remindUseBy,
+                onChanged: controller.setRemindUseBy,
+              ),
+            ],
+          ),
           const _SectionTitle('Preferences'),
           _Section(
             children: [

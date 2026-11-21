@@ -23,6 +23,9 @@ class SettingsController extends Notifier<AppSettings> {
   Future<void> setAppearance(Appearance value) => _save(AppSettingsTableCompanion(appearance: Value(value)));
   Future<void> setAppLock(bool on) => _save(AppSettingsTableCompanion(appLock: Value(on)));
   Future<void> setLockAfter(LockAfter value) => _save(AppSettingsTableCompanion(lockAfter: Value(value)));
+  Future<void> setRemindShots(bool on) => _save(AppSettingsTableCompanion(remindShots: Value(on)));
+  Future<void> setRemindReorder(bool on) => _save(AppSettingsTableCompanion(remindReorder: Value(on)));
+  Future<void> setRemindUseBy(bool on) => _save(AppSettingsTableCompanion(remindUseBy: Value(on)));
   Future<void> setHideInAppSwitcher(bool on) => _save(AppSettingsTableCompanion(hideInAppSwitcher: Value(on)));
 }
 
@@ -30,3 +33,6 @@ class SettingsController extends Notifier<AppSettings> {
 final medicationsProvider = StreamProvider<List<MedicationDetail>>(
   (ref) => ref.watch(databaseProvider).watchMedications(),
 );
+
+/// Everything logged, newest first.
+final historyProvider = StreamProvider<List<HistoryEntry>>((ref) => ref.watch(databaseProvider).watchHistory());

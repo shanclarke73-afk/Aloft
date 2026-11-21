@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
 import 'data/encrypted_database.dart';
+import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
 import 'settings/settings.dart';
 
@@ -21,6 +22,7 @@ Future<void> main() async {
           databaseProvider.overrideWithValue(database),
           initialSettingsProvider.overrideWithValue(settings),
           appLockProvider.overrideWithValue(lock),
+          remindersProvider.overrideWithValue(DeviceReminders()),
         ],
         child: const AloftApp(),
       ),

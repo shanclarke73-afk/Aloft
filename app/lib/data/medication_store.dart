@@ -11,6 +11,7 @@ class MedicationDetail {
     required this.supply,
     required this.usualDose,
     required this.lastDose,
+    required this.lastLogged,
     required this.usedMl,
     required this.usedPills,
   });
@@ -22,10 +23,14 @@ class MedicationDetail {
 
   /// Most recent dose that was taken (not skipped).
   final Dose? lastDose;
+
+  /// Most recent dose taken or skipped: what the schedule counts from.
+  final Dose? lastLogged;
   final double usedMl;
   final double usedPills;
 
-  double? get remainingMl => supply?.volumeMl == null ? null : (supply!.volumeMl! - usedMl).clamp(0, double.infinity);
+  double? get remainingMl =>
+      supply?.volumeMl == null ? null : (supply!.volumeMl! - supply!.lostMl - usedMl).clamp(0, double.infinity);
   double? get remainingPills =>
       supply?.pillCount == null ? null : (supply!.pillCount! - usedPills).clamp(0, double.infinity);
 }
@@ -154,6 +159,12 @@ extension MedicationStore on AloftDatabase {
               ..orderBy([(d) => OrderingTerm.desc(d.takenAt)])
               ..limit(1))
             .getSingleOrNull();
+    final lastLogged =
+        await (select(doses)
+              ..where((d) => d.medicationId.equals(m.id))
+              ..orderBy([(d) => OrderingTerm.desc(d.takenAt)])
+              ..limit(1))
+            .getSingleOrNull();
     var usedMl = 0.0, usedPills = 0.0;
     if (supply != null) {
       final taken = await (select(doses)..where((d) => d.supplyId.equals(supply.id) & d.skipped.equals(false))).get();
@@ -167,6 +178,7 @@ extension MedicationStore on AloftDatabase {
       supply: supply,
       usualDose: usual,
       lastDose: last,
+      lastLogged: lastLogged,
       usedMl: usedMl,
       usedPills: usedPills,
     );
@@ -196,6 +208,34 @@ extension MedicationStore on AloftDatabase {
     String? notes,
     bool skipped = false,
   }) {
+    final frozen = _freeze(supply, amount, unit, skipped);
+    final cleanNotes = notes?.trim();
+    return into(doses).insertReturning(
+      DosesCompanion.insert(
+        medicationId: medication.id,
+        supplyId: supply.id,
+        takenAt: takenAt,
+        amountEntered: skipped ? 0 : amount,
+        unitEntered: unit,
+        volumeMl: Value(frozen.volumeMl),
+        drugMg: Value(frozen.drugMg),
+        additiveAmounts: Value(frozen.extras),
+        injectionPain: Value(skipped ? 0 : pain),
+        injectionSite: Value(skipped ? null : site),
+        syringeType: Value(frozen.syringe),
+        notes: Value(cleanNotes == null || cleanNotes.isEmpty ? null : cleanNotes),
+        skipped: Value(skipped),
+      ),
+    );
+  }
+
+  /// mL, mg and extra-ingredient amounts for a dose from this supply, as it is right now.
+  ({double? volumeMl, double? drugMg, Map<String, String> extras, String? syringe}) _freeze(
+    Supply supply,
+    double amount,
+    DoseUnit unit,
+    bool skipped,
+  ) {
     double? volumeMl, drugMg;
     var extras = <String, String>{};
     if (!skipped) {
@@ -215,23 +255,133 @@ extension MedicationStore on AloftDatabase {
         if (unit == DoseUnit.ml) volumeMl = amount;
       }
     }
+    final vial = volumeMl != null && supply.concentrationMgPerMl != null;
+    return (volumeMl: volumeMl, drugMg: drugMg, extras: extras, syringe: vial ? 'U-100' : null);
+  }
+
+  /// Changes a logged dose. Amounts are worked out again from the vial it came from.
+  Future<Dose> updateDose(
+    Dose dose, {
+    required double amount,
+    required DoseUnit unit,
+    required DateTime takenAt,
+    InjectionSite? site,
+    int pain = 0,
+    String? notes,
+  }) async {
+    final supply = await (select(supplies)..where((s) => s.id.equals(dose.supplyId))).getSingle();
+    final frozen = _freeze(supply, amount, unit, false);
     final cleanNotes = notes?.trim();
-    return into(doses).insertReturning(
-      DosesCompanion.insert(
-        medicationId: medication.id,
-        supplyId: supply.id,
-        takenAt: takenAt,
-        amountEntered: skipped ? 0 : amount,
-        unitEntered: unit,
-        volumeMl: Value(volumeMl),
-        drugMg: Value(drugMg),
-        additiveAmounts: Value(extras),
-        injectionPain: Value(skipped ? 0 : pain),
-        injectionSite: Value(skipped ? null : site),
-        syringeType: Value(volumeMl != null && supply.concentrationMgPerMl != null ? 'U-100' : null),
+    final rows = await (update(doses)..where((d) => d.id.equals(dose.id))).writeReturning(
+      DosesCompanion(
+        updatedAt: Value(DateTime.now()),
+        takenAt: Value(takenAt),
+        amountEntered: Value(amount),
+        unitEntered: Value(unit),
+        volumeMl: Value(frozen.volumeMl),
+        drugMg: Value(frozen.drugMg),
+        additiveAmounts: Value(frozen.extras),
+        injectionPain: Value(pain),
+        injectionSite: Value(site),
+        syringeType: Value(frozen.syringe),
         notes: Value(cleanNotes == null || cleanNotes.isEmpty ? null : cleanNotes),
-        skipped: Value(skipped),
+        skipped: const Value(false),
       ),
     );
+    return rows.single;
   }
+
+  Future<void> deleteDose(Dose dose) => (delete(doses)..where((d) => d.id.equals(dose.id))).go();
+
+  /// Puts back a dose that was just deleted (Undo), exactly as it was.
+  Future<void> restoreDose(Dose dose) => into(doses).insert(dose);
+
+  /// Everything logged, newest first, with the medication and vial each dose came from.
+  Stream<List<HistoryEntry>> watchHistory() {
+    final query = select(doses).join([
+      innerJoin(medications, medications.id.equalsExp(doses.medicationId)),
+      innerJoin(supplies, supplies.id.equalsExp(doses.supplyId)),
+    ])..orderBy([OrderingTerm.desc(doses.takenAt)]);
+    return query.watch().map(
+      (rows) => [
+        for (final row in rows)
+          HistoryEntry(
+            dose: row.readTable(doses),
+            medication: row.readTable(medications),
+            supply: row.readTable(supplies),
+          ),
+      ],
+    );
+  }
+
+  /// Ends the current usual dose and starts a new one. History keeps the old one.
+  Future<void> changeUsualDose(Medication m, double amount, DoseUnit unit, {DateTime? now}) {
+    final at = now ?? DateTime.now();
+    return transaction(() async {
+      await (update(prescriptions)..where((p) => p.medicationId.equals(m.id) & p.endDate.isNull())).write(
+        PrescriptionsCompanion(endDate: Value(at), updatedAt: Value(at)),
+      );
+      await into(prescriptions)
+          .insert(PrescriptionsCompanion.insert(medicationId: m.id, prescribedDose: amount, unit: unit, startDate: at));
+    });
+  }
+
+  Future<void> updateSchedule(
+    Medication m, {
+    required ScheduleType type,
+    required List<int> days,
+    int? interval,
+    int? timeOfDayMinutes,
+  }) => (update(medications)..where((x) => x.id.equals(m.id))).write(
+    MedicationsCompanion(
+      updatedAt: Value(DateTime.now()),
+      scheduleType: Value(type),
+      scheduleDays: Value(days),
+      scheduleInterval: Value(interval),
+      timeOfDayMinutes: Value(timeOfDayMinutes),
+    ),
+  );
+
+  /// Pausing stops reminders and "due" on Today but keeps all history.
+  Future<void> setMedicationStatus(Medication m, MedicationStatus status) =>
+      (update(medications)..where((x) => x.id.equals(m.id))).write(
+        MedicationsCompanion(status: Value(status), updatedAt: Value(DateTime.now())),
+      );
+
+  Future<void> finishSupply(Supply supply) => (update(supplies)..where((s) => s.id.equals(supply.id))).write(
+    SuppliesCompanion(status: const Value(SupplyStatus.finished), updatedAt: Value(DateTime.now())),
+  );
+
+  /// Starts a new vial, pen strength or bottle; the one in use before is marked finished.
+  Future<Supply> startNewSupply(Medication m, SuppliesCompanion supply) {
+    return transaction(() async {
+      await (update(supplies)..where((s) => s.medicationId.equals(m.id) & s.status.equalsValue(SupplyStatus.active)))
+          .write(SuppliesCompanion(status: const Value(SupplyStatus.finished), updatedAt: Value(DateTime.now())));
+      return into(supplies).insertReturning(supply.copyWith(medicationId: Value(m.id)));
+    });
+  }
+
+  /// Sets what's left in a vial by hand (after a spill, or priming the needle). The difference
+  /// is recorded as lost, so logged doses stay as they are.
+  Future<void> setRemainingMl(MedicationDetail d, double remainingMl) {
+    final supply = d.supply!;
+    final lost = (supply.volumeMl! - d.usedMl - remainingMl).clamp(0.0, supply.volumeMl!);
+    return (update(supplies)..where((s) => s.id.equals(supply.id))).write(
+      SuppliesCompanion(lostMl: Value(lost), updatedAt: Value(DateTime.now())),
+    );
+  }
+
+  /// Vials, pens and bottles this medication has finished, newest first.
+  Future<List<Supply>> pastSupplies(Medication m) =>
+      (select(supplies)
+            ..where((s) => s.medicationId.equals(m.id) & s.status.equalsValue(SupplyStatus.active).not())
+            ..orderBy([(s) => OrderingTerm.desc(s.createdAt)]))
+          .get();
+}
+
+class HistoryEntry {
+  const HistoryEntry({required this.dose, required this.medication, required this.supply});
+  final Dose dose;
+  final Medication medication;
+  final Supply supply;
 }

@@ -205,4 +205,131 @@ void main() {
     await db.addMedication(tirzepatideVial);
     expect((await only()).medication.name, 'Tirzepatide');
   });
+
+  group('changing things later', () {
+    Future<Dose> shot(MedicationDetail d, {double amount = 25, int day = 19}) => db.logDose(
+      medication: d.medication,
+      supply: d.supply!,
+      amount: amount,
+      unit: DoseUnit.units,
+      takenAt: DateTime(2026, 11, day, 20),
+      site: InjectionSite.abdomenLowerLeft,
+    );
+
+    test('editing a shot works the amounts out again and gives the difference back to the vial', () async {
+      await db.addMedication(tirzepatideVial);
+      final dose = await shot(await only());
+      final edited = await db.updateDose(
+        dose,
+        amount: 20,
+        unit: DoseUnit.units,
+        takenAt: DateTime(2026, 11, 19, 21),
+        site: InjectionSite.thighLeft,
+        pain: 3,
+        notes: 'fixed',
+      );
+      expect((edited.volumeMl, edited.drugMg, edited.injectionPain, edited.notes), (0.2, 2.0, 3, 'fixed'));
+      expect(edited.additiveAmounts, {'Cyanocobalamin (B12)': '0.1 mg'});
+      expect((await only()).remainingMl, closeTo(1.8, 1e-9));
+    });
+
+    test('deleting a shot gives its volume back, and Undo restores it exactly', () async {
+      await db.addMedication(tirzepatideVial);
+      final dose = await shot(await only());
+      await db.deleteDose(dose);
+      expect(((await only()).remainingMl, (await only()).lastDose), (2, null));
+      await db.restoreDose(dose);
+      final back = (await only()).lastDose!;
+      expect((back.id, back.drugMg, back.takenAt), (dose.id, dose.drugMg, dose.takenAt));
+    });
+
+    test('history lists doses newest first with their medication', () async {
+      await db.addMedication(tirzepatideVial);
+      final d = await only();
+      await shot(d, day: 12);
+      await shot(d, day: 19);
+      final history = await db.watchHistory().first;
+      expect([for (final e in history) e.dose.takenAt.day], [19, 12]);
+      expect(history.first.medication.name, 'Tirzepatide');
+    });
+
+    test('changing the usual dose keeps the old one in history', () async {
+      await db.addMedication(tirzepatideVial);
+      await db.changeUsualDose((await only()).medication, 5, DoseUnit.mg);
+      final d = await only();
+      expect((d.usualDose!.prescribedDose, d.usualDose!.unit), (5, DoseUnit.mg));
+      final all = await db.select(db.prescriptions).get();
+      expect(all.length, 2);
+      expect(all.where((p) => p.endDate != null).single.prescribedDose, 25);
+    });
+
+    test('a new vial finishes the old one and starts full; its doses stay with the old vial', () async {
+      await db.addMedication(tirzepatideVial);
+      var d = await only();
+      await shot(d);
+      await db.startNewSupply(
+        d.medication,
+        const SuppliesCompanion(concentrationMgPerMl: Value(20), volumeMl: Value(1), additives: Value([b12])),
+      );
+      d = await only();
+      expect((d.supply!.concentrationMgPerMl, d.remainingMl), (20, 1));
+      final past = await db.pastSupplies(d.medication);
+      expect((past.single.concentrationMgPerMl, past.single.status), (10, SupplyStatus.finished));
+      // The last dose is still known, so the next Log shot starts from it.
+      expect(d.lastDose!.drugMg, 2.5);
+    });
+
+    test('a finished vial leaves nothing to log from until a new one is started', () async {
+      await db.addMedication(tirzepatideVial);
+      await db.finishSupply((await only()).supply!);
+      expect((await only()).supply, isNull);
+    });
+
+    test('adjusting what is left records the loss without touching logged doses', () async {
+      await db.addMedication(tirzepatideVial);
+      var d = await only();
+      await shot(d);
+      d = await only();
+      await db.setRemainingMl(d, 1.5);
+      d = await only();
+      expect((d.remainingMl, d.supply!.lostMl, d.usedMl), (1.5, 0.25, 0.25));
+    });
+
+    test('pausing and the schedule can be changed', () async {
+      await db.addMedication(tirzepatideVial);
+      var m = (await only()).medication;
+      await db.setMedicationStatus(m, MedicationStatus.paused);
+      await db.updateSchedule(m, type: ScheduleType.daysOfWeek, days: [1, 5], timeOfDayMinutes: 9 * 60);
+      m = (await only()).medication;
+      expect((m.status, m.scheduleType, m.timeOfDayMinutes), (MedicationStatus.paused, ScheduleType.daysOfWeek, 540));
+      expect(m.scheduleDays, [1, 5]);
+    });
+  });
+
+  test('a version 2 database gains the reminder switches and the lost-volume column', () async {
+    await db.close();
+    final key = generateDatabaseKey();
+    final file = File('${dir.path}/v2.db');
+    // Build a current database, then turn it back into what version 2 looked like.
+    db = openEncryptedDatabase(file, key);
+    await db.loadSettings(countryCode: 'US');
+    await db.addMedication(tirzepatideVial);
+    await db.close();
+    final raw = sqlite3.open(file.path);
+    applyDatabaseKey(raw, key);
+    raw.execute('''
+      ALTER TABLE app_settings DROP COLUMN remind_shots;
+      ALTER TABLE app_settings DROP COLUMN remind_reorder;
+      ALTER TABLE app_settings DROP COLUMN remind_use_by;
+      ALTER TABLE supplies DROP COLUMN lost_ml;
+      PRAGMA user_version = 2;
+    ''');
+    raw.close();
+
+    db = openEncryptedDatabase(file, key);
+    final settings = await db.loadSettings();
+    expect((settings.remindShots, settings.remindReorder, settings.remindUseBy), (true, true, true));
+    final d = await only();
+    expect((d.supply!.lostMl, d.remainingMl), (0, 2));
+  });
 }

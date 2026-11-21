@@ -31,6 +31,11 @@ class AppSettingsTable extends Table {
   TextColumn get lockAfter => textEnum<LockAfter>().withDefault(const Constant('immediately'))();
   BoolColumn get hideInAppSwitcher => boolean().withDefault(const Constant(true))();
 
+  // Reminders (SPEC 6.10). Each kind has its own switch.
+  BoolColumn get remindShots => boolean().withDefault(const Constant(true))();
+  BoolColumn get remindReorder => boolean().withDefault(const Constant(true))();
+  BoolColumn get remindUseBy => boolean().withDefault(const Constant(true))();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -116,6 +121,9 @@ class Supplies extends Table with RecordColumns {
   RealColumn get pillStrengthMg => real().nullable()();
   TextColumn get additives => text().map(const AdditivesConverter()).withDefault(const Constant('[]'))();
   RealColumn get volumeMl => real().nullable()();
+
+  /// Volume lost to spills or priming, set by "Adjust what's left".
+  RealColumn get lostMl => real().withDefault(const Constant(0))();
   RealColumn get pillCount => real().nullable()();
   TextColumn get pharmacy => text().nullable()();
   TextColumn get lotNumber => text().nullable()();
@@ -163,7 +171,7 @@ class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -174,6 +182,13 @@ class AloftDatabase extends _$AloftDatabase {
         await m.createTable(supplies);
         await m.createTable(prescriptions);
         await m.createTable(doses);
+      }
+      if (from < 3) {
+        await m.addColumn(appSettingsTable, appSettingsTable.remindShots);
+        await m.addColumn(appSettingsTable, appSettingsTable.remindReorder);
+        await m.addColumn(appSettingsTable, appSettingsTable.remindUseBy);
+        // Version 2 already made supplies without lost_ml; version 1 never had the table.
+        if (from == 2) await m.addColumn(supplies, supplies.lostMl);
       }
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
