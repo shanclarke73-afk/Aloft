@@ -41,6 +41,7 @@ void main() {
     expect(find.text('lb'), findsOneWidget);
     expect(find.text('Lock after'), findsNothing);
 
+    await tester.scrollUntilVisible(find.text('Lock with Face ID'), 200, scrollable: find.byType(Scrollable).last);
     await tester.runAsync(() async {
       await tester.tap(find.text('Lock with Face ID'));
       await Future<void>.delayed(const Duration(milliseconds: 300));

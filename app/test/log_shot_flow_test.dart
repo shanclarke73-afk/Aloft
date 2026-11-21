@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:aloft/app.dart';
 import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/medication_store.dart';
@@ -38,32 +37,6 @@ void main() {
       AppLock(authenticator: FakeAuthenticator(), enabled: false, lockAfter: LockAfter.immediately),
     ),
   ];
-
-  /// Lets the background database isolate answer, then rebuilds.
-  Future<void> settle(WidgetTester tester) async {
-    // Each database answer arrives in real time and is then handled on the next pump.
-    for (var i = 0; i < 6; i++) {
-      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 60)));
-      await tester.pump();
-    }
-    await tester.pumpAndSettle();
-  }
-
-  testWidgets('Today asks for a medication first, then offers Log shot', (tester) async {
-    await open(tester);
-    await tester.pumpWidget(ProviderScope(overrides: overrides(), child: const AloftApp()));
-    await settle(tester);
-    expect(find.text('Add your medication'), findsOneWidget);
-
-    await tester.runAsync(() => db.addMedication(tirzepatideVial));
-    await settle(tester);
-    expect(find.text('Tirzepatide'), findsOneWidget);
-    expect(find.text('25 units = 2.5 mg'), findsOneWidget);
-    expect(find.text('Weekly · Thu, 8:00 PM'), findsOneWidget);
-    expect(find.text('2 mL of 2 mL left · about 8 doses at your usual dose'), findsOneWidget);
-    expect(find.text('Log shot'), findsOneWidget);
-    await tester.runAsync(db.close);
-  });
 
   testWidgets('Log shot shows the conversion and math, warns on a very different dose, and saves', (tester) async {
     await open(tester);

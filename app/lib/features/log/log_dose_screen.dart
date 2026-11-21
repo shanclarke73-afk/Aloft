@@ -10,21 +10,49 @@ import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../medications/catalog.dart';
 
-Future<void> openLogDose(BuildContext context, MedicationDetail detail) async {
+/// Opens Log shot / Log dose. [when] pre-sets the time, for a dose taken earlier.
+Future<void> openLogDose(BuildContext context, MedicationDetail detail, {DateTime? when}) async {
   final history = await ProviderScope.containerOf(context, listen: false).read(databaseProvider).siteHistory();
   if (!context.mounted) return;
   await Navigator.of(context).push(
     MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (_) => LogDoseScreen(detail: detail, siteHistory: history),
+      builder: (_) => LogDoseScreen(detail: detail, siteHistory: history, initialWhen: when),
     ),
   );
 }
 
-/// Log a shot or a pill (SPEC 6.4, mockups/LogShot and LogPill).
+/// Opens a logged dose to change or delete it.
+Future<void> openEditDose(BuildContext context, HistoryEntry entry) {
+  return Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (_) => LogDoseScreen(
+        detail: MedicationDetail(
+          medication: entry.medication,
+          supply: entry.supply,
+          usualDose: null,
+          lastDose: null,
+          lastLogged: null,
+          usedMl: 0,
+          usedPills: 0,
+        ),
+        siteHistory: const [],
+        editing: entry.dose,
+      ),
+    ),
+  );
+}
+
+/// Log a shot or a pill (SPEC 6.4, mockups/LogShot and LogPill), or edit one already logged
+/// (mockups/EditEntry).
 class LogDoseScreen extends ConsumerStatefulWidget {
-  const LogDoseScreen({super.key, required this.detail, required this.siteHistory});
+  const LogDoseScreen({super.key, required this.detail, required this.siteHistory, this.initialWhen, this.editing});
   final MedicationDetail detail;
+  final DateTime? initialWhen;
+
+  /// The dose being changed, or null when logging a new one.
+  final Dose? editing;
 
   /// Sites logged across every medication, newest first.
   final List<({InjectionSite site, DateTime takenAt})> siteHistory;
@@ -48,6 +76,7 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
   MedicationDetail get _d => widget.detail;
   Medication get _med => _d.medication;
   Supply get _supply => _d.supply!;
+  Dose? get _editing => widget.editing;
   bool get _isPill => _med.form == MedicationForm.oral;
   double? get _strength => _supply.concentrationMgPerMl;
 
@@ -55,9 +84,21 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
   void initState() {
     super.initState();
     // Starts from the last dose taken, else the usual dose. Both were typed by the person.
+    final editing = _editing;
     final last = _d.lastDose, usual = _d.usualDose;
-    final amount = last?.amountEntered ?? usual?.prescribedDose;
-    _unit = last?.unitEntered ?? usual?.unit ?? (_strength != null ? DoseUnit.units : DoseUnit.mg);
+    final wasTaken = editing != null && !editing.skipped;
+    final amount = wasTaken ? editing.amountEntered : last?.amountEntered ?? usual?.prescribedDose;
+    _unit =
+        (wasTaken ? editing.unitEntered : null) ??
+        last?.unitEntered ??
+        usual?.unit ??
+        (_strength != null ? DoseUnit.units : DoseUnit.mg);
+    if (widget.initialWhen != null) _when = widget.initialWhen!;
+    if (editing != null) {
+      _when = editing.takenAt;
+      _pain = editing.injectionPain;
+      _note.text = editing.notes ?? '';
+    }
     if (_isPill) {
       _unit = DoseUnit.tablets;
       _tablets = amount ?? 1;
@@ -65,7 +106,7 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
       _amount.text = formatDoseAmount(amount, _unit);
     }
     _suggested = suggestSite([for (final entry in widget.siteHistory) entry.site]);
-    _site = _suggested;
+    _site = editing?.injectionSite ?? _suggested;
   }
 
   @override
@@ -99,6 +140,16 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
   /// Shown, never blocking (SPEC section 5).
   ({String text, bool warning})? get _check {
     if (_value == null) return null;
+    final editing = _editing;
+    if (editing != null) {
+      if (editing.skipped) return (text: 'This was saved as skipped. Saving records it as taken.', warning: false);
+      final was = _comparable(editing.amountEntered, editing.unitEntered);
+      if (was == null || !differs(was.$1, was.$2)) return null;
+      final mg = editing.drugMg == null || editing.unitEntered == DoseUnit.mg
+          ? ''
+          : ' (${describeAmount(editing.drugMg!, DoseUnit.mg)})';
+      return (text: 'Was ${describeAmount(editing.amountEntered, editing.unitEntered)}$mg', warning: false);
+    }
     final last = _d.lastDose, usual = _d.usualDose;
     final vsLast = last == null ? null : _comparable(last.amountEntered, last.unitEntered);
     final vsUsual = usual == null ? null : _comparable(usual.prescribedDose, usual.unit);
@@ -135,6 +186,22 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
       return;
     }
     setState(() => _saving = true);
+    final editing = _editing;
+    if (editing != null) {
+      await ref
+          .read(databaseProvider)
+          .updateDose(
+            editing,
+            amount: value!,
+            unit: _unit,
+            takenAt: _when,
+            site: _isPill ? null : _site,
+            pain: _pain,
+            notes: _note.text,
+          );
+      if (mounted) Navigator.pop(context);
+      return;
+    }
     await ref
         .read(databaseProvider)
         .logDose(
@@ -164,7 +231,7 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
         leading: TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
         leadingWidth: 88,
         title: Text(
-          _isPill ? 'Log dose' : 'Log shot',
+          _editing != null ? (_isPill ? 'Edit dose' : 'Edit shot') : (_isPill ? 'Log dose' : 'Log shot'),
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         centerTitle: true,
@@ -179,7 +246,14 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
             Card(
               child: ListTile(
                 title: Text(_med.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text([describeSupply(_d), ?describeRemaining(_d)].join('\n')),
+                subtitle: Text(
+                  [
+                    describeSupply(_d),
+                    if (_editing == null) ?describeRemaining(_d),
+                    if (_editing != null)
+                      'Logged ${formatWhen(context, _editing!.takenAt)}. Supply updates when you save.',
+                  ].join('\n'),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -266,12 +340,20 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
             FilledButton(
               key: const Key('save'),
               onPressed: _saving ? null : _save,
-              child: Text(_isPill ? 'Took it' : 'Save'),
+              child: Text(_isPill && _editing == null ? 'Took it' : 'Save'),
             ),
-            TextButton(
-              onPressed: _saving ? null : () => _save(skipped: true),
-              child: Text(_isPill ? 'Skipped today' : 'Skip this dose'),
-            ),
+            if (_editing == null)
+              TextButton(
+                onPressed: _saving ? null : () => _save(skipped: true),
+                child: Text(_isPill ? 'Skipped today' : 'Skip this dose'),
+              )
+            else
+              TextButton(
+                key: const Key('delete'),
+                style: TextButton.styleFrom(foregroundColor: scheme.error),
+                onPressed: _saving ? null : _delete,
+                child: Text(_isPill ? 'Delete this dose' : 'Delete this shot'),
+              ),
             const SizedBox(height: 8),
             Text(
               _isPill
@@ -282,6 +364,47 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Confirms, deletes, and offers Undo for 10 seconds (mockups/EditEntryDelete).
+  Future<void> _delete() async {
+    final dose = _editing!;
+    final what = dose.skipped ? 'Skipped' : describeAmount(dose.amountEntered, dose.unitEntered);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(_isPill ? 'Delete this dose?' : 'Delete this shot?'),
+        content: Text(
+          [
+            '${formatWhen(context, dose.takenAt)} · $what',
+            if (dose.volumeMl != null)
+              '${describeAmount(dose.volumeMl!, DoseUnit.ml)} goes back to your vial\'s count.',
+            'History updates. You can undo for 10 seconds.',
+          ].join('\n\n'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep it')),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(_isPill ? 'Delete dose' : 'Delete shot'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final db = ref.read(databaseProvider);
+    await db.deleteDose(dose);
+    if (!mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    Navigator.pop(context);
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 10),
+        content: Text(_isPill ? 'Dose deleted' : 'Shot deleted'),
+        action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreDose(dose)),
       ),
     );
   }

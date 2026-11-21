@@ -75,8 +75,52 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("hide_in_app_switcher" IN (0, 1))'),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _remindShotsMeta = const VerificationMeta('remindShots');
   @override
-  List<GeneratedColumn> get $columns => [id, weightUnit, lengthUnit, appearance, appLock, lockAfter, hideInAppSwitcher];
+  late final GeneratedColumn<bool> remindShots = GeneratedColumn<bool>(
+    'remind_shots',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("remind_shots" IN (0, 1))'),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _remindReorderMeta = const VerificationMeta('remindReorder');
+  @override
+  late final GeneratedColumn<bool> remindReorder = GeneratedColumn<bool>(
+    'remind_reorder',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("remind_reorder" IN (0, 1))'),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _remindUseByMeta = const VerificationMeta('remindUseBy');
+  @override
+  late final GeneratedColumn<bool> remindUseBy = GeneratedColumn<bool>(
+    'remind_use_by',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("remind_use_by" IN (0, 1))'),
+    defaultValue: const Constant(true),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    weightUnit,
+    lengthUnit,
+    appearance,
+    appLock,
+    lockAfter,
+    hideInAppSwitcher,
+    remindShots,
+    remindReorder,
+    remindUseBy,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -97,6 +141,18 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
         _hideInAppSwitcherMeta,
         hideInAppSwitcher.isAcceptableOrUnknown(data['hide_in_app_switcher']!, _hideInAppSwitcherMeta),
       );
+    }
+    if (data.containsKey('remind_shots')) {
+      context.handle(_remindShotsMeta, remindShots.isAcceptableOrUnknown(data['remind_shots']!, _remindShotsMeta));
+    }
+    if (data.containsKey('remind_reorder')) {
+      context.handle(
+        _remindReorderMeta,
+        remindReorder.isAcceptableOrUnknown(data['remind_reorder']!, _remindReorderMeta),
+      );
+    }
+    if (data.containsKey('remind_use_by')) {
+      context.handle(_remindUseByMeta, remindUseBy.isAcceptableOrUnknown(data['remind_use_by']!, _remindUseByMeta));
     }
     return context;
   }
@@ -125,6 +181,9 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
         DriftSqlType.bool,
         data['${effectivePrefix}hide_in_app_switcher'],
       )!,
+      remindShots: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_shots'])!,
+      remindReorder: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_reorder'])!,
+      remindUseBy: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_use_by'])!,
     );
   }
 
@@ -155,6 +214,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
   final bool appLock;
   final LockAfter lockAfter;
   final bool hideInAppSwitcher;
+  final bool remindShots;
+  final bool remindReorder;
+  final bool remindUseBy;
   const AppSettings({
     required this.id,
     required this.weightUnit,
@@ -163,6 +225,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     required this.appLock,
     required this.lockAfter,
     required this.hideInAppSwitcher,
+    required this.remindShots,
+    required this.remindReorder,
+    required this.remindUseBy,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -182,6 +247,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       map['lock_after'] = Variable<String>($AppSettingsTableTable.$converterlockAfter.toSql(lockAfter));
     }
     map['hide_in_app_switcher'] = Variable<bool>(hideInAppSwitcher);
+    map['remind_shots'] = Variable<bool>(remindShots);
+    map['remind_reorder'] = Variable<bool>(remindReorder);
+    map['remind_use_by'] = Variable<bool>(remindUseBy);
     return map;
   }
 
@@ -194,6 +262,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       appLock: Value(appLock),
       lockAfter: Value(lockAfter),
       hideInAppSwitcher: Value(hideInAppSwitcher),
+      remindShots: Value(remindShots),
+      remindReorder: Value(remindReorder),
+      remindUseBy: Value(remindUseBy),
     );
   }
 
@@ -207,6 +278,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       appLock: serializer.fromJson<bool>(json['appLock']),
       lockAfter: $AppSettingsTableTable.$converterlockAfter.fromJson(serializer.fromJson<String>(json['lockAfter'])),
       hideInAppSwitcher: serializer.fromJson<bool>(json['hideInAppSwitcher']),
+      remindShots: serializer.fromJson<bool>(json['remindShots']),
+      remindReorder: serializer.fromJson<bool>(json['remindReorder']),
+      remindUseBy: serializer.fromJson<bool>(json['remindUseBy']),
     );
   }
   @override
@@ -220,6 +294,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       'appLock': serializer.toJson<bool>(appLock),
       'lockAfter': serializer.toJson<String>($AppSettingsTableTable.$converterlockAfter.toJson(lockAfter)),
       'hideInAppSwitcher': serializer.toJson<bool>(hideInAppSwitcher),
+      'remindShots': serializer.toJson<bool>(remindShots),
+      'remindReorder': serializer.toJson<bool>(remindReorder),
+      'remindUseBy': serializer.toJson<bool>(remindUseBy),
     };
   }
 
@@ -231,6 +308,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     bool? appLock,
     LockAfter? lockAfter,
     bool? hideInAppSwitcher,
+    bool? remindShots,
+    bool? remindReorder,
+    bool? remindUseBy,
   }) => AppSettings(
     id: id ?? this.id,
     weightUnit: weightUnit ?? this.weightUnit,
@@ -239,6 +319,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     appLock: appLock ?? this.appLock,
     lockAfter: lockAfter ?? this.lockAfter,
     hideInAppSwitcher: hideInAppSwitcher ?? this.hideInAppSwitcher,
+    remindShots: remindShots ?? this.remindShots,
+    remindReorder: remindReorder ?? this.remindReorder,
+    remindUseBy: remindUseBy ?? this.remindUseBy,
   );
   AppSettings copyWithCompanion(AppSettingsTableCompanion data) {
     return AppSettings(
@@ -249,6 +332,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       appLock: data.appLock.present ? data.appLock.value : this.appLock,
       lockAfter: data.lockAfter.present ? data.lockAfter.value : this.lockAfter,
       hideInAppSwitcher: data.hideInAppSwitcher.present ? data.hideInAppSwitcher.value : this.hideInAppSwitcher,
+      remindShots: data.remindShots.present ? data.remindShots.value : this.remindShots,
+      remindReorder: data.remindReorder.present ? data.remindReorder.value : this.remindReorder,
+      remindUseBy: data.remindUseBy.present ? data.remindUseBy.value : this.remindUseBy,
     );
   }
 
@@ -261,13 +347,27 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           ..write('appearance: $appearance, ')
           ..write('appLock: $appLock, ')
           ..write('lockAfter: $lockAfter, ')
-          ..write('hideInAppSwitcher: $hideInAppSwitcher')
+          ..write('hideInAppSwitcher: $hideInAppSwitcher, ')
+          ..write('remindShots: $remindShots, ')
+          ..write('remindReorder: $remindReorder, ')
+          ..write('remindUseBy: $remindUseBy')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, weightUnit, lengthUnit, appearance, appLock, lockAfter, hideInAppSwitcher);
+  int get hashCode => Object.hash(
+    id,
+    weightUnit,
+    lengthUnit,
+    appearance,
+    appLock,
+    lockAfter,
+    hideInAppSwitcher,
+    remindShots,
+    remindReorder,
+    remindUseBy,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -278,7 +378,10 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           other.appearance == this.appearance &&
           other.appLock == this.appLock &&
           other.lockAfter == this.lockAfter &&
-          other.hideInAppSwitcher == this.hideInAppSwitcher);
+          other.hideInAppSwitcher == this.hideInAppSwitcher &&
+          other.remindShots == this.remindShots &&
+          other.remindReorder == this.remindReorder &&
+          other.remindUseBy == this.remindUseBy);
 }
 
 class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
@@ -289,6 +392,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
   final Value<bool> appLock;
   final Value<LockAfter> lockAfter;
   final Value<bool> hideInAppSwitcher;
+  final Value<bool> remindShots;
+  final Value<bool> remindReorder;
+  final Value<bool> remindUseBy;
   const AppSettingsTableCompanion({
     this.id = const Value.absent(),
     this.weightUnit = const Value.absent(),
@@ -297,6 +403,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.appLock = const Value.absent(),
     this.lockAfter = const Value.absent(),
     this.hideInAppSwitcher = const Value.absent(),
+    this.remindShots = const Value.absent(),
+    this.remindReorder = const Value.absent(),
+    this.remindUseBy = const Value.absent(),
   });
   AppSettingsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -306,6 +415,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.appLock = const Value.absent(),
     this.lockAfter = const Value.absent(),
     this.hideInAppSwitcher = const Value.absent(),
+    this.remindShots = const Value.absent(),
+    this.remindReorder = const Value.absent(),
+    this.remindUseBy = const Value.absent(),
   }) : weightUnit = Value(weightUnit),
        lengthUnit = Value(lengthUnit);
   static Insertable<AppSettings> custom({
@@ -316,6 +428,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Expression<bool>? appLock,
     Expression<String>? lockAfter,
     Expression<bool>? hideInAppSwitcher,
+    Expression<bool>? remindShots,
+    Expression<bool>? remindReorder,
+    Expression<bool>? remindUseBy,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -325,6 +440,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       if (appLock != null) 'app_lock': appLock,
       if (lockAfter != null) 'lock_after': lockAfter,
       if (hideInAppSwitcher != null) 'hide_in_app_switcher': hideInAppSwitcher,
+      if (remindShots != null) 'remind_shots': remindShots,
+      if (remindReorder != null) 'remind_reorder': remindReorder,
+      if (remindUseBy != null) 'remind_use_by': remindUseBy,
     });
   }
 
@@ -336,6 +454,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Value<bool>? appLock,
     Value<LockAfter>? lockAfter,
     Value<bool>? hideInAppSwitcher,
+    Value<bool>? remindShots,
+    Value<bool>? remindReorder,
+    Value<bool>? remindUseBy,
   }) {
     return AppSettingsTableCompanion(
       id: id ?? this.id,
@@ -345,6 +466,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       appLock: appLock ?? this.appLock,
       lockAfter: lockAfter ?? this.lockAfter,
       hideInAppSwitcher: hideInAppSwitcher ?? this.hideInAppSwitcher,
+      remindShots: remindShots ?? this.remindShots,
+      remindReorder: remindReorder ?? this.remindReorder,
+      remindUseBy: remindUseBy ?? this.remindUseBy,
     );
   }
 
@@ -372,6 +496,15 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     if (hideInAppSwitcher.present) {
       map['hide_in_app_switcher'] = Variable<bool>(hideInAppSwitcher.value);
     }
+    if (remindShots.present) {
+      map['remind_shots'] = Variable<bool>(remindShots.value);
+    }
+    if (remindReorder.present) {
+      map['remind_reorder'] = Variable<bool>(remindReorder.value);
+    }
+    if (remindUseBy.present) {
+      map['remind_use_by'] = Variable<bool>(remindUseBy.value);
+    }
     return map;
   }
 
@@ -384,7 +517,10 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
           ..write('appearance: $appearance, ')
           ..write('appLock: $appLock, ')
           ..write('lockAfter: $lockAfter, ')
-          ..write('hideInAppSwitcher: $hideInAppSwitcher')
+          ..write('hideInAppSwitcher: $hideInAppSwitcher, ')
+          ..write('remindShots: $remindShots, ')
+          ..write('remindReorder: $remindReorder, ')
+          ..write('remindUseBy: $remindUseBy')
           ..write(')'))
         .toString();
   }
@@ -1225,6 +1361,16 @@ class $SuppliesTable extends Supplies with TableInfo<$SuppliesTable, Supply> {
     type: DriftSqlType.double,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _lostMlMeta = const VerificationMeta('lostMl');
+  @override
+  late final GeneratedColumn<double> lostMl = GeneratedColumn<double>(
+    'lost_ml',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _pillCountMeta = const VerificationMeta('pillCount');
   @override
   late final GeneratedColumn<double> pillCount = GeneratedColumn<double>(
@@ -1299,6 +1445,7 @@ class $SuppliesTable extends Supplies with TableInfo<$SuppliesTable, Supply> {
     pillStrengthMg,
     additives,
     volumeMl,
+    lostMl,
     pillCount,
     pharmacy,
     lotNumber,
@@ -1348,6 +1495,9 @@ class $SuppliesTable extends Supplies with TableInfo<$SuppliesTable, Supply> {
     if (data.containsKey('volume_ml')) {
       context.handle(_volumeMlMeta, volumeMl.isAcceptableOrUnknown(data['volume_ml']!, _volumeMlMeta));
     }
+    if (data.containsKey('lost_ml')) {
+      context.handle(_lostMlMeta, lostMl.isAcceptableOrUnknown(data['lost_ml']!, _lostMlMeta));
+    }
     if (data.containsKey('pill_count')) {
       context.handle(_pillCountMeta, pillCount.isAcceptableOrUnknown(data['pill_count']!, _pillCountMeta));
     }
@@ -1395,6 +1545,7 @@ class $SuppliesTable extends Supplies with TableInfo<$SuppliesTable, Supply> {
         attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}additives'])!,
       ),
       volumeMl: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}volume_ml']),
+      lostMl: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}lost_ml'])!,
       pillCount: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}pill_count']),
       pharmacy: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}pharmacy']),
       lotNumber: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}lot_number']),
@@ -1431,6 +1582,9 @@ class Supply extends DataClass implements Insertable<Supply> {
   final double? pillStrengthMg;
   final List<Additive> additives;
   final double? volumeMl;
+
+  /// Volume lost to spills or priming, set by "Adjust what's left".
+  final double lostMl;
   final double? pillCount;
   final String? pharmacy;
   final String? lotNumber;
@@ -1448,6 +1602,7 @@ class Supply extends DataClass implements Insertable<Supply> {
     this.pillStrengthMg,
     required this.additives,
     this.volumeMl,
+    required this.lostMl,
     this.pillCount,
     this.pharmacy,
     this.lotNumber,
@@ -1478,6 +1633,7 @@ class Supply extends DataClass implements Insertable<Supply> {
     if (!nullToAbsent || volumeMl != null) {
       map['volume_ml'] = Variable<double>(volumeMl);
     }
+    map['lost_ml'] = Variable<double>(lostMl);
     if (!nullToAbsent || pillCount != null) {
       map['pill_count'] = Variable<double>(pillCount);
     }
@@ -1515,6 +1671,7 @@ class Supply extends DataClass implements Insertable<Supply> {
       pillStrengthMg: pillStrengthMg == null && nullToAbsent ? const Value.absent() : Value(pillStrengthMg),
       additives: Value(additives),
       volumeMl: volumeMl == null && nullToAbsent ? const Value.absent() : Value(volumeMl),
+      lostMl: Value(lostMl),
       pillCount: pillCount == null && nullToAbsent ? const Value.absent() : Value(pillCount),
       pharmacy: pharmacy == null && nullToAbsent ? const Value.absent() : Value(pharmacy),
       lotNumber: lotNumber == null && nullToAbsent ? const Value.absent() : Value(lotNumber),
@@ -1537,6 +1694,7 @@ class Supply extends DataClass implements Insertable<Supply> {
       pillStrengthMg: serializer.fromJson<double?>(json['pillStrengthMg']),
       additives: serializer.fromJson<List<Additive>>(json['additives']),
       volumeMl: serializer.fromJson<double?>(json['volumeMl']),
+      lostMl: serializer.fromJson<double>(json['lostMl']),
       pillCount: serializer.fromJson<double?>(json['pillCount']),
       pharmacy: serializer.fromJson<String?>(json['pharmacy']),
       lotNumber: serializer.fromJson<String?>(json['lotNumber']),
@@ -1559,6 +1717,7 @@ class Supply extends DataClass implements Insertable<Supply> {
       'pillStrengthMg': serializer.toJson<double?>(pillStrengthMg),
       'additives': serializer.toJson<List<Additive>>(additives),
       'volumeMl': serializer.toJson<double?>(volumeMl),
+      'lostMl': serializer.toJson<double>(lostMl),
       'pillCount': serializer.toJson<double?>(pillCount),
       'pharmacy': serializer.toJson<String?>(pharmacy),
       'lotNumber': serializer.toJson<String?>(lotNumber),
@@ -1579,6 +1738,7 @@ class Supply extends DataClass implements Insertable<Supply> {
     Value<double?> pillStrengthMg = const Value.absent(),
     List<Additive>? additives,
     Value<double?> volumeMl = const Value.absent(),
+    double? lostMl,
     Value<double?> pillCount = const Value.absent(),
     Value<String?> pharmacy = const Value.absent(),
     Value<String?> lotNumber = const Value.absent(),
@@ -1596,6 +1756,7 @@ class Supply extends DataClass implements Insertable<Supply> {
     pillStrengthMg: pillStrengthMg.present ? pillStrengthMg.value : this.pillStrengthMg,
     additives: additives ?? this.additives,
     volumeMl: volumeMl.present ? volumeMl.value : this.volumeMl,
+    lostMl: lostMl ?? this.lostMl,
     pillCount: pillCount.present ? pillCount.value : this.pillCount,
     pharmacy: pharmacy.present ? pharmacy.value : this.pharmacy,
     lotNumber: lotNumber.present ? lotNumber.value : this.lotNumber,
@@ -1617,6 +1778,7 @@ class Supply extends DataClass implements Insertable<Supply> {
       pillStrengthMg: data.pillStrengthMg.present ? data.pillStrengthMg.value : this.pillStrengthMg,
       additives: data.additives.present ? data.additives.value : this.additives,
       volumeMl: data.volumeMl.present ? data.volumeMl.value : this.volumeMl,
+      lostMl: data.lostMl.present ? data.lostMl.value : this.lostMl,
       pillCount: data.pillCount.present ? data.pillCount.value : this.pillCount,
       pharmacy: data.pharmacy.present ? data.pharmacy.value : this.pharmacy,
       lotNumber: data.lotNumber.present ? data.lotNumber.value : this.lotNumber,
@@ -1639,6 +1801,7 @@ class Supply extends DataClass implements Insertable<Supply> {
           ..write('pillStrengthMg: $pillStrengthMg, ')
           ..write('additives: $additives, ')
           ..write('volumeMl: $volumeMl, ')
+          ..write('lostMl: $lostMl, ')
           ..write('pillCount: $pillCount, ')
           ..write('pharmacy: $pharmacy, ')
           ..write('lotNumber: $lotNumber, ')
@@ -1661,6 +1824,7 @@ class Supply extends DataClass implements Insertable<Supply> {
     pillStrengthMg,
     additives,
     volumeMl,
+    lostMl,
     pillCount,
     pharmacy,
     lotNumber,
@@ -1682,6 +1846,7 @@ class Supply extends DataClass implements Insertable<Supply> {
           other.pillStrengthMg == this.pillStrengthMg &&
           other.additives == this.additives &&
           other.volumeMl == this.volumeMl &&
+          other.lostMl == this.lostMl &&
           other.pillCount == this.pillCount &&
           other.pharmacy == this.pharmacy &&
           other.lotNumber == this.lotNumber &&
@@ -1701,6 +1866,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
   final Value<double?> pillStrengthMg;
   final Value<List<Additive>> additives;
   final Value<double?> volumeMl;
+  final Value<double> lostMl;
   final Value<double?> pillCount;
   final Value<String?> pharmacy;
   final Value<String?> lotNumber;
@@ -1719,6 +1885,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
     this.pillStrengthMg = const Value.absent(),
     this.additives = const Value.absent(),
     this.volumeMl = const Value.absent(),
+    this.lostMl = const Value.absent(),
     this.pillCount = const Value.absent(),
     this.pharmacy = const Value.absent(),
     this.lotNumber = const Value.absent(),
@@ -1738,6 +1905,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
     this.pillStrengthMg = const Value.absent(),
     this.additives = const Value.absent(),
     this.volumeMl = const Value.absent(),
+    this.lostMl = const Value.absent(),
     this.pillCount = const Value.absent(),
     this.pharmacy = const Value.absent(),
     this.lotNumber = const Value.absent(),
@@ -1757,6 +1925,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
     Expression<double>? pillStrengthMg,
     Expression<String>? additives,
     Expression<double>? volumeMl,
+    Expression<double>? lostMl,
     Expression<double>? pillCount,
     Expression<String>? pharmacy,
     Expression<String>? lotNumber,
@@ -1776,6 +1945,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
       if (pillStrengthMg != null) 'pill_strength_mg': pillStrengthMg,
       if (additives != null) 'additives': additives,
       if (volumeMl != null) 'volume_ml': volumeMl,
+      if (lostMl != null) 'lost_ml': lostMl,
       if (pillCount != null) 'pill_count': pillCount,
       if (pharmacy != null) 'pharmacy': pharmacy,
       if (lotNumber != null) 'lot_number': lotNumber,
@@ -1797,6 +1967,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
     Value<double?>? pillStrengthMg,
     Value<List<Additive>>? additives,
     Value<double?>? volumeMl,
+    Value<double>? lostMl,
     Value<double?>? pillCount,
     Value<String?>? pharmacy,
     Value<String?>? lotNumber,
@@ -1816,6 +1987,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
       pillStrengthMg: pillStrengthMg ?? this.pillStrengthMg,
       additives: additives ?? this.additives,
       volumeMl: volumeMl ?? this.volumeMl,
+      lostMl: lostMl ?? this.lostMl,
       pillCount: pillCount ?? this.pillCount,
       pharmacy: pharmacy ?? this.pharmacy,
       lotNumber: lotNumber ?? this.lotNumber,
@@ -1857,6 +2029,9 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
     if (volumeMl.present) {
       map['volume_ml'] = Variable<double>(volumeMl.value);
     }
+    if (lostMl.present) {
+      map['lost_ml'] = Variable<double>(lostMl.value);
+    }
     if (pillCount.present) {
       map['pill_count'] = Variable<double>(pillCount.value);
     }
@@ -1896,6 +2071,7 @@ class SuppliesCompanion extends UpdateCompanion<Supply> {
           ..write('pillStrengthMg: $pillStrengthMg, ')
           ..write('additives: $additives, ')
           ..write('volumeMl: $volumeMl, ')
+          ..write('lostMl: $lostMl, ')
           ..write('pillCount: $pillCount, ')
           ..write('pharmacy: $pharmacy, ')
           ..write('lotNumber: $lotNumber, ')
@@ -3197,6 +3373,9 @@ typedef $$AppSettingsTableTableCreateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> appLock,
   Value<LockAfter> lockAfter,
   Value<bool> hideInAppSwitcher,
+  Value<bool> remindShots,
+  Value<bool> remindReorder,
+  Value<bool> remindUseBy,
 });
 typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanion Function({
   Value<int> id,
@@ -3206,6 +3385,9 @@ typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> appLock,
   Value<LockAfter> lockAfter,
   Value<bool> hideInAppSwitcher,
+  Value<bool> remindShots,
+  Value<bool> remindReorder,
+  Value<bool> remindUseBy,
 });
 
 class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -3235,6 +3417,15 @@ class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $A
 
   ColumnFilters<bool> get hideInAppSwitcher =>
       $composableBuilder(column: $table.hideInAppSwitcher, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get remindShots =>
+      $composableBuilder(column: $table.remindShots, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get remindReorder =>
+      $composableBuilder(column: $table.remindReorder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get remindUseBy =>
+      $composableBuilder(column: $table.remindUseBy, builder: (column) => ColumnFilters(column));
 }
 
 class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -3264,6 +3455,15 @@ class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, 
 
   ColumnOrderings<bool> get hideInAppSwitcher =>
       $composableBuilder(column: $table.hideInAppSwitcher, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get remindShots =>
+      $composableBuilder(column: $table.remindShots, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get remindReorder =>
+      $composableBuilder(column: $table.remindReorder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get remindUseBy =>
+      $composableBuilder(column: $table.remindUseBy, builder: (column) => ColumnOrderings(column));
 }
 
 class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -3292,6 +3492,13 @@ class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase
 
   GeneratedColumn<bool> get hideInAppSwitcher =>
       $composableBuilder(column: $table.hideInAppSwitcher, builder: (column) => column);
+
+  GeneratedColumn<bool> get remindShots => $composableBuilder(column: $table.remindShots, builder: (column) => column);
+
+  GeneratedColumn<bool> get remindReorder =>
+      $composableBuilder(column: $table.remindReorder, builder: (column) => column);
+
+  GeneratedColumn<bool> get remindUseBy => $composableBuilder(column: $table.remindUseBy, builder: (column) => column);
 }
 
 class $$AppSettingsTableTableTableManager
@@ -3326,6 +3533,9 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> appLock = const Value.absent(),
                 Value<LockAfter> lockAfter = const Value.absent(),
                 Value<bool> hideInAppSwitcher = const Value.absent(),
+                Value<bool> remindShots = const Value.absent(),
+                Value<bool> remindReorder = const Value.absent(),
+                Value<bool> remindUseBy = const Value.absent(),
               }) => AppSettingsTableCompanion(
                 id: id,
                 weightUnit: weightUnit,
@@ -3334,6 +3544,9 @@ class $$AppSettingsTableTableTableManager
                 appLock: appLock,
                 lockAfter: lockAfter,
                 hideInAppSwitcher: hideInAppSwitcher,
+                remindShots: remindShots,
+                remindReorder: remindReorder,
+                remindUseBy: remindUseBy,
               ),
           createCompanionCallback:
               ({
@@ -3344,6 +3557,9 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> appLock = const Value.absent(),
                 Value<LockAfter> lockAfter = const Value.absent(),
                 Value<bool> hideInAppSwitcher = const Value.absent(),
+                Value<bool> remindShots = const Value.absent(),
+                Value<bool> remindReorder = const Value.absent(),
+                Value<bool> remindUseBy = const Value.absent(),
               }) => AppSettingsTableCompanion.insert(
                 id: id,
                 weightUnit: weightUnit,
@@ -3352,6 +3568,9 @@ class $$AppSettingsTableTableTableManager
                 appLock: appLock,
                 lockAfter: lockAfter,
                 hideInAppSwitcher: hideInAppSwitcher,
+                remindShots: remindShots,
+                remindReorder: remindReorder,
+                remindUseBy: remindUseBy,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -3897,6 +4116,7 @@ typedef $$SuppliesTableCreateCompanionBuilder = SuppliesCompanion Function({
   Value<double?> pillStrengthMg,
   Value<List<Additive>> additives,
   Value<double?> volumeMl,
+  Value<double> lostMl,
   Value<double?> pillCount,
   Value<String?> pharmacy,
   Value<String?> lotNumber,
@@ -3916,6 +4136,7 @@ typedef $$SuppliesTableUpdateCompanionBuilder = SuppliesCompanion Function({
   Value<double?> pillStrengthMg,
   Value<List<Additive>> additives,
   Value<double?> volumeMl,
+  Value<double> lostMl,
   Value<double?> pillCount,
   Value<String?> pharmacy,
   Value<String?> lotNumber,
@@ -3985,6 +4206,9 @@ class $$SuppliesTableFilterComposer extends Composer<_$AloftDatabase, $SuppliesT
 
   ColumnFilters<double> get volumeMl =>
       $composableBuilder(column: $table.volumeMl, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lostMl =>
+      $composableBuilder(column: $table.lostMl, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<double> get pillCount =>
       $composableBuilder(column: $table.pillCount, builder: (column) => ColumnFilters(column));
@@ -4074,6 +4298,9 @@ class $$SuppliesTableOrderingComposer extends Composer<_$AloftDatabase, $Supplie
   ColumnOrderings<double> get volumeMl =>
       $composableBuilder(column: $table.volumeMl, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get lostMl =>
+      $composableBuilder(column: $table.lostMl, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<double> get pillCount =>
       $composableBuilder(column: $table.pillCount, builder: (column) => ColumnOrderings(column));
 
@@ -4140,6 +4367,8 @@ class $$SuppliesTableAnnotationComposer extends Composer<_$AloftDatabase, $Suppl
       $composableBuilder(column: $table.additives, builder: (column) => column);
 
   GeneratedColumn<double> get volumeMl => $composableBuilder(column: $table.volumeMl, builder: (column) => column);
+
+  GeneratedColumn<double> get lostMl => $composableBuilder(column: $table.lostMl, builder: (column) => column);
 
   GeneratedColumn<double> get pillCount => $composableBuilder(column: $table.pillCount, builder: (column) => column);
 
@@ -4229,6 +4458,7 @@ class $$SuppliesTableTableManager
                 Value<double?> pillStrengthMg = const Value.absent(),
                 Value<List<Additive>> additives = const Value.absent(),
                 Value<double?> volumeMl = const Value.absent(),
+                Value<double> lostMl = const Value.absent(),
                 Value<double?> pillCount = const Value.absent(),
                 Value<String?> pharmacy = const Value.absent(),
                 Value<String?> lotNumber = const Value.absent(),
@@ -4247,6 +4477,7 @@ class $$SuppliesTableTableManager
                 pillStrengthMg: pillStrengthMg,
                 additives: additives,
                 volumeMl: volumeMl,
+                lostMl: lostMl,
                 pillCount: pillCount,
                 pharmacy: pharmacy,
                 lotNumber: lotNumber,
@@ -4267,6 +4498,7 @@ class $$SuppliesTableTableManager
                 Value<double?> pillStrengthMg = const Value.absent(),
                 Value<List<Additive>> additives = const Value.absent(),
                 Value<double?> volumeMl = const Value.absent(),
+                Value<double> lostMl = const Value.absent(),
                 Value<double?> pillCount = const Value.absent(),
                 Value<String?> pharmacy = const Value.absent(),
                 Value<String?> lotNumber = const Value.absent(),
@@ -4285,6 +4517,7 @@ class $$SuppliesTableTableManager
                 pillStrengthMg: pillStrengthMg,
                 additives: additives,
                 volumeMl: volumeMl,
+                lostMl: lostMl,
                 pillCount: pillCount,
                 pharmacy: pharmacy,
                 lotNumber: lotNumber,

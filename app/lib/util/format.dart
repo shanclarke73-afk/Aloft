@@ -15,6 +15,12 @@ String formatWhen(BuildContext context, DateTime when, {DateTime? now}) {
   return '${formatDay(context, when, now: now)}, $time';
 }
 
+/// "Thu, Nov 20".
+String formatLongDay(BuildContext context, DateTime when) =>
+    '${weekdayShort[when.weekday - 1]}, ${MaterialLocalizations.of(context).formatShortMonthDay(when)}';
+
+const weekdayLong = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 String formatDay(BuildContext context, DateTime when, {DateTime? now}) {
   final today = DateUtils.dateOnly(now ?? DateTime.now());
   final days = today.difference(DateUtils.dateOnly(when)).inDays;

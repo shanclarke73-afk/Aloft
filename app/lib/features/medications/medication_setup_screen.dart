@@ -5,8 +5,8 @@ import '../../data/database.dart';
 import '../../data/medication_store.dart';
 import '../../dose/dose_math.dart';
 import '../../settings/settings.dart';
-import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
+import '../../widgets/schedule_editor.dart';
 import 'catalog.dart';
 
 /// Asks which kind of medication, then opens the setup screen for it.
@@ -75,7 +75,6 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   final _vialSize = TextEditingController();
   final _pillCount = TextEditingController();
   final _dose = TextEditingController();
-  final _interval = TextEditingController(text: '3');
   final _pharmacy = TextEditingController();
   final _lot = TextEditingController();
   final _cost = TextEditingController();
@@ -83,9 +82,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
 
   late DoseUnit _doseUnit;
   double _tablets = 1;
-  late ScheduleType _schedule;
-  final _days = <int>{DateTime.now().weekday};
-  int _time = 8 * 60;
+  late final ScheduleDraft _scheduleDraft;
   DateTime? _opened;
   DateTime? _useBy;
   bool _showProblems = false;
@@ -98,14 +95,15 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   void initState() {
     super.initState();
     _doseUnit = _isVial ? DoseUnit.units : DoseUnit.mg;
-    _schedule = _isPill ? ScheduleType.daily : ScheduleType.weekly;
+    _scheduleDraft = ScheduleDraft(type: _isPill ? ScheduleType.daily : ScheduleType.weekly);
   }
 
   @override
   void dispose() {
-    for (final c in [_customName, _strength, _vialSize, _pillCount, _dose, _interval, _pharmacy, _lot, _cost]) {
+    for (final c in [_customName, _strength, _vialSize, _pillCount, _dose, _pharmacy, _lot, _cost]) {
       c.dispose();
     }
+    _scheduleDraft.dispose();
     for (final row in _additives) {
       row.name.dispose();
       row.amount.dispose();
@@ -131,9 +129,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
     if (_doseValue == null) 'Enter your dose.',
     if (_isVial && _vialSize.text.trim().isNotEmpty && parseAmount(_vialSize.text) == null)
       'Vial size should be a number of mL.',
-    if ((_schedule == ScheduleType.weekly || _schedule == ScheduleType.daysOfWeek) && _days.isEmpty) 'Choose a day.',
-    if (_schedule == ScheduleType.everyNDays && (int.tryParse(_interval.text.trim()) ?? 0) < 2)
-      'Enter how many days apart (2 or more).',
+    ..._scheduleDraft.problems,
     for (final row in _additives)
       if (row.name.text.trim().isNotEmpty != (parseAmount(row.amount.text) != null))
         'Each other ingredient needs a name and an amount per mL.',
@@ -154,13 +150,10 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
             activeIngredient: drug?.ingredient ?? 'other',
             isGlp1: drug?.isGlp1 ?? false,
             form: widget.form,
-            scheduleType: _schedule,
-            scheduleDays: switch (_schedule) {
-              ScheduleType.weekly || ScheduleType.daysOfWeek => _days.toList()..sort(),
-              _ => const [],
-            },
-            scheduleInterval: _schedule == ScheduleType.everyNDays ? int.parse(_interval.text.trim()) : null,
-            timeOfDayMinutes: _schedule == ScheduleType.asNeeded ? null : _time,
+            scheduleType: _scheduleDraft.type,
+            scheduleDays: _scheduleDraft.scheduleDays,
+            scheduleInterval: _scheduleDraft.scheduleInterval,
+            timeOfDayMinutes: _scheduleDraft.timeOfDayMinutes,
             concentrationMgPerMl: _isVial ? _strengthValue : null,
             pillStrengthMg: _isPill ? _strengthValue : null,
             additives: _isVial ? _additiveValues : const [],
@@ -442,70 +435,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
               for (final line in extras)
                 Text('$line · U-100 syringe', style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
             ],
-            const FieldLabel('How often'),
-            DropdownMenu<ScheduleType>(
-              expandedInsets: EdgeInsets.zero,
-              initialSelection: _schedule,
-              requestFocusOnTap: false,
-              dropdownMenuEntries: const [
-                DropdownMenuEntry(value: ScheduleType.weekly, label: 'Weekly'),
-                DropdownMenuEntry(value: ScheduleType.daysOfWeek, label: 'Certain days (e.g. Mon, Wed, Fri)'),
-                DropdownMenuEntry(value: ScheduleType.everyNDays, label: 'Every N days'),
-                DropdownMenuEntry(value: ScheduleType.daily, label: 'Daily'),
-                DropdownMenuEntry(value: ScheduleType.asNeeded, label: 'As needed'),
-              ],
-              onSelected: (type) => setState(() {
-                _schedule = type!;
-                if (type == ScheduleType.weekly && _days.length > 1) {
-                  final first = _days.first;
-                  _days
-                    ..clear()
-                    ..add(first);
-                }
-              }),
-            ),
-            if (_schedule == ScheduleType.weekly || _schedule == ScheduleType.daysOfWeek) ...[
-              FieldLabel(_schedule == ScheduleType.weekly ? (_isPill ? 'Day' : 'Shot day') : 'Days'),
-              Wrap(
-                spacing: 6,
-                children: [
-                  for (var day = 1; day <= 7; day++)
-                    ChoiceChip(
-                      label: Text(weekdayShort[day - 1]),
-                      showCheckmark: false,
-                      selected: _days.contains(day),
-                      onSelected: (on) => setState(() {
-                        if (_schedule == ScheduleType.weekly) {
-                          _days
-                            ..clear()
-                            ..add(day);
-                        } else if (on) {
-                          _days.add(day);
-                        } else {
-                          _days.remove(day);
-                        }
-                      }),
-                    ),
-                ],
-              ),
-            ],
-            if (_schedule == ScheduleType.everyNDays) ...[
-              const FieldLabel('Days apart'),
-              NumberField(controller: _interval, suffix: 'days', onChanged: _refresh, wholeNumber: true),
-            ],
-            if (_schedule != ScheduleType.asNeeded) ...[
-              const FieldLabel('Time'),
-              PickerField(
-                text: formatTime(context, _time),
-                onTap: () async {
-                  final picked = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay(hour: _time ~/ 60, minute: _time % 60),
-                  );
-                  if (picked != null) setState(() => _time = picked.hour * 60 + picked.minute);
-                },
-              ),
-            ],
+            ScheduleEditor(draft: _scheduleDraft, pill: _isPill, onChanged: () => setState(() {})),
             const SizedBox(height: 12),
             Text(
               'Enter what your prescriber ordered. Aloft converts it but never suggests a dose.',
