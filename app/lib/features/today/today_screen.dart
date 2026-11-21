@@ -11,6 +11,7 @@ import '../../settings/settings.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/format.dart';
 import '../body/log_side_effect_screen.dart';
+import '../charts/charts_screen.dart';
 import '../body/log_weight_screen.dart';
 import '../log/log_dose_screen.dart';
 import '../medications/medication_setup_screen.dart';
@@ -64,6 +65,10 @@ class TodayScreen extends ConsumerWidget {
                 DueCard(detail: d, now: at),
                 const SizedBox(height: 12),
                 if (SupplyCard.hasSomethingToShow(d)) ...[SupplyCard(detail: d), const SizedBox(height: 12)],
+              ],
+              for (final series in ref.watch(levelSeriesProvider)) ...[
+                LevelCard(series: series, now: at),
+                const SizedBox(height: 12),
               ],
               const WeightCard(),
             ],
@@ -417,6 +422,46 @@ class WeightCard extends ConsumerWidget {
               Icon(Icons.add_circle_outline, color: scheme.secondary),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Estimated level: 3.1 mg" (mockups/Main). Always labelled as an estimate.
+class LevelCard extends StatelessWidget {
+  const LevelCard({super.key, required this.series, required this.now});
+  final LevelSeries series;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final muted = TextStyle(fontSize: 13, color: scheme.onSurfaceVariant);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Estimated ${series.ingredient} level',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: scheme.onSurfaceVariant),
+                  ),
+                ),
+                Text('Estimate only', style: muted),
+              ],
+            ),
+            const SizedBox(height: 2),
+            Text(
+              describeAmount(series.now(now), DoseUnit.mg),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+            Text('Not a blood level. See Charts for the curve.', style: muted),
+          ],
         ),
       ),
     );

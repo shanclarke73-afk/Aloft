@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../features/charts/charts_screen.dart';
 import '../features/history/history_screen.dart';
 import '../features/more/more_screen.dart';
 import '../features/today/today_screen.dart';
 
-/// The five bottom tabs (SPEC section 7). Today, History and More are built so far.
+/// The five bottom tabs (SPEC section 7). Progress (photos) is the only tab not built yet.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -31,7 +32,8 @@ class _HomeShellState extends State<HomeShell> {
         children: [
           const TodayScreen(),
           const HistoryScreen(),
-          for (final tab in _tabs.skip(2).take(2)) _ComingSoon(title: tab.label),
+          _ComingSoon(title: _tabs[2].label),
+          const ChartsScreen(),
           const MoreScreen(),
         ],
       ),
