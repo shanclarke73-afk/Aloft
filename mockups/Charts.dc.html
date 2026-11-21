@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Charts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;background:#FFFFFF;border-top:1px solid #E3E8EF;display:flex;justify-content:space-around;padding-top:8px;box-sizing:border-box}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#5B6878;text-decoration:none;width:64px;min-height:44px}
+.tab:hover{color:#12263A}
+.tab.on{color:#2F6FA3;font-weight:600}
+.card{background:#FFFFFF;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.seg{flex:1;height:38px;border:none;border-radius:10px;font:600 14px Inter,sans-serif;color:#5B6878;background:transparent}
+.seg.on{background:#FFFFFF;color:#12263A;box-shadow:0 1px 3px rgba(18,38,58,.12)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 56px 20px 100px; display: flex; flex-direction: column; gap: 14px">
+  <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 30px; font-weight: 800">Charts</h1>
+  <div style="display: flex; background: #EEF2F6; border-radius: 12px; padding: 4px; gap: 4px" role="group" aria-label="Chart">
+    <button class="seg on" aria-pressed="true">Level</button>
+    <button class="seg" aria-pressed="false">Weight</button>
+    <button class="seg" aria-pressed="false">Body</button>
+    <button class="seg" aria-pressed="false">Effects</button>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 15px; font-weight: 700">Estimated tirzepatide level</span>
+      <span style="font-size: 13px; color: #5B6878">9 weeks</span>
+    </div>
+    <svg width="326" height="190" viewBox="0 0 326 190" fill="none" role="img" aria-label="Estimated medication level rising with each weekly shot and stepping up after the dose increase to 5 mg">
+      <path d="M0 150H326M0 110H326M0 70H326M0 30H326" stroke="#EEF2F6" stroke-width="1"/>
+      <rect x="144" y="14" width="182" height="140" fill="#2F6FA3" opacity="0.05"/>
+      <text x="150" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#2F5B80">5 mg from Oct 23</text>
+      <text x="4" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#4A5A6B">2.5 mg</text>
+      <path d="M0 150 L8 110 Q14 134.8 36 134.8 L44 94.8 Q50 129 72 129 L80 89 Q86 126.8 108 126.8 L116 86.8 Q122 126 144 126 L152 46 Q158 110.5 180 110.5 L188 30.5 Q194 104.6 216 104.6 L224 24.6 Q230 102.3 252 102.3 L260 22.3 Q266 101.6 288 101.6" stroke="#2F6FA3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M288 101.6 L296 21.5 Q302 101.5 324 101.5" stroke="#2F6FA3" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round"/>
+      <path d="M288 14V160" stroke="#12263A" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="270" y="176" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#12263A">Today</text>
+      <circle cx="0" cy="164" r="3" fill="#2F6FA3"/><circle cx="36" cy="164" r="3" fill="#2F6FA3"/><circle cx="72" cy="164" r="3" fill="#2F6FA3"/><circle cx="108" cy="164" r="3" fill="#2F6FA3"/><circle cx="144" cy="164" r="3" fill="#2F6FA3"/><circle cx="180" cy="164" r="3" fill="#2F6FA3"/><circle cx="216" cy="164" r="3" fill="#2F6FA3"/><circle cx="252" cy="164" r="3" fill="#2F6FA3"/>
+      <circle cx="160" cy="58" r="5" fill="#E07A4F"/><circle cx="196" cy="44" r="5" fill="#E07A4F"/>
+      <text x="0" y="186" font-family="Inter, sans-serif" font-size="11" fill="#4A5A6B">Sep 25</text>
+    </svg>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #4A5A6B">
+      <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 4px; background: #2F6FA3"></span>Shot</span>
+      <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 4px; background: #E07A4F"></span>Nausea logged</span>
+      <span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; border-top: 2px dashed #2F6FA3"></span>Projected</span>
+    </div>
+    <span style="font-size: 12px; color: #5B6878; line-height: 1.4">An estimate based on your logged doses and the drug's typical half-life. Not a blood level.</span>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 15px; font-weight: 700">Weight</span>
+      <span style="font-size: 14px; font-weight: 700; color: #1E6B3C">−12.4 lb</span>
+    </div>
+    <svg width="326" height="90" viewBox="0 0 326 90" fill="none" role="img" aria-label="Weight trending down from 197 to 184.6 pounds">
+      <path d="M0 12 L20 14 L40 18 L60 17 L80 24 L100 28 L120 27 L140 34 L160 40 L180 42 L200 49 L220 52 L240 58 L260 57 L280 64 L300 68 L322 72" stroke="#1E6B3C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M144 4V84" stroke="#2F6FA3" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="148" y="84" font-family="Inter, sans-serif" font-size="11" fill="#2F5B80">5 mg</text>
+      <text x="0" y="34" font-family="Inter, sans-serif" font-size="11" fill="#4A5A6B">197.0</text>
+      <text x="282" y="88" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#12263A">184.6</text>
+    </svg>
+  </div>
+
+  <nav class="tabs" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</a>
+    <a class="tab" href="History.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</a>
+    <a class="tab" href="PhotoCompare.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>Progress</a>
+    <a class="tab on" href="Charts.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8M20 16v-3"/></svg>Charts</a>
+    <a class="tab" href="Export.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>More</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

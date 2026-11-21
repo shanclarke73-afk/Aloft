@@ -1,0 +1,180 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Charts.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Charts: medication level",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Export.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Export & backup",
+      "w": 390,
+      "x": 1410,
+      "y": 1400
+    },
+    "History.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "History",
+      "w": 390,
+      "x": 940,
+      "y": 1400
+    },
+    "LogShot.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Log a shot",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Today",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "OnbDose.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 3: dose & schedule (pens)",
+      "w": 390,
+      "x": 0,
+      "y": 2600
+    },
+    "OnbFinish.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 6: privacy & finish",
+      "w": 390,
+      "x": 1410,
+      "y": 2600
+    },
+    "OnbMedication.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 2: what are you taking?",
+      "w": 390,
+      "x": -470,
+      "y": 2600
+    },
+    "OnbPhotos.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 5: starting photos",
+      "w": 390,
+      "x": 940,
+      "y": 2600
+    },
+    "OnbWeight.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding 4: starting weight",
+      "w": 390,
+      "x": 470,
+      "y": 2600
+    },
+    "Onboarding.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Onboarding: welcome",
+      "w": 390,
+      "x": -469,
+      "y": 0
+    },
+    "PhotoCapture.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Progress photo capture",
+      "w": 390,
+      "x": 0,
+      "y": 1400
+    },
+    "PhotoCompare.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Progress: compare",
+      "w": 390,
+      "x": 470,
+      "y": 1400
+    },
+    "VialSetup.dc.html": {
+      "h": 1280,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "New vial (from label scan)",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-20T18:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "title",
+    "onbtitle"
+  ],
+  "notes": {
+    "onbtitle": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Onboarding, steps 2–6 (after Welcome)",
+      "w": 240,
+      "x": -470,
+      "y": 2300
+    },
+    "title": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Aloft · v1 screens",
+      "w": 240,
+      "x": -470,
+      "y": -300
+    }
+  },
+  "order": [
+    "Onboarding.dc.html",
+    "Main.dc.html",
+    "LogShot.dc.html",
+    "VialSetup.dc.html",
+    "Charts.dc.html",
+    "PhotoCapture.dc.html",
+    "PhotoCompare.dc.html",
+    "History.dc.html",
+    "Export.dc.html",
+    "OnbMedication.dc.html",
+    "OnbDose.dc.html",
+    "OnbWeight.dc.html",
+    "OnbPhotos.dc.html",
+    "OnbFinish.dc.html"
+  ],
+  "pages": [],
+  "title": "Aloft App Mockups"
+}

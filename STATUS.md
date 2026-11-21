@@ -8,6 +8,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 ## Done
 - [x] Feature plan, competitor check (Shotsy and others), name chosen (Aloft), spec draft 1
 - [x] Screen mockups (8 app screens + 6 onboarding steps): https://claude.ai/artifact/Lzbyu8ZRQ8LN998PQqeayh
+      Copy in [mockups/](mockups/) (open `mockups/index.html` in a browser); re-copy if the canvas changes.
 - [x] GitHub repo created: https://github.com/shanclarke73-afk/Aloft (empty as of Nov 20)
 
 ## Next time

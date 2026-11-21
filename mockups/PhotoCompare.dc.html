@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Progress compare</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;background:#FFFFFF;border-top:1px solid #E3E8EF;display:flex;justify-content:space-around;padding-top:8px;box-sizing:border-box}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#5B6878;text-decoration:none;width:64px;min-height:44px}
+.tab:hover{color:#12263A}
+.tab.on{color:#2F6FA3;font-weight:600}
+.card{background:#FFFFFF;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.seg{flex:1;height:38px;border:none;border-radius:10px;font:600 14px Inter,sans-serif;color:#5B6878;background:transparent}
+.seg.on{background:#FFFFFF;color:#12263A;box-shadow:0 1px 3px rgba(18,38,58,.12)}
+.chip{height:36px;padding:0 14px;border-radius:999px;border:1px solid #D5DDE6;background:#FFFFFF;color:#33475B;font:600 13px Inter,sans-serif}
+.chip.on{background:#12263A;color:#FFFFFF;border-color:#12263A}
+.date{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid #D5DDE6;background:#FFFFFF;border-radius:12px;padding:8px 12px;font-family:Inter,sans-serif;color:#12263A;min-height:44px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 56px 20px 100px; display: flex; flex-direction: column; gap: 14px">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 30px; font-weight: 800">Progress</h1>
+    <a href="PhotoCapture.dc.html" aria-label="Take progress photos" style="width: 44px; height: 44px; border-radius: 22px; background: #1F5F8F; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>
+    </a>
+  </div>
+  <div style="display: flex; background: #EEF2F6; border-radius: 12px; padding: 4px; gap: 4px" role="group" aria-label="View">
+    <button class="seg" aria-pressed="false">Gallery</button>
+    <button class="seg on" aria-pressed="true">Compare</button>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+    <button class="date"><span style="font-size: 12px; color: #5B6878">From</span><span style="font-size: 14px; font-weight: 700">Sep 4 · 197.0 lb</span></button>
+    <button class="date"><span style="font-size: 12px; color: #5B6878">To</span><span style="font-size: 14px; font-weight: 700">Nov 20 · 184.6 lb</span></button>
+  </div>
+
+  <div class="card" style="padding: 10px; display: flex; flex-direction: column; gap: 10px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <div style="height: 300px; border-radius: 14px; background: #E3E8EF; display: flex; align-items: flex-end; justify-content: center; position: relative; overflow: hidden">
+        <svg width="150" height="280" viewBox="0 0 300 520" fill="none" role="img" aria-label="Front photo, September 4">
+          <circle cx="150" cy="70" r="42" fill="#C3CEDA"/>
+          <path d="M78 130 Q150 108 222 130 L246 270 L226 276 L214 192 L214 316 L226 520 L176 520 L156 344 L144 344 L124 520 L74 520 L86 316 L86 192 L74 276 L54 270 Z" fill="#C3CEDA"/>
+        </svg>
+        <span style="position: absolute; top: 8px; left: 8px; background: rgba(18,38,58,.78); color: #FFFFFF; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 999px">Week 1</span>
+      </div>
+      <div style="height: 300px; border-radius: 14px; background: #E3E8EF; display: flex; align-items: flex-end; justify-content: center; position: relative; overflow: hidden">
+        <svg width="150" height="280" viewBox="0 0 300 520" fill="none" role="img" aria-label="Front photo, November 20">
+          <circle cx="150" cy="70" r="40" fill="#A9B8C8"/>
+          <path d="M88 130 Q150 112 212 130 L234 270 L216 276 L206 192 L202 316 L218 520 L176 520 L156 344 L144 344 L124 520 L82 520 L98 316 L94 192 L84 276 L66 270 Z" fill="#A9B8C8"/>
+        </svg>
+        <span style="position: absolute; top: 8px; left: 8px; background: rgba(18,38,58,.78); color: #FFFFFF; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 999px">Week 12</span>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 8px" role="group" aria-label="Pose">
+      <button class="chip on" aria-pressed="true">Front</button>
+      <button class="chip" aria-pressed="false">Side</button>
+      <button class="chip" aria-pressed="false">Back</button>
+      <button class="chip" aria-pressed="false">Slider</button>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+    <div class="card" style="padding: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center">
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 18px; font-weight: 800; color: #1E6B3C">−12.4 lb</span>
+      <span style="font-size: 12px; color: #5B6878">weight</span>
+    </div>
+    <div class="card" style="padding: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center">
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 18px; font-weight: 800; color: #1E6B3C">−3.1 in</span>
+      <span style="font-size: 12px; color: #5B6878">waist</span>
+    </div>
+    <div class="card" style="padding: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center">
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 18px; font-weight: 800">11 wk</span>
+      <span style="font-size: 12px; color: #5B6878">apart</span>
+    </div>
+  </div>
+
+  <button style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 50px; border-radius: 14px; border: 1px solid #D5DDE6; background: #FFFFFF; font: 700 15px Inter, sans-serif; color: #12263A">
+    Make a timelapse
+    <span style="background: #12263A; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.4px">PRO</span>
+  </button>
+
+  <nav class="tabs" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</a>
+    <a class="tab" href="History.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</a>
+    <a class="tab on" href="PhotoCompare.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>Progress</a>
+    <a class="tab" href="Charts.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8M20 16v-3"/></svg>Charts</a>
+    <a class="tab" href="Export.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>More</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
