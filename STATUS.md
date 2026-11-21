@@ -19,7 +19,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Step 1, foundation** (pull request open, Nov 21): Flutter project in [app/](app/), encrypted database,
       settings (units, appearance), app lock, app-switcher cover, the five tabs (only More has content).
       Bundle ID decided: `com.shannonsonlinebookkeeping.aloft`.
-- [ ] Step 2: medications, supplies, dose math, log shot, site rotation
+- [x] **Step 2, medications and logging** (pull request open, Nov 21): add a compounded vial, brand-name pen or
+      pill by typing it in; units ⇄ mL ⇄ mg with the math shown and added ingredients; Log shot / Log dose with
+      mismatch notes, skip, pain 0–10 and site rotation across all medications; simple Today and My medications.
+- [ ] Step 3: full Today screen, quick-add, History (edit/delete), schedules and reminders, supply tracking
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -30,12 +33,16 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
-6. Build step 2 (medications, supplies and dose math).
+6. Build step 3 (Today, History, reminders, supply tracking).
 
 ## Not done / not verified
 - No trademark check.
 - Step 1 was run on the iPhone simulator only. Not yet tried: Face ID on a real iPhone, the lock on a real Android
   phone, and moving the encrypted data to a new phone.
+- Left out of step 2, to pick up in later steps: the body-map picture for injection sites (it's a list for now),
+  "Something else" medications, the pill wait timer, changing the usual dose, starting a new vial, pausing, and
+  the "second medication is Pro" limit (any number can be added until Pro is built in step 7).
+- Half-life and Tmax are left empty for every medication until checked against prescribing information.
 - Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
 - App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/database.dart';
+import '../data/medication_store.dart';
 
 /// Both are set in main() once the encrypted database is open.
 final databaseProvider = Provider<AloftDatabase>((ref) => throw UnimplementedError('database not opened'));
@@ -24,3 +25,8 @@ class SettingsController extends Notifier<AppSettings> {
   Future<void> setLockAfter(LockAfter value) => _save(AppSettingsTableCompanion(lockAfter: Value(value)));
   Future<void> setHideInAppSwitcher(bool on) => _save(AppSettingsTableCompanion(hideInAppSwitcher: Value(on)));
 }
+
+/// Medications that aren't ended, with their current supply, usual dose and last dose.
+final medicationsProvider = StreamProvider<List<MedicationDetail>>(
+  (ref) => ref.watch(databaseProvider).watchMedications(),
+);
