@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../features/charts/charts_screen.dart';
 import '../features/history/history_screen.dart';
 import '../features/more/more_screen.dart';
+import '../features/progress/progress_screen.dart';
 import '../features/today/today_screen.dart';
 
-/// The five bottom tabs (SPEC section 7). Progress (photos) is the only tab not built yet.
+/// The five bottom tabs (SPEC section 7).
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -29,13 +30,7 @@ class _HomeShellState extends State<HomeShell> {
     return Scaffold(
       body: IndexedStack(
         index: _index,
-        children: [
-          const TodayScreen(),
-          const HistoryScreen(),
-          _ComingSoon(title: _tabs[2].label),
-          const ChartsScreen(),
-          const MoreScreen(),
-        ],
+        children: const [TodayScreen(), HistoryScreen(), ProgressScreen(), ChartsScreen(), MoreScreen()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
@@ -44,22 +39,6 @@ class _HomeShellState extends State<HomeShell> {
           for (final tab in _tabs)
             NavigationDestination(icon: Icon(tab.icon), selectedIcon: Icon(tab.selected), label: tab.label),
         ],
-      ),
-    );
-  }
-}
-
-class _ComingSoon extends StatelessWidget {
-  const _ComingSoon({required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text('Not built yet.', style: TextStyle(fontSize: 15, color: scheme.onSurfaceVariant)),
       ),
     );
   }

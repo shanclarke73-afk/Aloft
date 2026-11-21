@@ -223,12 +223,45 @@ class DayNotes extends Table with RecordColumns {
   TextColumn get body => text()();
 }
 
-@DriftDatabase(tables: [AppSettingsTable, Medications, Supplies, Prescriptions, Doses, Weights, SideEffects, DayNotes])
+enum PhotoPose {
+  front('Front'),
+  side('Side'),
+  back('Back'),
+  other('Other');
+
+  const PhotoPose(this.label);
+  final String label;
+}
+
+/// One progress photo (SPEC 6.9). Photos taken on the same day are shown together as a set.
+@DataClassName('ProgressPhoto')
+class ProgressPhotos extends Table with RecordColumns {
+  DateTimeColumn get takenAt => dateTime()();
+  TextColumn get pose => textEnum<PhotoPose>()();
+
+  /// The file's name inside the app's private photos folder. Only the name is kept, because
+  /// the folder's full path changes when the app is reinstalled or restored.
+  TextColumn get fileName => text()();
+}
+
+@DriftDatabase(
+  tables: [
+    AppSettingsTable,
+    Medications,
+    Supplies,
+    Prescriptions,
+    Doses,
+    Weights,
+    SideEffects,
+    DayNotes,
+    ProgressPhotos,
+  ],
+)
 class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -252,6 +285,7 @@ class AloftDatabase extends _$AloftDatabase {
         await m.createTable(sideEffects);
       }
       if (from < 5) await m.createTable(dayNotes);
+      if (from < 6) await m.createTable(progressPhotos);
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );

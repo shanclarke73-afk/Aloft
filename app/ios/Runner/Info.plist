@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Aloft uses the camera to take progress photos. They stay inside Aloft and are never added to your camera roll.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Aloft only receives the photos you choose, to add them to your progress photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Aloft uses Face ID to keep your health data and photos private.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
