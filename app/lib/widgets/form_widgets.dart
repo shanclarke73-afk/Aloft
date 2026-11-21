@@ -49,7 +49,7 @@ class NumberField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.numberWithOptions(decimal: !wholeNumber),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(wholeNumber ? r'[0-9]' : r'[0-9.,]'))],
-      style: large ? const TextStyle(fontSize: 28, fontWeight: FontWeight.w800) : null,
+      style: large ? const TextStyle(fontFamily: displayFont, fontSize: 28, fontWeight: FontWeight.w800) : null,
       decoration: InputDecoration(hintText: hint, suffixText: suffix),
       // The number keypad has no Done key, so tapping anywhere else closes it.
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
@@ -96,7 +96,7 @@ class TabletStepper extends StatelessWidget {
           child: Text(
             describeAmount(value, DoseUnit.tablets),
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
           ),
         ),
         IconButton.filledTonal(

@@ -11,6 +11,7 @@ import '../settings/settings.dart';
 import '../widgets/form_widgets.dart';
 import 'shotsy_file.dart';
 import 'shotsy_import.dart';
+import '../theme/aloft_theme.dart';
 
 /// Lets the person pick Shotsy's CSV export, then shows the preview. Nothing is saved until
 /// they tap Import there.
@@ -93,7 +94,10 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
             ? const SizedBox.shrink()
             : TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
         leadingWidth: 88,
-        title: const Text('Import from Shotsy', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Import from Shotsy',
+          style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

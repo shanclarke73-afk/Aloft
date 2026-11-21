@@ -109,7 +109,10 @@ class StartupProblemApp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Aloft can\'t open your data', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                const Text(
+                  'Aloft can\'t open your data',
+                  style: TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 12),
                 Text(message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, height: 1.45)),
               ],

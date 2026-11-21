@@ -8,6 +8,7 @@ import '../../settings/settings.dart';
 import '../../widgets/form_widgets.dart';
 import '../../widgets/schedule_editor.dart';
 import 'catalog.dart';
+import '../../theme/aloft_theme.dart';
 
 /// Asks which kind of medication, then opens the setup screen for it.
 Future<void> startAddMedication(BuildContext context) async {
@@ -22,7 +23,10 @@ Future<void> startAddMedication(BuildContext context) async {
             padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('What are you taking?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              child: Text(
+                'What are you taking?',
+                style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+              ),
             ),
           ),
           for (final (form, title, subtitle) in const [
@@ -185,7 +189,10 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
       appBar: AppBar(
         leading: TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
         leadingWidth: 88,
-        title: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: Text(
+          title,
+          style: const TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       // Not a ListView: that would discard fields scrolled off screen, and what was typed in them.

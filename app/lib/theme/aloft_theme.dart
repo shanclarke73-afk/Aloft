@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// Colors from the app icon and mockups (brand/README.md).
+/// Body text is Inter; headings and big numbers are Plus Jakarta Sans (as in the mockups).
+const bodyFont = 'Inter';
+const displayFont = 'PlusJakartaSans';
+
 abstract final class AloftColors {
   static const navy = Color(0xFF1D3557);
   static const navyDeep = Color(0xFF12263A);
@@ -43,7 +47,7 @@ ThemeData aloftTheme(Brightness brightness) {
           error: Color(0xFFB3261E),
         );
   final page = dark ? const Color(0xFF0E1B2C) : AloftColors.page;
-  final base = ThemeData(brightness: brightness, colorScheme: scheme, useMaterial3: true);
+  final base = ThemeData(brightness: brightness, colorScheme: scheme, useMaterial3: true, fontFamily: bodyFont);
   return base.copyWith(
     scaffoldBackgroundColor: page,
     appBarTheme: AppBarTheme(
@@ -52,7 +56,12 @@ ThemeData aloftTheme(Brightness brightness) {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      titleTextStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: scheme.onSurface),
+      titleTextStyle: TextStyle(
+        fontFamily: displayFont,
+        fontSize: 28,
+        fontWeight: FontWeight.w800,
+        color: scheme.onSurface,
+      ),
     ),
     cardTheme: CardThemeData(
       color: scheme.surface,
@@ -67,7 +76,7 @@ ThemeData aloftTheme(Brightness brightness) {
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+        textStyle: const TextStyle(fontFamily: bodyFont, fontSize: 17, fontWeight: FontWeight.w700),
       ),
     ),
     navigationBarTheme: NavigationBarThemeData(

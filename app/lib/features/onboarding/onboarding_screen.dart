@@ -11,13 +11,9 @@ import '../../theme/aloft_theme.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../backup/backup_screen.dart';
+import '../about/about_screen.dart';
 import '../medications/medication_setup_screen.dart';
 import '../progress/add_photos_screen.dart';
-
-/// The medical disclaimer (SPEC section 9). The same words are used wherever it appears.
-const medicalDisclaimer =
-    'Aloft is a personal tracking tool, not a medical device. It does not provide medical advice or tell you how '
-    'much to take. Always follow your prescriber.';
 
 /// First launch (SPEC 6.1, mockups/Onboarding to OnbFinish): welcome, medication, starting
 /// weight, photos, then privacy choices and the disclaimer. Everything except the disclaimer
@@ -136,7 +132,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Widget _title(String text) => Padding(
     padding: const EdgeInsets.only(bottom: 8),
-    child: Text(text, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, height: 1.15)),
+    child: Text(
+      text,
+      style: const TextStyle(fontFamily: displayFont, fontSize: 26, fontWeight: FontWeight.w800, height: 1.15),
+    ),
   );
 
   Widget _lead(BuildContext context, String text) => Padding(
@@ -179,7 +178,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       const SizedBox(height: 24),
       const Text(
         'Aloft',
-        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: AloftColors.teal),
+        style: TextStyle(fontFamily: displayFont, fontSize: 40, fontWeight: FontWeight.w800, color: AloftColors.teal),
       ),
       _lead(context, 'From titration to thriving.'),
       const SizedBox(height: 8),

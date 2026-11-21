@@ -10,6 +10,7 @@ import '../../photos/photo_picker.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
+import '../../theme/aloft_theme.dart';
 
 /// Removes a temporary copy Aloft made or was handed. Files elsewhere are never touched.
 void _discardTemporary(File file) {
@@ -157,7 +158,10 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     final locked = _password.text.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Backup and restore', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Backup and restore',
+          style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -338,7 +342,10 @@ class _RestoreScreenState extends ConsumerState<RestoreScreen> {
             ? const SizedBox.shrink()
             : TextButton(onPressed: _busy ? null : () => Navigator.pop(context), child: const Text('Cancel')),
         leadingWidth: 88,
-        title: const Text('Restore', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Restore',
+          style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

@@ -41,7 +41,12 @@ class _LockScreenState extends State<LockScreen> {
               const SizedBox(height: 20),
               const Text(
                 'Aloft is locked',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.white),
+                style: TextStyle(
+                  fontFamily: displayFont,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 12),
               const Text(
@@ -92,7 +97,7 @@ class PrivacyCover extends StatelessWidget {
         child: Text(
           'Aloft',
           textDirection: TextDirection.ltr,
-          style: TextStyle(fontSize: 34, fontWeight: FontWeight.w800, color: Colors.white),
+          style: TextStyle(fontFamily: displayFont, fontSize: 34, fontWeight: FontWeight.w800, color: Colors.white),
         ),
       ),
     );

@@ -7,6 +7,7 @@ import '../../data/medication_store.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
+import '../../theme/aloft_theme.dart';
 
 Future<void> openLogSideEffect(BuildContext context) =>
     Navigator.of(context)
@@ -87,7 +88,10 @@ class _LogSideEffectScreenState extends ConsumerState<LogSideEffectScreen> {
       appBar: AppBar(
         leading: TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
         leadingWidth: 88,
-        title: const Text('Side effects', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Side effects',
+          style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

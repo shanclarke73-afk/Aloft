@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +19,13 @@ import 'settings/settings.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // The bundled fonts' license texts, listed with the others under About → Open-source licenses.
+  LicenseRegistry.addLicense(() async* {
+    yield LicenseEntryWithLineBreaks(['Inter'], await rootBundle.loadString('assets/fonts/Inter-OFL.txt'));
+    yield LicenseEntryWithLineBreaks([
+      'Plus Jakarta Sans',
+    ], await rootBundle.loadString('assets/fonts/PlusJakartaSans-OFL.txt'));
+  });
   try {
     final database = await openAppDatabase();
     final settings = await database.loadSettings(

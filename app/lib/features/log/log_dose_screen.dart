@@ -9,6 +9,7 @@ import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../medications/catalog.dart';
+import '../../theme/aloft_theme.dart';
 
 /// Opens Log shot / Log dose. [when] pre-sets the time, for a dose taken earlier.
 Future<void> openLogDose(BuildContext context, MedicationDetail detail, {DateTime? when}) async {
@@ -232,7 +233,7 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
         leadingWidth: 88,
         title: Text(
           _editing != null ? (_isPill ? 'Edit dose' : 'Edit shot') : (_isPill ? 'Log dose' : 'Log shot'),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+          style: const TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
         ),
         centerTitle: true,
       ),

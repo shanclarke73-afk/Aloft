@@ -11,6 +11,7 @@ import '../../widgets/form_widgets.dart';
 import '../../widgets/schedule_editor.dart';
 import 'catalog.dart';
 import 'medication_setup_screen.dart';
+import '../../theme/aloft_theme.dart';
 
 /// More → My medications (mockups/MyMeds): usual dose, schedule, the vial in use, and the
 /// changes a person makes over time.
@@ -22,7 +23,10 @@ class MyMedicationsScreen extends ConsumerWidget {
     final list = ref.watch(medicationsProvider).value ?? const [];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My medications', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'My medications',
+          style: TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
@@ -457,7 +461,10 @@ Future<void> _sheet(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              Text(
+                title,
+                style: const TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 12),
               ...builder(context, setState),
             ],

@@ -11,6 +11,7 @@ import '../../widgets/form_widgets.dart';
 import 'add_photos_screen.dart';
 import 'photo_image.dart';
 import 'photo_view_screen.dart';
+import '../../theme/aloft_theme.dart';
 
 /// The Progress tab (mockups/PhotoCompare): a gallery by date, and two days side by side.
 class ProgressScreen extends ConsumerStatefulWidget {
@@ -83,7 +84,10 @@ class _Empty extends StatelessWidget {
           children: [
             Icon(Icons.photo_camera_outlined, size: 44, color: scheme.secondary),
             const SizedBox(height: 16),
-            const Text('Progress photos', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+            const Text(
+              'Progress photos',
+              style: TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
+            ),
             const SizedBox(height: 8),
             Text(
               'Photos are optional. Add one whenever you like, or bring in older ones with their original dates.',
