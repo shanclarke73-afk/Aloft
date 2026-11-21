@@ -16,13 +16,14 @@ import 'medication_store_test.dart' show tirzepatideVial;
 
 void main() {
   late AloftDatabase db;
+  late AppSettings settings;
 
   Future<void> open(WidgetTester tester) async {
     final dir = Directory.systemTemp.createTempSync('aloft_today');
     addTearDown(() => dir.deleteSync(recursive: true));
     await tester.runAsync(() async {
       db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
-      await db.loadSettings(countryCode: 'US');
+      settings = await db.loadSettings(countryCode: 'US');
       await db.addMedication(tirzepatideVial, now: DateTime(2026, 11, 2));
     });
   }
@@ -39,7 +40,7 @@ void main() {
   Future<void> show(WidgetTester tester, Widget screen) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [databaseProvider.overrideWithValue(db)],
+        overrides: [databaseProvider.overrideWithValue(db), initialSettingsProvider.overrideWithValue(settings)],
         child: MaterialApp(home: screen),
       ),
     );

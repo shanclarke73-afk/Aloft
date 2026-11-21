@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/body_store.dart';
 import '../data/database.dart';
 import '../data/medication_store.dart';
 
@@ -36,3 +37,9 @@ final medicationsProvider = StreamProvider<List<MedicationDetail>>(
 
 /// Everything logged, newest first.
 final historyProvider = StreamProvider<List<HistoryEntry>>((ref) => ref.watch(databaseProvider).watchHistory());
+
+/// Weights, newest first.
+final weightsProvider = StreamProvider<List<Weight>>((ref) => ref.watch(databaseProvider).watchWeights());
+
+/// Side effects, newest first.
+final sideEffectsProvider = StreamProvider<List<SideEffect>>((ref) => ref.watch(databaseProvider).watchSideEffects());

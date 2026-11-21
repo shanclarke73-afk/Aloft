@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 21, 2026 (1.0 build: steps 1–3 of 8 done)_
+_Last updated: November 21, 2026 (1.0 build: steps 1–3 and half of 4 of 8 done)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -26,7 +26,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       late-dose card (taking it now / took it, didn't log it / skipped); History with edit, delete and 10-second
       undo; local reminders for shot days, reorder at 2 doses left and use-by date, each with its own switch;
       My medications: change dose, edit schedule, start a new vial, finish a vial, adjust what's left, pause.
-- [ ] Step 4: weight, side effects, Health integration, level chart
+- [x] **Step 4a, weight and side effects** (Nov 21): log weight in lb or kg with the change since last time and since
+      the start; log several side effects at once, each 1–10, with "likely from"; both show in History (with
+      All / Shots / Weight / Effects filters) and in quick-add; Today has a weight card.
+- [ ] Step 4b: Apple Health / Health Connect, level chart and the Charts tab
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -37,7 +40,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
-6. Build step 4 (weight, side effects, Health, level chart).
+6. Build step 4b (Health, level chart, Charts tab).
 
 ## Not done / not verified
 - No trademark check.
