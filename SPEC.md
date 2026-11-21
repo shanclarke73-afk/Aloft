@@ -240,7 +240,7 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 
 Import:
 - Backup zip or JSON → full restore (choose: replace all, or merge and skip duplicates).
-- CSV → column-mapping screen (date, dose, unit, weight, etc.), preview, duplicate detection.
+- CSV → column-mapping screen (date, dose, unit, weight, etc.), preview, duplicate detection. All imports are free.
 - Shotsy import preset once a sample export file is available.
 - Manual exports go through the system share sheet (Files, Drive, email, etc.). The backup zip is also how to move
   between iPhone and Android, since iCloud and Google Drive backups don't cross platforms.
@@ -296,20 +296,66 @@ Bottom tabs:
 
 ## 8. Free vs. Pro (proposal)
 
-One-time purchase, no subscription, no ads. Price to decide: **$6.99–$9.99**.
+**Pricing (decided Nov 20, 2026):** three ways to get the same Pro, no ads ever:
 
-| Free | Pro (one-time) |
+| Plan | Price | Notes |
+|---|---|---|
+| Monthly | **$1.99/mo** | Auto-renews; $23.88 over a year |
+| Yearly | **$14.99/yr** | Auto-renews; ~37% less than monthly; shown as the default/highlighted plan |
+| Lifetime | **$29.99 once** | Same as 2 years of yearly; non-consumable |
+
+- Set up in RevenueCat (already used for Debt Shredder): one "pro" entitlement, two auto-renewing subscriptions in
+  one subscription group + one non-consumable. Lifetime buyers must never be shown subscription upsells.
+- Positioning vs market (section 8.1): yearly is well under the usual $39.99/yr; lifetime is about a third of the
+  $90–100 lifetime options.
+- Store requirements for subscriptions: price, length and auto-renew terms on the paywall, links to Terms and
+  Privacy, a Restore Purchases button, and "Manage subscription" in More.
+- Family Sharing on for the lifetime purchase (and subscriptions if supported); enrol in Apple's Small Business
+  Program / Google's 15% tier.
+- Open: free trial on yearly (e.g. 7 days)?
+
+**Feature split (decided Nov 20, 2026):**
+
+| Free | Pro (monthly, yearly or lifetime) |
 |---|---|
-| Unlimited shot logging, conversion, rotation | Multiple active medications (e.g. GLP-1 + another injectable) |
-| One active medication, unlimited vials | Photo compare slider + timelapse |
-| Medication level chart | PDF report for your provider |
-| Weight, measurements, side effects | CSV export + CSV import (incl. Shotsy) |
-| Progress photos (capture, gallery, outline guide) | Label/prescription scan |
-| Reminders, app lock | Custom poses, unlimited photo sets per day |
-| JSON export + backup zip (always free) | Future Pro features |
+| Unlimited shot logging, units ⇄ mL ⇄ mg conversion, site rotation | Multiple active medications (e.g. GLP-1 + another injectable) |
+| One active medication, unlimited vials, added ingredients, supply/reorder | Photo compare **slider** + **timelapse** |
+| **Label / prescription scan** | PDF report for your provider |
+| Medication level chart | CSV **export** |
+| Weight, measurements, side effects, Health sync | Custom poses, unlimited photo sets per day |
+| Progress photos: capture with outline, gallery, **side-by-side compare** | Future Pro features (widgets, watch, etc.) |
+| Reminders, app lock | |
+| Automatic iCloud / Google Drive backup, JSON export, backup zip | |
+| **Imports**: backup, JSON, CSV, Shotsy | |
 
-Rationale: Shotsy reviewers praise its generous free tier, so the core tracker stays free. Pro covers the
-"nice to have" and the power features.
+Rationale: the whole everyday tracker is free, including the things competitors charge for (level chart, photos,
+backup) and the things that win switchers (label scan, Shotsy import, side-by-side compare). Pro is for sharing
+with a provider, power users, and progress videos.
+
+### 8.1 Competitor pricing (US App Store listings, checked Nov 20, 2026)
+| App | Model | Prices | Notable |
+|---|---|---|---|
+| Shotsy (4.8, 35K) | Subscription | $9.99–14.99/mo, $39.99–59.99/yr | No account, iCloud; PDF + CSV; level chart reportedly paid |
+| MeAgain (4.8, 41K) | Subscription | ~$10/mo, up to $119.99 | Compounded, progress photos, doctor PDF |
+| Glapp (4.8, 1.1K) | Subscription | $4.99/wk, $9.99/mo, $39.99/yr | Level chart free; 3 free doctor reports |
+| Pep (4.7, 984) | Subscription | ~$10/mo, ~$40/yr | Compounded, side-by-side progress photos |
+| Glippy (4.8, 480) | **Completely free** | — | Compounded, PDF + CSV, no paywall |
+| GLPeak (4.7, 162) | Subscription | $4.99/mo, $39.99/yr | Compounded vial math; photos paid |
+| Pokii (4.7, 826) | Subscription | $2.99–10.99/mo, $24.99–59.99/yr | Compounded, photos, iCloud |
+| Dozify | Subscription | $6.99/mo, $39.99/yr | No account; level chart, vials, photos all paid |
+| Steady | Sub **or lifetime** | $4.99/mo or **$99.99 lifetime** | Photos free; compounded + reconstitution calculator |
+| Simple GLP | Sub **or lifetime** | $9.99/mo, $39.99/yr, **$89.99 lifetime** | No account; CSV free |
+| Easy GLP-1 Tracker | **One-time only** | **$4.99** | Free = 2 shots / 2 weeks |
+| Cadence | Subscription | $1.99/mo, $12.99/yr | Level chart, PDFs paid |
+
+Takeaways:
+- **$39.99/yr is the going rate**; lifetime unlocks are rare and priced $90–100.
+- Usually free: dose log, reminders, site rotation, weight, side effects. Usually paid: level chart, doctor PDF,
+  multiple meds, vial/supply tracking, photos (varies), cloud sync.
+- **Compounded support and progress photos are NOT unique** (MeAgain, Pep, Glippy, GLPeak, Pokii, Steady, Simple
+  GLP). Aloft's edge has to be the combination: per-vial added ingredients, label scan (not seen elsewhere), free
+  level chart + photos + backup, and a fair one-time price with no subscription.
+- Free/paid split for Shotsy, MeAgain, Pep and Pokii isn't itemized on their listings; Google Play prices not checked.
 
 ---
 
@@ -370,7 +416,7 @@ Rationale: Shotsy reviewers praise its generous free tier, so the core tracker s
 1. **Real label + prescription photos** (personal info blurred) to design and test the scanner.
 2. Is the user's dose prescribed in **units, mg or mL**?
 3. **Shotsy export:** does it have one, and in what format? (Sample file needed for the import preset.)
-4. Pro price ($6.99 / $7.99 / $9.99) and exactly which features are Pro.
+4. Pricing decided ($1.99/mo, $14.99/yr, $29.99 lifetime). Still open: exactly which features are Pro, and a trial.
 5. Bundle ID / developer account: same as Debt Shredder (`com.shannonsonlinebookkeeping.aloft`) or a Peace of Mind
    Apps identity?
 6. Crash reporting: none, or opt-in (e.g. Sentry with health data scrubbed)?
