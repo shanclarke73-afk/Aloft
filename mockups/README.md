@@ -17,9 +17,14 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `OnbFinish.dc.html` | 6. Privacy, reminders, disclaimer |
 | `Main.dc.html` | Today |
 | `MainTwoMeds.dc.html` | Today with two medications (Zepbound + NAD+, Pro) |
+| `TodayFirst.dc.html` | Today on day 1 (first shot day, getting-started checklist incl. Shotsy import, empty states) |
+| `TodayLate.dc.html` | Today when a shot is late (taking it now, took it but didn't log, skipped, remind tonight) |
 | `QuickAdd.dc.html` | Quick-add menu from the Today "+" button (shot, weight, side effect, measurements, photos, note) |
 | `LogWeight.dc.html` | Log weight (lb/kg, change since last, save to Apple Health) |
 | `LogMeasurements.dc.html` | Log measurements (waist first with where-to-measure figure, left/right, custom, reminder) |
+| `LogSideEffect.dc.html` | Log side effects (pick several, 1–5 strength each, days since shot, likely medication) |
+| `EditEntry.dc.html` | Edit a logged shot (shows what changed, updates charts and supply) |
+| `EditEntryDelete.dc.html` | Delete confirmation (what happens, 10-second undo) |
 | `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
 | `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
 | `LogPill.dc.html` | Log a pill dose (one-tap "Took it", tablets stepper, wait timer) |
@@ -34,6 +39,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `HistoryTwoMeds.dc.html` | History with two medications (color per medication, filter chips, Pro) |
 | `HistoryPill.dc.html` | History for a daily pill (week strip, half tablet, skipped day) |
 | `Settings.dc.html` | More / Settings (Pro card, medications, reminders, backup, preferences, privacy, purchases, help, delete data) |
+| `MyMeds.dc.html` | My medications (active medication + vial, change dose, new/finish vial, dose history, past vials and medications, pause) |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
 | `ExportTwoMeds.dc.html` | Export & backup with two medications (choose medications for PDF/CSV, Pro) |
 | `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |

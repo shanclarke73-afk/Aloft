@@ -242,8 +242,8 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - Measurements: **waist** (the suggested main one, shown first with a "where to measure" figure), hips, chest,
   neck, upper arm and thigh (each with a left/right choice that's remembered), plus custom ones the user names
   (e.g. under bust, calf). Every field is optional. Each shows change since the comparison date. An "i" button
-  explains where to measure so it's the same spot each time. Optional reminder every 4 weeks, on the same day as
-  the photo reminder. Units follow the in/cm setting.
+  explains where to measure so it's the same spot each time. Optional reminder (off by default) **monthly**, on
+  the same day as the photo reminder. Units follow the in/cm setting.
 - Logging: a **+ button on Today** opens a quick-add menu (shot or dose, weight, side effect, measurements, progress
   photos, note); tapping the Weight card opens weight entry directly. Weight entry shows change since the last
   weigh-in and since starting, and can save to Apple Health / Health Connect.
@@ -262,12 +262,19 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - **Compare:** pick two dates → side-by-side or swipe slider.
 - **Timelapse (Pro):** builds a short video or GIF from one pose over time; saved only when the user exports it.
 - Photos live only in the app's private storage, behind app lock; never in the camera roll unless the user exports.
-- Optional photo reminder (e.g. every 4 weeks).
+- Photos are **optional**, and so is their reminder (owner's decisions, Nov 21, 2026):
+  - Photo and measurement reminders are **off by default** and are separate switches in Settings → Reminders.
+  - When turned on, they fire **once a month** on the same day of the month as the user's start date (e.g. the 4th);
+    there's no more frequent option, so it never nags. One gentle follow-up 3 days later if nothing was logged,
+    then nothing until next month.
+  - The Today "Photo check-in" card only appears when the photo reminder is on.
 
 ### 6.10 Reminders
 - Shot reminders **per medication**, following each one's own schedule (e.g. NAD+ Mon/Wed/Fri 9 AM and
   Zepbound Thu 8 PM); weigh-in (optional), photo day (optional), reorder and beyond-use date per supply.
-- All local notifications, all off-able, none about water/food.
+- All local notifications, none about water/food. **Each reminder type has its own on/off switch** in Settings →
+  Reminders. Defaults: shot day **on**, reorder **on**, use-by date **on**, progress photos **off**, measurements
+  **off**, weigh-in **off**. Photos and measurements are monthly when turned on.
 
 ### 6.11 Export and import
 | Format | Contents | Free / Pro |
@@ -484,10 +491,17 @@ major releases.
 - Measurements screen + Charts Body and Effects tabs
 - Dose-change history and "Update your usual dose?" prompt
 - Pro additions: CSV export, compare slider
+- **Home-screen widgets** (moved up from 2.0 at the owner's request, Nov 21, 2026), iPhone and Android:
+  - Small: next shot countdown ("Shot in 2 days" / "Shot today 8 PM"); tap opens Log shot
+  - Medium: next shot + last dose + doses left in the vial; a "Log" button where the OS allows it
+  - iPhone Lock Screen widget: next shot day
+  - Privacy option "Hide details on widgets" (shows "Aloft · Thu" with no medication name or dose), since
+    widgets are visible to anyone looking at the phone
+  - Open question: which widgets are free vs Pro (suggestion: next-shot widget free, others Pro)
 
 ### Release 2.0: "Delight"
 - Pro: timelapse, custom poses
-- Home-screen widgets; possibly Apple Watch / Wear OS quick-log
+- Possibly Apple Watch / Wear OS quick-log
 - Optional backup password (end-to-end encrypted backups)
 - Insights (e.g. side effects vs. level curve), iPad layout, more languages
 

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Delete a shot</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#237A85}a:hover{color:#1B5F67}
+.ef{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#33475B;line-height:1.4}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+  <div style="padding: 52px 20px 0; display: flex; flex-direction: column; gap: 12px" aria-hidden="true">
+    <div style="display: flex; justify-content: space-between; font-size: 16px; color: #237A85; padding: 12px 0"><span>Cancel</span><span style="color: #12263A; font-weight: 700">Edit shot</span><span style="font-weight: 700">Save</span></div>
+    <div style="background: #FFF6F0; border-radius: 14px; height: 56px"></div>
+    <div style="background: #FFFFFF; border-radius: 20px; height: 200px"></div>
+    <div style="background: #FFFFFF; border-radius: 20px; height: 196px"></div>
+  </div>
+
+  <a href="EditEntry.dc.html" aria-label="Close" style="position: absolute; inset: 0; background: rgba(14,26,38,.45)"></a>
+
+  <div role="alertdialog" aria-labelledby="dt" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 28px 28px 0 0; padding: 12px 20px 34px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -8px 30px rgba(14,26,38,.2)">
+    <span style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #D5DDE6"></span>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+      <div style="width: 52px; height: 52px; border-radius: 26px; background: #FDECEA; display: flex; align-items: center; justify-content: center">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+      </div>
+      <span id="dt" style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 22px; font-weight: 800">Delete this shot?</span>
+      <span style="font-size: 15px; color: #33475B">Thu, Nov 13, 8:12 PM · 20 units = 2.0 mg<br>Abdomen, lower left</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px; background: #F6F8FB; border-radius: 14px; padding: 12px 14px">
+      <div class="ef"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#237A85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><rect x="7" y="7" width="10" height="14" rx="2"/><path d="M9 7V4h6v3"/></svg>0.20 mL goes back to your vial's count (5 doses left)</div>
+      <div class="ef"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#237A85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8"/></svg>History and your level chart update</div>
+      <div class="ef"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#237A85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>You can undo for 10 seconds, and older backups still have it</div>
+    </div>
+
+    <button style="height: 52px; border-radius: 16px; border: none; background: #B42318; color: #FFFFFF; font: 700 17px Inter, sans-serif">Delete shot</button>
+    <a href="EditEntry.dc.html" style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 16px; border: 1px solid #D5DDE6; text-decoration: none; font: 700 16px Inter, sans-serif; color: #12263A">Keep it</a>
+  </div>
+
+  <div role="status" style="position: absolute; left: 20px; right: 20px; top: 56px; background: #12263A; color: #FFFFFF; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 24px rgba(14,26,38,.3)">
+    <span style="font-size: 14px">After deleting: "Shot deleted"</span>
+    <button style="border: none; background: none; font: 700 14px Inter, sans-serif; color: #8FD3D9; padding: 6px 4px">Undo</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

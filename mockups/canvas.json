@@ -2,8 +2,62 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "TodayFirst.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Today: first day (no data yet)",
+      "w": 390,
+      "x": 5640,
+      "y": 3564
+    },
+    "TodayLate.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Today: shot is late",
+      "w": 390,
+      "x": 5170,
+      "y": 3564
+    },
+    "EditEntry.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Edit an entry (shot)",
+      "w": 390,
+      "x": 4230,
+      "y": 3564
+    },
+    "EditEntryDelete.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Delete an entry: confirm + undo",
+      "w": 390,
+      "x": 4700,
+      "y": 3564
+    },
+    "LogSideEffect.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Log side effect",
+      "w": 390,
+      "x": 3760,
+      "y": 3564
+    },
+    "MyMeds.dc.html": {
+      "h": 1240,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "My medications (full scroll)",
+      "w": 390,
+      "x": 3290,
+      "y": 3564
+    },
     "Settings.dc.html": {
-      "h": 1560,
+      "h": 1620,
       "is_interactive": true,
       "radius": 36,
       "title": "More / Settings (full scroll)",
@@ -350,7 +404,13 @@
     "LogMeasurements.dc.html",
     "IconButterflies.dc.html",
     "IconSummitPlane.dc.html",
-    "Settings.dc.html"
+    "Settings.dc.html",
+    "MyMeds.dc.html",
+    "LogSideEffect.dc.html",
+    "EditEntry.dc.html",
+    "EditEntryDelete.dc.html",
+    "TodayLate.dc.html",
+    "TodayFirst.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"

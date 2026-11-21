@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Today, shot is late</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#237A85}a:hover{color:#1B5F67}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;background:#FFFFFF;border-top:1px solid #E3E8EF;display:flex;justify-content:space-around;padding-top:8px;box-sizing:border-box}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#5B6878;text-decoration:none;width:64px;min-height:44px}
+.tab:hover{color:#12263A}
+.tab.on{color:#237A85;font-weight:600}
+.card{background:#FFFFFF;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.opt{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #F1D3C2;border-radius:14px;padding:10px 12px;text-decoration:none;color:#12263A;font-family:Inter,sans-serif;text-align:left;min-height:56px}
+.opt:hover{color:#12263A;border-color:#E9A47F}
+.ot{font-size:15px;font-weight:700}
+.os{font-size:12px;color:#4A5A6B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 56px 20px 100px; display: flex; flex-direction: column; gap: 14px">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="lg"><rect width="100" height="100" rx="24"/></clipPath></defs><g clip-path="url(#lg)"><rect width="100" height="100" fill="#1D3557"/><path d="M-4 104 L50 28 L104 104 Z" fill="#3E8E8A"/><path d="M50 28 L104 104 L60 104 Z" fill="#2F6F6C"/><path d="M50 28 V12" stroke="#F4EDE4" stroke-width="3" stroke-linecap="round"/><path d="M50 12 L63 16.5 L50 21 Z" fill="#E8956B"/></g></svg>
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.5px">Aloft</span>
+    </div>
+    <span style="font-size: 13px; color: #4A5A6B">Saturday, Nov 22</span>
+  </div>
+
+  <div style="background: #FFF4EC; border: 1px solid #F1C9B2; border-radius: 24px; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 44px; height: 44px; border-radius: 14px; background: #FDE3D4; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4532A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <span style="font-size: 13px; font-weight: 700; color: #8A3D1C; text-transform: uppercase; letter-spacing: 0.4px">Not logged yet</span>
+        <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 22px; font-weight: 800; line-height: 1.15">Thursday's shot · 2 days ago</span>
+      </div>
+    </div>
+    <span style="font-size: 14px; color: #5A3A2A">Tirzepatide + B12 · usual dose 25 units = 2.5 mg</span>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <a href="LogShot.dc.html" class="opt" style="background: #1D3557; border-color: #1D3557; color: #FFFFFF">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span style="display: flex; flex-direction: column"><span class="ot" style="color: #FFFFFF">Taking it now</span><span class="os" style="color: #CDE5E8">Logs it for today</span></span>
+      </a>
+      <a href="EditEntry.dc.html" class="opt">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#237A85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>
+        <span style="display: flex; flex-direction: column"><span class="ot">I took it, just didn't log it</span><span class="os">Logs it for Thursday or the day you pick</span></span>
+      </a>
+      <button class="opt">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8"/></svg>
+        <span style="display: flex; flex-direction: column"><span class="ot">Skipped this week</span><span class="os">Keeps your schedule; next shot Thursday</span></span>
+      </button>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <button style="border: none; background: none; padding: 8px 0; font: 600 14px Inter, sans-serif; color: #237A85">Remind me tonight</button>
+      <span style="font-size: 12px; color: #5A3A2A">Last shot: Thu, Nov 13</span>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 10px; align-items: flex-start; padding: 0 4px">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A5A6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+    <span style="font-size: 13px; color: #4A5A6B; line-height: 1.4">Not sure what to do about a late dose? Check your medication's instructions or ask your prescriber. Aloft only keeps your record.</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+    <a href="LogWeight.dc.html" class="card" style="display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #12263A">
+      <span style="font-size: 14px; font-weight: 600">Weight</span>
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 22px; font-weight: 800">184.6 lb</span>
+      <span style="font-size: 13px; color: #1E6B3C; font-weight: 600">−12.4 lb since Sep 4</span>
+    </a>
+    <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; font-weight: 600">This vial</span>
+      <span style="font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 22px; font-weight: 800">4 doses</span>
+      <span style="font-size: 13px; color: #5B6878">Use by Dec 30</span>
+    </div>
+  </div>
+
+  <a href="QuickAdd.dc.html" aria-label="Add a log entry" style="position: absolute; right: 20px; bottom: 100px; width: 58px; height: 58px; border-radius: 29px; background: #1D3557; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(29,53,87,.35)">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </a>
+
+  <nav class="tabs" aria-label="Main">
+    <a class="tab on" href="TodayLate.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</a>
+    <a class="tab" href="History.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</a>
+    <a class="tab" href="PhotoCompare.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>Progress</a>
+    <a class="tab" href="Charts.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8M20 16v-3"/></svg>Charts</a>
+    <a class="tab" href="Settings.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>More</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
