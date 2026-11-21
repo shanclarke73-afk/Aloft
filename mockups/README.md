@@ -22,10 +22,10 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `QuickAdd.dc.html` | Quick-add menu from the Today "+" button (shot, weight, side effect, measurements, photos, note) |
 | `LogWeight.dc.html` | Log weight (lb/kg, change since last, save to Apple Health) |
 | `LogMeasurements.dc.html` | Log measurements (waist first with where-to-measure figure, left/right, custom, reminder) |
-| `LogSideEffect.dc.html` | Log side effects (pick several, 1–5 strength each, days since shot, likely medication) |
+| `LogSideEffect.dc.html` | Log side effects (pick several, 1–10 strength each, days since shot, likely medication) |
 | `EditEntry.dc.html` | Edit a logged shot (shows what changed, updates charts and supply) |
 | `EditEntryDelete.dc.html` | Delete confirmation (what happens, 10-second undo) |
-| `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
+| `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site, 0–10 pain slider) |
 | `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
 | `LogPill.dc.html` | Log a pill dose (one-tap "Took it", tablets stepper, wait timer) |
 | `VialSetup.dc.html` | New vial from label scan, incl. "Your dose" |
@@ -43,6 +43,9 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
 | `ExportTwoMeds.dc.html` | Export & backup with two medications (choose medications for PDF/CSV, Pro) |
 | `LockScreen.dc.html` | App lock (Face ID / phone passcode; no health data visible) |
+| `ShotsyImport.dc.html` | Import from Shotsy preview (counts, brand pen vs compounded + vial strength, dose history, duplicates) |
+| `RestoreBackup.dc.html` | Restore on a new phone (latest backup or an older snapshot, or start fresh) |
+| `VialSetupTyped.dc.html` | New vial typed in by hand (Release 1.0; the scan version is 1.5) |
 | `Widgets.dc.html` | Release 1.5 widgets: home screen (small, medium, two meds), Lock Screen, hidden-details mode; suggested free vs Pro |
 | `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |
 | `canvas.json` | Canvas layout (positions of the screens) |

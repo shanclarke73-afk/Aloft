@@ -20,7 +20,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    Side-effect values are 1–10 whole numbers (confirmed Nov 21). Keep real exports out of git
    (`samples/` is git-ignored). General CSV import moved to Release 1.5.
 2. Done: app screens use the icon's navy + teal palette (icon: Summit trail, files in [brand/](brand/)).
-3. All 1.0 screens are mocked up, including Settings, My medications, side effects, edit/delete, late shot, day 1
+3. All 1.0 screens are mocked up, including Settings, My medications, side effects, edit/delete, late shot, day 1, Shotsy import preview, restore on a new phone, typed vial setup
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, bundle ID, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).

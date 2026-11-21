@@ -357,6 +357,33 @@
       "w": 1600,
       "x": -470,
       "y": 6808
+    },
+    "ShotsyImport.dc.html": {
+      "h": 1170,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Import from Shotsy: preview (full scroll)",
+      "w": 390,
+      "x": 6580,
+      "y": 3564
+    },
+    "RestoreBackup.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Restore from backup on a new phone",
+      "w": 390,
+      "x": 7050,
+      "y": 3564
+    },
+    "VialSetupTyped.dc.html": {
+      "h": 1420,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "New vial, typed in (Release 1.0, no scan)",
+      "w": 390,
+      "x": 7520,
+      "y": 3564
     }
   },
   "createdOnFiles": {
@@ -429,7 +456,10 @@
     "TodayLate.dc.html",
     "TodayFirst.dc.html",
     "LockScreen.dc.html",
-    "Widgets.dc.html"
+    "Widgets.dc.html",
+    "ShotsyImport.dc.html",
+    "RestoreBackup.dc.html",
+    "VialSetupTyped.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
