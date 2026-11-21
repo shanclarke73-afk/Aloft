@@ -104,7 +104,8 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 - `supplyId`, `takenAt`, `amountEntered` + `unitEntered` (units | mL | mg)
 - Calculated and stored at log time: `volumeMl`, `drugMg`, `additiveAmounts` (frozen so later edits to the supply
   don't rewrite history)
-- `injectionSite` (abdomen L/R upper/lower, thigh L/R, **back of upper arm** L/R, buttock L/R, custom),
+- `injectionPain` (optional number; Shotsy exports a "Pain Level")
+- `injectionSite` (abdomen upper/lower × left/middle/right, thigh L/R, **back of upper arm** L/R, buttock L/R, custom),
   `syringeType` (U-100 default). Body map shows front sites plus the back-of-arm sites (drawn dashed, since they're
   on the back); rotation spans **all** medications so two shots never land on the same spot.
 - `notes`, `skipped` (bool, for "skipped this week")
@@ -114,8 +115,10 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
 **Measurement**: `measuredAt`, `type` (waist | hips | chest | neck | upperArm | thigh | custom), `side`
 (left | right | none), `customName`, `cm`
 
-**SideEffect**: `occurredAt`, `type` (nausea, constipation, diarrhea, fatigue, headache, heartburn, injection-site
-reaction, low appetite, sulfur burps, hair shedding, custom), `severity` 1–5, `notes`
+**SideEffect**: `occurredAt`, `type` (nausea, constipation, diarrhea, fatigue, headache / migraine, heartburn,
+indigestion, stomach pain, belching / sulfur burps, injection-site reaction, low appetite, food noise, mood swings,
+metallic taste, hair shedding, custom; covers every symptom Shotsy exports), `severity` 1–5, `medicationId`
+(optional, "after which medication"), `notes`
 
 **PhotoSet**: `takenAt`, `weightAtTime` (linked if logged that day), `photos`: list of
 `{pose: front | side | back | custom, filePath, width, height}`, `notes`
@@ -276,8 +279,29 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 
 Import:
 - Backup zip or JSON → full restore (choose: replace all, or merge and skip duplicates).
-- CSV → column-mapping screen (date, dose, unit, weight, etc.), preview, duplicate detection. All imports are free.
-- Shotsy import preset once a sample export file is available.
+- **Shotsy (1.0):** its CSV export is detected by its header and imported directly (shots with mg dose, time and
+  site; weights; notes; side effects), with a preview and duplicate check. Full mapping:
+  [docs/shotsy-import.md](docs/shotsy-import.md).
+- **Any CSV (1.5):** column-mapping screen (date, dose, unit, weight, etc.), preview, duplicate detection.
+- All imports are free.
+- **Import check:** after a Shotsy import, the totals Aloft shows (number of shots, date range, weight change) should
+  match the "Shotsy Summary" PDF the user can export from Shotsy. Use that as an acceptance test.
+
+**PDF report for your provider (Pro)**, designed after reviewing Shotsy's 2-page summary PDF (Nov 20, 2026). Shotsy's
+is a picture of a chart, saved as images, so it can't be searched, copied or read by screen readers; it has no
+dose table, injection sites or side effects, and it spends half a page on an empty nutrition chart. Aloft's report:
+- **Real text, not images**, so it's searchable, copyable and accessible; Letter and A4.
+- **Page 1 summary:** date range and length of treatment; current medication(s) and dose, including concentration
+  and units for compounded vials and added ingredients; doses logged and missed; weight change (lb or kg and %),
+  average per week, current BMI if enabled.
+- **Chart:** estimated level curve with dose steps marked, plus the weight line, like Shotsy's but with labeled axes
+  and dose-change markers.
+- **Dose history table:** date, medication, dose (mg, and units/mL for compounded), injection site, notes; grouped
+  by dose step so titration up and down is easy to see.
+- **Side effects by medication** (counts and average severity) and **measurements** when logged.
+- **Notes**, and optional progress photos (off by default).
+- **Sections with no data are left out** (no empty charts). The user picks the date range and medications.
+- Footer on every page: "Created with Aloft · personal tracking record, not medical advice."
 - Manual exports go through the system share sheet (Files, Drive, email, etc.). The backup zip is also how to move
   between iPhone and Android, since iCloud and Google Drive backups don't cross platforms.
 
@@ -445,8 +469,9 @@ major releases.
 - Weight (manual + Apple Health / Health Connect), side effects
 - Progress photos: capture with outline, gallery, side-by-side compare
 - History (with edit/delete), medication level chart
-- **Import: Shotsy + any CSV** (column mapping, preview, duplicate check), plus backup zip / JSON restore.
-  **Moved into 1.0 at the owner's request** so her Shotsy history comes over on day one.
+- **Import from Shotsy** (its CSV export, auto-detected; preview and duplicate check; see
+  [docs/shotsy-import.md](docs/shotsy-import.md)), plus backup zip / JSON restore. **Moved into 1.0 at the owner's
+  request** so the owner's Shotsy history comes over on day one.
 - App lock, automatic iCloud / Google Drive backup + restore (tested on a second device), JSON + backup-zip export
 - Settings (units, lock, reminders, Manage subscription, Restore purchases, Delete all data, disclaimer, terms,
   privacy, support) and My medications (change usual dose, finish/start vial, pause)
@@ -454,6 +479,8 @@ major releases.
 
 ### Release 1.5: "Smarter"
 - Label / prescription scanning (on-device), built and tested against real labels
+- **General CSV import** from any app or spreadsheet: column-matching screen, preview, duplicate check
+  (Shotsy-specific import ships in 1.0; this is the "any CSV" version, decided Nov 20, 2026)
 - Measurements screen + Charts Body and Effects tabs
 - Dose-change history and "Update your usual dose?" prompt
 - Pro additions: CSV export, compare slider
@@ -470,8 +497,8 @@ major releases.
 3. **Today, quick-add, History (edit/delete), schedules, reminders, supply tracking.**
 4. **Weight, side effects, Health integration, level chart.**
 5. **Progress photos:** capture with outline, gallery, side-by-side compare.
-6. **Import (Shotsy + CSV) and export/backup:** JSON, zip, iCloud / Google Drive backup and restore. Build the
-   Shotsy import from a real Shotsy export file (kept out of git in `samples/`).
+6. **Shotsy import and export/backup:** Shotsy CSV import per [docs/shotsy-import.md](docs/shotsy-import.md)
+   (test against the owner's real export, kept out of git); JSON, zip, iCloud / Google Drive backup and restore.
 7. **Pro + RevenueCat** (second medication, PDF report), store listings, privacy/terms pages, screenshots.
 8. **Testing:** owner's own daily use (real shots, imported Shotsy history), TestFlight + Play closed testing,
    then submit.

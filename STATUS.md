@@ -16,8 +16,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] App icon chosen: **Summit trail** (round 3, concept J). Final files in [brand/](brand/)
 
 ## Next time
-1. Export your data from Shotsy (CSV or whatever it offers) and save it in `samples/` in this folder.
-   That folder is git-ignored, so health data never goes to GitHub. The 1.0 importer is built from it.
+1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
+   Still needed: an export with side effects filled in, to confirm that column format. Keep real exports out of git
+   (`samples/` is git-ignored). General CSV import moved to Release 1.5.
 2. Decide whether the app screens should switch to the icon's navy + teal palette (icon chosen: Summit trail,
    files in [brand/](brand/)).
 3. Mock up the remaining 1.0 screens: Settings, My medications, Log side effect, edit/delete entry,

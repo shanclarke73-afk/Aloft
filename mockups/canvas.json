@@ -2,6 +2,31 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "Settings.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "More / Settings (full scroll)",
+      "w": 390,
+      "x": 2820,
+      "y": 3564
+    },
+    "IconSummitPlane.dc.html": {
+      "h": 640,
+      "radius": 24,
+      "title": "App icon concepts, round 3: summit and paper plane",
+      "w": 1600,
+      "x": -470,
+      "y": 6048
+    },
+    "IconButterflies.dc.html": {
+      "h": 640,
+      "radius": 24,
+      "title": "App icon concepts, round 2: butterflies",
+      "w": 1600,
+      "x": -470,
+      "y": 5288
+    },
     "LogMeasurements.dc.html": {
       "h": 844,
       "is_interactive": true,
@@ -322,7 +347,10 @@
     "IconConcepts.dc.html",
     "QuickAdd.dc.html",
     "LogWeight.dc.html",
-    "LogMeasurements.dc.html"
+    "LogMeasurements.dc.html",
+    "IconButterflies.dc.html",
+    "IconSummitPlane.dc.html",
+    "Settings.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
