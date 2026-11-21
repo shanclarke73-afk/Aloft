@@ -85,7 +85,10 @@ All records have `id` (UUID), `createdAt`, `updatedAt`.
   `form` (brandPen | compoundedVial | oral | other)
 - `halfLifeHours`, `tmaxHours` (pre-filled from the built-in list for known drugs; editable; used only for the
   level chart)
-- `scheduleType` (weekly | everyNDays | daily | custom), `scheduleInterval`, `preferredDay`, `preferredTime`
+- **Each medication has its own schedule** (e.g. Zepbound weekly on Thursday, NAD+ Mon/Wed/Fri):
+  `scheduleType` (weekly | daysOfWeek | everyNDays | daily | asNeeded), `scheduleDays` (list of weekdays, for
+  weekly or several days a week), `scheduleInterval` (for every N days), `times` (one or more times of day),
+  `startDate`. Reminders, "due today" on Today, and missed-dose detection all use the medication's own schedule.
 
 **Supply** (a specific vial or pen)
 - `medicationId`
@@ -251,7 +254,8 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - Optional photo reminder (e.g. every 4 weeks).
 
 ### 6.10 Reminders
-- Shot day (time chosen), weigh-in (optional), photo day (optional), reorder, beyond-use date.
+- Shot reminders **per medication**, following each one's own schedule (e.g. NAD+ Mon/Wed/Fri 9 AM and
+  Zepbound Thu 8 PM); weigh-in (optional), photo day (optional), reorder and beyond-use date per supply.
 - All local notifications, all off-able, none about water/food.
 
 ### 6.11 Export and import

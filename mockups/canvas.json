@@ -2,6 +2,15 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "HistoryTwoMeds.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "History: two medications (Pro)",
+      "w": 390,
+      "x": 2350,
+      "y": 1400
+    },
     "LogShotTwoMeds.dc.html": {
       "h": 844,
       "is_interactive": true,
@@ -213,7 +222,8 @@
     "Paywall.dc.html",
     "OnbDosePill.dc.html",
     "MainTwoMeds.dc.html",
-    "LogShotTwoMeds.dc.html"
+    "LogShotTwoMeds.dc.html",
+    "HistoryTwoMeds.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
