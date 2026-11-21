@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 21, 2026 (1.0 build: steps 1–4 of 8 done, except Health sync)_
+_Last updated: November 21, 2026 (1.0 build: steps 1–4 done except Health sync; Shotsy import done)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -34,6 +34,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       weight chart; an estimated-level card on Today.
 - [ ] Step 4c: Apple Health / Health Connect (needs the HealthKit capability set up in Xcode and a real phone)
 - [ ] Step 5: progress photos
+- [x] **Step 6a, Shotsy import** (Nov 21): More → Import from Shotsy reads the CSV export, shows a preview (date
+      range, counts, pen or compounded vial for each medication), and brings in shots, weights, day notes and
+      side effects. Importing the same file twice adds nothing. Tested with made-up data only.
+- [ ] Step 6b: export, backup zip, iCloud / Google Drive backup and restore
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -44,7 +48,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
 4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
-6. Build step 5 (progress photos), then Health sync on a real phone.
+6. **Try the Shotsy import with the real export** on the Mac mini or a phone, and compare the totals with
+   Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
+7. Build step 5 (progress photos), step 6b (backup), then Health sync on a real phone.
 
 ## Not done / not verified
 - No trademark check.
@@ -60,6 +66,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
   8–12 h; dulaglutide 5 days / median 48 h). Shannon should look these over once, and they need re-checking before
   each release. Retatrutide has no prescribing information, so it gets no curve. The numbers are built in and
   can't be edited in the app yet.
+- The Shotsy import has only been run on made-up files in Shotsy's format. The real export is on the laptop
+  (`samples/`, git-ignored) and hasn't been tried. Day notes come in as notes in History; notes can't be added or
+  edited by hand yet (long-press deletes one).
 - Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
 - App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that

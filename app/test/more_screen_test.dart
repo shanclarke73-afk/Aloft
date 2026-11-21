@@ -38,7 +38,7 @@ void main() {
 
     await tester.tap(find.text('More'));
     await tester.pumpAndSettle();
-    expect(find.text('lb'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('lb'), 200, scrollable: find.byType(Scrollable).last);
     expect(find.text('Lock after'), findsNothing);
 
     await tester.scrollUntilVisible(find.text('Lock with Face ID'), 200, scrollable: find.byType(Scrollable).last);

@@ -216,12 +216,19 @@ class SideEffects extends Table with RecordColumns {
   TextColumn get notes => text().nullable()();
 }
 
-@DriftDatabase(tables: [AppSettingsTable, Medications, Supplies, Prescriptions, Doses, Weights, SideEffects])
+/// A free-text note for a day (Shotsy's "Day Notes", and anything an import couldn't place).
+@DataClassName('DayNote')
+class DayNotes extends Table with RecordColumns {
+  DateTimeColumn get noteDate => dateTime()();
+  TextColumn get body => text()();
+}
+
+@DriftDatabase(tables: [AppSettingsTable, Medications, Supplies, Prescriptions, Doses, Weights, SideEffects, DayNotes])
 class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -244,6 +251,7 @@ class AloftDatabase extends _$AloftDatabase {
         await m.createTable(weights);
         await m.createTable(sideEffects);
       }
+      if (from < 5) await m.createTable(dayNotes);
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );

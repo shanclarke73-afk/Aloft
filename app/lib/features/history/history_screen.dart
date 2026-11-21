@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
+import '../../import/shotsy_import.dart';
 import '../../dose/dose_math.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
@@ -31,11 +32,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     final doses = ref.watch(historyProvider).value ?? const <HistoryEntry>[];
     final weights = ref.watch(weightsProvider).value ?? const <Weight>[];
     final effects = ref.watch(sideEffectsProvider).value ?? const <SideEffect>[];
+    final notes = ref.watch(dayNotesProvider).value ?? const <DayNote>[];
     final names = {
       for (final d in ref.watch(medicationsProvider).value ?? const <MedicationDetail>[])
         d.medication.id: d.medication.name,
     };
-    final nothingLogged = doses.isEmpty && weights.isEmpty && effects.isEmpty;
+    final nothingLogged = doses.isEmpty && weights.isEmpty && effects.isEmpty && notes.isEmpty;
 
     final items = <(DateTime, Widget)>[
       if (_filter == _Filter.all || _filter == _Filter.shots)
@@ -44,6 +46,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         for (final w in weights) (w.measuredAt, _WeightRow(weight: w, unit: unit)),
       if (_filter == _Filter.all || _filter == _Filter.effects)
         for (final e in effects) (e.occurredAt, _EffectRow(effect: e, medicationName: names[e.medicationId])),
+      // A day's note sorts to the end of its day.
+      if (_filter == _Filter.all)
+        for (final n in notes) (n.noteDate, _NoteRow(note: n)),
     ]..sort((a, b) => b.$1.compareTo(a.$1));
 
     final rows = <Widget>[];
@@ -109,6 +114,34 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 ...rows,
               ],
             ),
+    );
+  }
+}
+
+class _NoteRow extends ConsumerWidget {
+  const _NoteRow({required this.note});
+  final DayNote note;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        title: const Text('Note', style: TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: Text(note.body),
+        onLongPress: () async {
+          final db = ref.read(databaseProvider);
+          final messenger = ScaffoldMessenger.of(context);
+          await db.deleteDayNote(note);
+          messenger.showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 10),
+              content: const Text('Note deleted'),
+              action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreDayNote(note)),
+            ),
+          );
+        },
+      ),
     );
   }
 }
