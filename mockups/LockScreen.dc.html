@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Locked</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#8FD3D9}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #1D3557; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 0 32px 48px">
+  <svg width="390" height="300" viewBox="0 0 390 300" fill="none" aria-hidden="true" style="position: absolute; left: 0; bottom: 0">
+    <path d="M-20 320 L210 40 L440 320 Z" fill="#24406A"/>
+    <path d="M210 40 L440 320 L250 320 Z" fill="#203A60"/>
+    <path d="M120 320 Q170 280 150 240 Q130 200 190 170 Q230 150 214 100 L210 70" stroke="#3E5C86" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 14"/>
+  </svg>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; position: relative; margin-top: -60px">
+    <svg width="88" height="88" viewBox="0 0 100 100" role="img" aria-label="Aloft"><defs><clipPath id="lk"><rect width="100" height="100" rx="24"/></clipPath></defs><g clip-path="url(#lk)"><rect width="100" height="100" fill="#16294A"/><path d="M-4 104 L50 28 L104 104 Z" fill="#3E8E8A"/><path d="M50 28 L104 104 L60 104 Z" fill="#2F6F6C"/><path d="M30 104 Q44 90 38 78 Q32 66 48 58 Q58 52 51 42 L50 34" fill="none" stroke="#F4E3CC" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="0.5 6.2"/><path d="M50 28 V12" stroke="#F4EDE4" stroke-width="2.4" stroke-linecap="round"/><path d="M50 12 L63 16.5 L50 21 Z" fill="#E8956B"/></g></svg>
+    <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 28px; font-weight: 800">Aloft is locked</h1>
+    <p style="margin: 0; font-size: 15px; color: #CDE5E8; text-align: center; line-height: 1.45">Your health data and photos stay private.</p>
+
+    <button aria-label="Unlock with Face ID" style="margin-top: 18px; width: 92px; height: 92px; border-radius: 28px; border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center">
+      <svg width="52" height="52" viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15V10a4 4 0 0 1 4-4h5M33 6h5a4 4 0 0 1 4 4v5M42 33v5a4 4 0 0 1-4 4h-5M15 42h-5a4 4 0 0 1-4-4v-5"/><path d="M17 18v3M31 18v3M24 18v8h-2"/><path d="M18 32c3.5 3 8.5 3 12 0"/></svg>
+    </button>
+    <a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; height: 52px; width: 260px; border-radius: 16px; background: #FFFFFF; color: #1D3557; font-weight: 700; font-size: 17px; text-decoration: none; margin-top: 6px">Unlock with Face ID</a>
+    <button style="border: none; background: none; font: 600 15px Inter, sans-serif; color: #8FD3D9; padding: 12px">Use phone passcode</button>
+  </div>
+
+  <span style="position: relative; font-size: 12px; color: #A9BDD3; text-align: center; line-height: 1.4">Lock settings: More → Privacy &amp; security</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -340,6 +340,15 @@
       "w": 390,
       "x": 940,
       "y": 0
+    },
+    "LockScreen.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Lock screen (Face ID / passcode)",
+      "w": 390,
+      "x": 6110,
+      "y": 3564
     }
   },
   "createdOnFiles": {
@@ -410,7 +419,8 @@
     "EditEntry.dc.html",
     "EditEntryDelete.dc.html",
     "TodayLate.dc.html",
-    "TodayFirst.dc.html"
+    "TodayFirst.dc.html",
+    "LockScreen.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"

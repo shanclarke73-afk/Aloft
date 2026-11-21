@@ -42,6 +42,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `MyMeds.dc.html` | My medications (active medication + vial, change dose, new/finish vial, dose history, past vials and medications, pause) |
 | `Export.dc.html` | Export & backup (automatic iCloud / Google Drive backup) |
 | `ExportTwoMeds.dc.html` | Export & backup with two medications (choose medications for PDF/CSV, Pro) |
+| `LockScreen.dc.html` | App lock (Face ID / phone passcode; no health data visible) |
 | `Paywall.dc.html` | Aloft Pro upgrade ($1.99/mo, $14.99/yr, $29.99 lifetime) |
 | `canvas.json` | Canvas layout (positions of the screens) |
 
