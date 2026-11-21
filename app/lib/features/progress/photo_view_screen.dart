@@ -8,6 +8,7 @@ import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import 'photo_image.dart';
+import '../../theme/aloft_theme.dart';
 
 Future<void> openPhoto(BuildContext context, ProgressPhoto photo) =>
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => PhotoViewScreen(photoId: photo.id)));
@@ -120,7 +121,10 @@ class _EditSheetState extends ConsumerState<_EditSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Pose and date', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const Text(
+              'Pose and date',
+              style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+            ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,

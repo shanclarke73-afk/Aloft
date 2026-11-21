@@ -94,7 +94,10 @@ Future<void> showQuickAdd(BuildContext context, List<MedicationDetail> medicatio
             padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('Add to your log', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              child: Text(
+                'Add to your log',
+                style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+              ),
             ),
           ),
           for (final d in medications)
@@ -178,7 +181,10 @@ class _NoMedication extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Add your medication', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+          const Text(
+            'Add your medication',
+            style: TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 8),
           Text(
             'Enter your pen, vial or pill once. After that, logging a dose takes a few seconds.',
@@ -241,7 +247,12 @@ class DueCard extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             headline,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white),
+            style: const TextStyle(
+              fontFamily: displayFont,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+            ),
           ),
           if (status != null && status.state == DueState.upcoming && status.days > 1)
             Text('in ${status.days} days', style: soft),
@@ -359,7 +370,7 @@ class SupplyCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     left == null ? (describeRemaining(detail) ?? '') : '$left ${left == 1 ? 'dose' : 'doses'} left',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                    style: const TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
                   ),
                   if (left != null)
                     if (describeRemaining(detail)?.split(' · ').first case final amount?)
@@ -469,7 +480,7 @@ class LevelCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               describeAmount(series.now(now), DoseUnit.mg),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
             ),
             Text('Not a blood level. See Charts for the curve.', style: muted),
           ],

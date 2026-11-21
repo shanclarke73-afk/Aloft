@@ -6,6 +6,7 @@ import 'package:aloft/data/body_store.dart';
 import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/medication_store.dart';
+import 'package:aloft/features/about/about_screen.dart';
 import 'package:aloft/features/onboarding/onboarding_screen.dart';
 import 'package:aloft/photos/photo_picker.dart';
 import 'package:aloft/security/app_lock.dart';

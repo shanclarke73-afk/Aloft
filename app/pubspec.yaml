@@ -26,6 +26,7 @@ dependencies:
   exif: ^3.3.0
   archive: ^4.7.1
   share_plus: ^13.3.1
+  package_info_plus: ^10.2.2
 
 dev_dependencies:
   flutter_test:
@@ -33,8 +34,30 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   drift_dev: ^2.35.3
   build_runner: ^2.17.1
+  flutter_launcher_icons: ^0.14.4
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon-rounded.png
+    - assets/fonts/Inter-OFL.txt
+    - assets/fonts/PlusJakartaSans-OFL.txt
+  # Both are variable fonts under the SIL Open Font License (texts alongside them).
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans.ttf
+
+# App icons are generated from the artwork in brand/: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: ../brand/ios-appstore-1024.png
+  remove_alpha_ios: true
+  adaptive_icon_background: "#1D3557"
+  adaptive_icon_foreground: ../brand/android-foreground-432.png
 
 # Build SQLite with SQLCipher so the database is encrypted at rest (SPEC section 3).
 hooks:

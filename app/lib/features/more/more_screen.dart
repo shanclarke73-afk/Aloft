@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../about/about_screen.dart';
 import '../backup/backup_screen.dart';
 
 import '../../data/database.dart';
@@ -9,10 +10,6 @@ import '../../security/app_lock.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../medications/my_medications_screen.dart';
-
-const medicalDisclaimer =
-    'Aloft is a personal tracking tool, not a medical device. It does not provide medical advice or tell you '
-    'how much to take. Always follow your prescriber.';
 
 /// More tab: settings (mockups/Settings). Rows for features that aren't built yet are left out.
 class MoreScreen extends ConsumerWidget {
@@ -151,16 +148,11 @@ class MoreScreen extends ConsumerWidget {
           _Section(
             children: [
               ListTile(
-                title: const Text('Medical disclaimer'),
+                key: const Key('about-aloft'),
+                title: const Text('About Aloft'),
+                subtitle: const Text('Medical disclaimer, privacy and licenses'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => showDialog<void>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Medical disclaimer'),
-                    content: const Text(medicalDisclaimer),
-                    actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))],
-                  ),
-                ),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AboutScreen())),
               ),
             ],
           ),

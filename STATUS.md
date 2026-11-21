@@ -52,6 +52,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       import from Shotsy), starting weight with its date, starting photos, then app lock, the shot-day reminder
       and the medical disclaimer. Every step can be skipped except ticking the disclaimer. The welcome screen
       has a link to restore a backup file. A phone set up before this existed sees the screens once.
+- [x] **Icon, fonts and About** (Nov 21): the Summit trail icon is the app icon on both platforms (generated
+      from `brand/` with `dart run flutter_launcher_icons`); Inter for body text and Plus Jakarta Sans for headings
+      and big numbers are bundled (open font license, no download at run time); More → About Aloft has the
+      version, medical disclaimer, privacy summary, level-chart note, trademark notice and open-source licenses.
 - [ ] Step 6b-2: automatic backup to the person's own iCloud / Google Drive with snapshots, the "no backup in 7
       days" warning on Today, and restore during onboarding. Needs the iCloud capability, a Google sign-in setup
       and real phones.
@@ -99,8 +103,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - Onboarding differs from the spec and mockups where the feature behind a screen isn't built: the welcome screen
   says data stays on the phone with a backup file you save yourself (no iCloud / Google Drive promise), and there
   is no label scan, Apple Health import, goal weight, BMI, or backup switch. Add those when the features exist.
-  The disclaimer is shown in onboarding only; it still needs to go in an About screen.
-- Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
-- App icon isn't wired into the app yet (files are in [brand/](brand/)).
+- The Android icon has only been built, never seen on a phone or emulator. Its generated file was edited by hand
+  to drop an extra 16% inset (the artwork already sits in the safe area); re-running the icon tool puts the inset
+  back, and it also changes an unrelated Xcode setting that should be reverted (`git checkout` the `.pbxproj`).
+- About has no privacy policy, terms or support links yet: the pages on peaceofmindapps.com don't exist. The
+  trademark owners named there (Novo Nordisk, Eli Lilly) are from memory and should be checked before release.
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that
   starts at 0, in Shotsy and in Aloft.

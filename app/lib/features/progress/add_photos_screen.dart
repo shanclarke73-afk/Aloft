@@ -8,6 +8,7 @@ import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import 'photo_image.dart';
+import '../../theme/aloft_theme.dart';
 
 const photosStayPrivate = 'Saved only inside Aloft, never to your camera roll.';
 
@@ -24,7 +25,10 @@ Future<void> startAddPhotos(BuildContext context) async {
             padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('Add progress photos', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              child: Text(
+                'Add progress photos',
+                style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+              ),
             ),
           ),
           ListTile(
@@ -162,7 +166,10 @@ class _AddPhotosScreenState extends ConsumerState<AddPhotosScreen> {
       appBar: AppBar(
         leading: TextButton(onPressed: _saving ? null : _cancel, child: const Text('Cancel')),
         leadingWidth: 88,
-        title: const Text('New photos', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        title: const Text(
+          'New photos',
+          style: TextStyle(fontFamily: displayFont, fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
