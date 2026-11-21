@@ -1,11 +1,9 @@
 name: Flutter app
 
-# Quick checks only (format, analyze, tests) on Linux. The iPhone and Android apps are built
-# on the Mac, to save GitHub minutes.
+# Quick checks only (format, analyze, tests) on Linux, once per pull request. Nothing runs
+# again when a pull request is merged, and GitHub never builds the iPhone or Android app:
+# those are built on the Mac.
 on:
-  push:
-    branches: [main]
-    paths: ['app/**', '.github/workflows/flutter.yml']
   pull_request:
     paths: ['app/**', '.github/workflows/flutter.yml']
 
