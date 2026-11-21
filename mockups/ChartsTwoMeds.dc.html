@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aloft · Charts with two medications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6FA3}a:hover{color:#1F4E75}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;background:#FFFFFF;border-top:1px solid #E3E8EF;display:flex;justify-content:space-around;padding-top:8px;box-sizing:border-box}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#5B6878;text-decoration:none;width:64px;min-height:44px}
+.tab:hover{color:#12263A}
+.tab.on{color:#2F6FA3;font-weight:600}
+.card{background:#FFFFFF;border-radius:20px;padding:14px 16px;box-shadow:0 1px 2px rgba(18,38,58,.06),0 6px 20px rgba(18,38,58,.05)}
+.seg{flex:1;height:36px;border:none;border-radius:10px;font:600 14px Inter,sans-serif;color:#5B6878;background:transparent}
+.seg.on{background:#FFFFFF;color:#12263A;box-shadow:0 1px 3px rgba(18,38,58,.12)}
+.dose{width:28px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wk{font-size:11px;color:#4A5A6B;text-align:center}
+.eff{display:flex;align-items:center;gap:10px;font-size:13px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8FB; color: #12263A; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; padding: 56px 20px 100px; display: flex; flex-direction: column; gap: 12px">
+  <h1 style="margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 30px; font-weight: 800">Charts</h1>
+  <div style="display: flex; background: #EEF2F6; border-radius: 12px; padding: 4px; gap: 4px" role="group" aria-label="Chart">
+    <button class="seg on" aria-pressed="true">Meds</button>
+    <button class="seg" aria-pressed="false">Weight</button>
+    <button class="seg" aria-pressed="false">Body</button>
+    <button class="seg" aria-pressed="false">Effects</button>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700"><span style="width: 10px; height: 10px; border-radius: 5px; background: #2F6FA3"></span>Zepbound® · estimated level</span>
+      <span style="font-size: 12px; color: #5B6878">6 weeks</span>
+    </div>
+    <svg width="326" height="130" viewBox="0 0 326 130" fill="none" role="img" aria-label="Estimated tirzepatide level from weekly Zepbound shots, steady at 5 mg">
+      <path d="M0 110H326M0 75H326M0 40H326" stroke="#EEF2F6" stroke-width="1"/>
+      <path d="M0 110 L8 50 Q14 88 52 88 L60 32 Q66 80 104 80 L112 26 Q118 77 156 77 L164 24 Q170 76 208 76 L216 23 Q222 75 260 75" stroke="#2F6FA3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M260 75 L268 22 Q274 75 312 75" stroke="#2F6FA3" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round"/>
+      <path d="M260 10V116" stroke="#12263A" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="242" y="128" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#12263A">Today</text>
+      <circle cx="0" cy="118" r="3" fill="#2F6FA3"/><circle cx="52" cy="118" r="3" fill="#2F6FA3"/><circle cx="104" cy="118" r="3" fill="#2F6FA3"/><circle cx="156" cy="118" r="3" fill="#2F6FA3"/><circle cx="208" cy="118" r="3" fill="#2F6FA3"/>
+    </svg>
+    <span style="font-size: 12px; color: #5B6878">Estimate from your logged doses. Not a blood level.</span>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700"><span style="width: 10px; height: 10px; border-radius: 5px; background: #1E6B3C"></span>NAD+ · Mon &amp; Thu</span>
+      <span style="font-size: 13px; font-weight: 700; color: #1E6B3C">7 of 8 taken</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px" role="img" aria-label="Last 4 weeks of NAD+ doses: 7 taken, 1 missed on Nov 3">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px"><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span></div><span class="wk">Oct 27</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px"><span class="dose" style="background: #FFFFFF; border: 1.5px dashed #B4532A; box-sizing: border-box"></span><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span></div><span class="wk">Nov 3</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px"><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span></div><span class="wk">Nov 10</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px"><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span><span class="dose" style="background: #E7F3EC"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E6B3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span></div><span class="wk">Nov 17</span></div>
+    </div>
+    <span style="font-size: 12px; color: #5B6878">Add-ons show doses taken. Level charts are for GLP-1s only.</span>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 8px">
+    <span style="font-size: 15px; font-weight: 700">Side effects by medication · 30 days</span>
+    <div class="eff"><span style="width: 110px; flex-shrink: 0">Nausea</span><div style="flex-grow: 1; height: 8px; border-radius: 4px; background: #EEF2F6; overflow: hidden"><div style="width: 40%; height: 8px; background: #2F6FA3"></div></div><span style="width: 74px; text-align: right; color: #4A5A6B; font-size: 12px">2 · Zepbound</span></div>
+    <div class="eff"><span style="width: 110px; flex-shrink: 0">Flushing</span><div style="flex-grow: 1; height: 8px; border-radius: 4px; background: #EEF2F6; overflow: hidden"><div style="width: 60%; height: 8px; background: #1E6B3C"></div></div><span style="width: 74px; text-align: right; color: #4A5A6B; font-size: 12px">3 · NAD+</span></div>
+    <div class="eff"><span style="width: 110px; flex-shrink: 0">Fatigue</span><div style="flex-grow: 1; height: 8px; border-radius: 4px; background: #EEF2F6; overflow: hidden"><div style="width: 20%; height: 8px; background: #2F6FA3"></div></div><span style="width: 74px; text-align: right; color: #4A5A6B; font-size: 12px">1 · Zepbound</span></div>
+  </div>
+
+  <nav class="tabs" aria-label="Main">
+    <a class="tab" href="MainTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</a>
+    <a class="tab" href="HistoryTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</a>
+    <a class="tab" href="PhotoCompare.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8.5 6l1.5-2h4l1.5 2"/></svg>Progress</a>
+    <a class="tab on" href="ChartsTwoMeds.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-5M11 16V6M16 16v-8M20 16v-3"/></svg>Charts</a>
+    <a class="tab" href="Export.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>More</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
