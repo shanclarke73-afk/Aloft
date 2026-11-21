@@ -19,6 +19,7 @@ Static screen designs for Aloft v1 (sample data, not real). Copied from the desi
 | `MainTwoMeds.dc.html` | Today with two medications (Zepbound + NAD+, Pro) |
 | `LogShot.dc.html` | Log a shot (units ⇄ mL ⇄ mg, injection site) |
 | `LogShotTwoMeds.dc.html` | Log a shot with two medications (pick which, shared site rotation, Pro) |
+| `LogPill.dc.html` | Log a pill dose (one-tap "Took it", tablets stepper, wait timer) |
 | `VialSetup.dc.html` | New vial from label scan, incl. "Your dose" |
 | `VialSetupTwoMeds.dc.html` | Adding NAD+ as a second medication (own dose and Mon & Thu schedule, Pro) |
 | `Charts.dc.html` | Medication level + weight |

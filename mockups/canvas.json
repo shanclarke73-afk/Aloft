@@ -2,6 +2,15 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "LogPill.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 36,
+      "title": "Log a dose: pill",
+      "w": 390,
+      "x": 470,
+      "y": 3564
+    },
     "VialSetupTwoMeds.dc.html": {
       "h": 1280,
       "is_interactive": true,
@@ -263,7 +272,8 @@
     "ChartsTwoMeds.dc.html",
     "PhotoCompareTwoMeds.dc.html",
     "ExportTwoMeds.dc.html",
-    "VialSetupTwoMeds.dc.html"
+    "VialSetupTwoMeds.dc.html",
+    "LogPill.dc.html"
   ],
   "pages": [],
   "title": "Aloft App Mockups"
