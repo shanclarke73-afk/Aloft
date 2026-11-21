@@ -1,0 +1,33 @@
+name: Flutter app
+
+# Quick checks only (format, analyze, tests) on Linux. The iPhone and Android apps are built
+# on the Mac, to save GitHub minutes.
+on:
+  push:
+    branches: [main]
+    paths: ['app/**', '.github/workflows/flutter.yml']
+  pull_request:
+    paths: ['app/**', '.github/workflows/flutter.yml']
+
+concurrency:
+  group: flutter-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.9
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test

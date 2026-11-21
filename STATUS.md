@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 20, 2026 (planning done; release plan set; no code yet)_
+_Last updated: November 21, 2026 (planning done; 1.0 build step 1 of 8 in review)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -15,6 +15,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] GitHub repo: https://github.com/shanclarke73-afk/Aloft
 - [x] App icon chosen: **Summit trail** (round 3, concept J). Final files in [brand/](brand/)
 
+## Build progress (1.0, SPEC section 11)
+- [x] **Step 1, foundation** (pull request open, Nov 21): Flutter project in [app/](app/), encrypted database,
+      settings (units, appearance), app lock, app-switcher cover, the five tabs (only More has content).
+      Bundle ID decided: `com.shannonsonlinebookkeeping.aloft`.
+- [ ] Step 2: medications, supplies, dose math, log shot, site rotation
+
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
    Side-effect values are 1–10 whole numbers (confirmed Nov 21). Keep real exports out of git
@@ -22,12 +28,16 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 2. Done: app screens use the icon's navy + teal palette (icon: Summit trail, files in [brand/](brand/)).
 3. All 1.0 screens are mocked up, including Settings, My medications, side effects, edit/delete, late shot, day 1, Shotsy import preview, restore on a new phone, typed vial setup
    and the lock screen. Widgets (Release 1.5) mocked up; suggested split: small + Lock Screen free, medium Pro (confirm).
-4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, bundle ID, crash reporting).
+4. Answer the remaining open questions in SPEC section 12 (dose unit on your label, crash reporting).
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
-6. Start 1.0 build step 1 (Flutter project + database + app lock) on the Mac mini.
+6. Build step 2 (medications, supplies and dose math).
 
 ## Not done / not verified
-- No trademark check, no code yet.
+- No trademark check.
+- Step 1 was run on the iPhone simulator only. Not yet tried: Face ID on a real iPhone, the lock on a real Android
+  phone, and moving the encrypted data to a new phone.
+- Fonts from the mockups (Plus Jakarta Sans, Inter) aren't in the app yet; it uses the phone's own font.
+- App icon isn't wired into the app yet (files are in [brand/](brand/)).
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that
   starts at 0, in Shotsy and in Aloft.
 - Drug half-life/Tmax defaults in the spec must be checked against prescribing information before release.
