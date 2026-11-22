@@ -300,7 +300,6 @@ class WeightChart extends StatelessWidget {
     final values = spots.map((s) => s.y);
     final low = values.reduce((a, b) => a < b ? a : b), high = values.reduce((a, b) => a > b ? a : b);
     final pad = ((high - low) * 0.15).clamp(1.0, 50.0);
-    final dates = MaterialLocalizations.of(context);
     final style = TextStyle(fontSize: 11, color: scheme.onSurfaceVariant);
     final span = spots.last.x - spots.first.x;
 
@@ -322,7 +321,7 @@ class WeightChart extends StatelessWidget {
               interval: span <= 0 ? 1 : (span / 3).clamp(1, 1000).ceilToDouble(),
               getTitlesWidget: (value, meta) => value == meta.min || value == meta.max
                   ? const SizedBox.shrink()
-                  : Text(dates.formatShortMonthDay(start.add(Duration(minutes: (value * 1440).round()))), style: style),
+                  : Text(formatAxisDate(context, start.add(Duration(minutes: (value * 1440).round()))), style: style),
             ),
           ),
         ),
