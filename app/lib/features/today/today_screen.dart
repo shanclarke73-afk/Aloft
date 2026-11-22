@@ -377,7 +377,7 @@ class SupplyCard extends StatelessWidget {
                       Text(amount, style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
                   if (useBy != null)
                     Text(
-                      'Use by ${MaterialLocalizations.of(context).formatShortMonthDay(useBy)}',
+                      'Use by ${formatMonthDay(context, useBy)}',
                       style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
                     ),
                 ],
@@ -433,7 +433,7 @@ class WeightCard extends ConsumerWidget {
                     if (latest != null && first != null && first.id != latest.id)
                       Text(
                         '${formatWeightChange(first.kg, latest.kg, unit)} since '
-                        '${MaterialLocalizations.of(context).formatShortMonthDay(first.measuredAt)}',
+                        '${formatMonthDay(context, first.measuredAt)}',
                         style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
                       )
                     else if (latest != null)

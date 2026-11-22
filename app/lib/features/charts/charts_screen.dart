@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../util/format.dart';
 import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
@@ -141,7 +142,7 @@ class ChartsScreen extends ConsumerWidget {
                   else ...[
                     Text(
                       '${formatWeightChange(weights.last.kg, weights.first.kg, unit)} since '
-                      '${MaterialLocalizations.of(context).formatShortMonthDay(weights.last.measuredAt)}',
+                      '${formatMonthDay(context, weights.last.measuredAt)}',
                       style: muted,
                     ),
                     const SizedBox(height: 16),
