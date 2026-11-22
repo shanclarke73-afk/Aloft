@@ -21,11 +21,22 @@ class Reminders {
   /// Whether the phone will show Aloft's notifications. False when the person said no to the
   /// phone's own question, or switched them off in the phone's settings. Never asks.
   Future<bool> allowed() async => true;
+
+  /// Whether reminders arrive at their minute. On Android that needs the "Alarms & reminders"
+  /// setting; without it the phone may hold a reminder back, up to an hour for one set far
+  /// ahead. Always true on iPhone.
+  Future<bool> onTime() async => true;
+
+  /// Opens the phone's "Alarms & reminders" setting for Aloft.
+  Future<void> askForOnTime() async {}
 }
 
 /// Whether the phone lets Aloft show notifications right now. Checked again whenever the
 /// app comes back to the screen, since the answer is changed in the phone's settings.
 final notificationsAllowedProvider = FutureProvider<bool>((ref) => ref.watch(remindersProvider).allowed());
+
+/// Whether reminders arrive on the minute. Checked again whenever the app comes back to the screen.
+final remindersOnTimeProvider = FutureProvider<bool>((ref) => ref.watch(remindersProvider).onTime());
 
 /// Local notifications only: scheduled on the phone, nothing is sent anywhere.
 class DeviceReminders implements Reminders {
@@ -79,6 +90,29 @@ class DeviceReminders implements Reminders {
     }
   }
 
+  AndroidFlutterLocalNotificationsPlugin? get _android =>
+      _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+  @override
+  Future<bool> onTime() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      await _init();
+      return await _android?.canScheduleExactNotifications() ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<void> askForOnTime() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _init();
+      await _android?.requestExactAlarmsPermission();
+    } catch (_) {}
+  }
+
   @override
   Future<void> sync(List<PlannedReminder> plan) {
     // One at a time, so two quick changes can't interleave a cancel and a schedule.
@@ -90,6 +124,9 @@ class DeviceReminders implements Reminders {
       await _init();
       await _plugin.cancelAll();
       if (plan.isEmpty || !await _allowed()) return;
+      // Asking for exact timing without the setting throws, so check each time: it can be
+      // switched off in the phone's settings while the app is closed.
+      final exact = await onTime();
       var id = 1;
       for (final reminder in plan) {
         final at = reminder.at;
@@ -109,8 +146,9 @@ class DeviceReminders implements Reminders {
             ),
             iOS: DarwinNotificationDetails(threadIdentifier: reminder.channel.id),
           ),
-          // Within a few minutes is fine, and it avoids asking for the exact-alarm permission.
-          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          androidScheduleMode: exact
+              ? AndroidScheduleMode.exactAllowWhileIdle
+              : AndroidScheduleMode.inexactAllowWhileIdle,
         );
       }
     } catch (e) {

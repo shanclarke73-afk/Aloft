@@ -173,6 +173,26 @@ void main() {
     await tester.pumpAndSettle();
     expect(warning, findsNothing);
 
+    // Allowed, but the phone may hold reminders back: More offers the setting that fixes it.
+    final late = find.textContaining('may deliver reminders late');
+    expect(late, findsNothing);
+    reminders.late = true;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(late, findsOneWidget);
+    await tester.ensureVisible(find.byKey(const Key('on-time-reminders')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('on-time-reminders')));
+    await tester.pump();
+    expect(reminders.asked, 1);
+    // Switched on in the phone's settings: gone when the app returns.
+    reminders.late = false;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(late, findsNothing);
+
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 5));
   });
@@ -180,7 +200,15 @@ void main() {
 
 class _BlockedReminders extends Reminders {
   bool blocked = true;
+  bool late = false;
+  int asked = 0;
 
   @override
   Future<bool> allowed() async => !blocked;
+
+  @override
+  Future<bool> onTime() async => !late;
+
+  @override
+  Future<void> askForOnTime() async => asked++;
 }
