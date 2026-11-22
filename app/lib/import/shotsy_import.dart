@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../data/body_store.dart';
 import '../data/database.dart';
+import '../data/medication_store.dart';
 import '../dose/dose_math.dart';
 import '../features/medications/catalog.dart';
 import 'shotsy_file.dart';
@@ -21,6 +22,9 @@ class ShotsyMedicationChoice {
 
 class ShotsyImportResult {
   int shots = 0, weights = 0, notes = 0, effects = 0, duplicates = 0, medicationsAdded = 0;
+
+  /// New medications that were added paused, because only one may be active without Pro.
+  final paused = <String>[];
 }
 
 /// The ingredient a medication name refers to, from the built-in names. "other" when unknown.
@@ -41,9 +45,19 @@ extension ShotsyImport on AloftDatabase {
   /// Saves everything in [file]. Running it again on the same file adds nothing: a shot on the
   /// same day with the same medication and dose, a weight on the same day with the same value,
   /// and a repeated note or side effect are skipped and counted.
-  Future<ShotsyImportResult> importShotsy(ShotsyFile file, Map<String, ShotsyMedicationChoice> choices) {
+  ///
+  /// With [oneActiveOnly] (no Pro), at most one medication ends up active: any already active
+  /// stay so, otherwise the new one with the most recent shot is. The other new ones arrive
+  /// paused with all their history, and are named in the result.
+  Future<ShotsyImportResult> importShotsy(
+    ShotsyFile file,
+    Map<String, ShotsyMedicationChoice> choices, {
+    bool oneActiveOnly = false,
+  }) {
     return transaction(() async {
       final result = ShotsyImportResult();
+      final hadActive = (await select(medications).get()).any((m) => m.status == MedicationStatus.active);
+      final added = <({Medication medication, DateTime lastShot})>[];
       final existingDoses = await select(doses).get();
       final existingWeights = await select(weights).get();
       final existingNotes = await select(dayNotes).get();
@@ -93,6 +107,7 @@ extension ShotsyImport on AloftDatabase {
             ),
           );
           result.medicationsAdded++;
+          added.add((medication: medication, lastShot: last.at));
           // The doses in the file become the dose history; the latest is the usual dose.
           for (var i = 0; i < shots.length; i++) {
             if (i > 0 && shots[i].mg == shots[i - 1].mg) continue;
@@ -124,6 +139,14 @@ extension ShotsyImport on AloftDatabase {
         );
         medicationFor[name] = medication;
         supplyFor[name] = supply;
+      }
+
+      if (oneActiveOnly) {
+        added.sort((a, b) => b.lastShot.compareTo(a.lastShot));
+        for (final extra in added.skip(hadActive ? 0 : 1)) {
+          await setMedicationStatus(extra.medication, MedicationStatus.paused);
+          result.paused.add(extra.medication.name);
+        }
       }
 
       for (final day in file.days) {

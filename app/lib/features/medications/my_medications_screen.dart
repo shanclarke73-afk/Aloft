@@ -10,6 +10,7 @@ import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../../widgets/schedule_editor.dart';
 import 'catalog.dart';
+import 'medication_limit.dart';
 import 'medication_setup_screen.dart';
 import '../../theme/aloft_theme.dart';
 
@@ -40,7 +41,7 @@ class MyMedicationsScreen extends ConsumerWidget {
             style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52)),
             icon: const Icon(Icons.add),
             label: Text(list.isEmpty ? 'Add medication' : 'Add another medication'),
-            onPressed: () => startAddMedication(context),
+            onPressed: () => startAddMedication(context, ref),
           ),
           const SizedBox(height: 12),
           Text(
@@ -129,10 +130,11 @@ class _MedicationCard extends ConsumerWidget {
                 if (supply != null && (isVial || isPill))
                   action('Finish this $container', () => _finish(context, db, container)),
                 if (supply?.volumeMl != null) action('Adjust what\'s left', () => _adjust(context, db)),
-                action(
-                  paused ? 'Resume' : 'Pause',
-                  () => db.setMedicationStatus(m, paused ? MedicationStatus.active : MedicationStatus.paused),
-                ),
+                action(paused ? 'Resume' : 'Pause', () async {
+                  // Resuming next to one that is already active is the same as adding a second.
+                  if (paused && !await allowAnotherActive(context, ref, resuming: m)) return;
+                  await db.setMedicationStatus(m, paused ? MedicationStatus.active : MedicationStatus.paused);
+                }, key: Key('pause-${m.name}')),
               ],
             ),
             if (!paused)
