@@ -1,3 +1,5 @@
+import '../security/app_lock.dart';
+
 import 'dart:io';
 import 'dart:ui' show Rect;
 
@@ -15,19 +17,28 @@ abstract class BackupFiles {
 }
 
 class DeviceBackupFiles implements BackupFiles {
+  DeviceBackupFiles(this._lock);
+
+  /// The share sheet and the file chooser cover Aloft; coming back shouldn't ask for the lock.
+  final AppLock _lock;
+
   @override
   Future<void> share(File file, {Rect? origin}) async {
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile(file.path, mimeType: 'application/zip')],
-        sharePositionOrigin: origin,
+    await _lock.awayOnPurpose(
+      () => SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'application/zip')],
+          sharePositionOrigin: origin,
+        ),
       ),
     );
   }
 
   @override
   Future<File?> pick() async {
-    final picked = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['zip']);
+    final picked = await _lock.awayOnPurpose(
+      () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['zip']),
+    );
     final path = picked.singleOrNull?.path;
     return path == null ? null : File(path);
   }

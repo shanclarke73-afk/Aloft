@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../security/app_lock.dart';
 import '../data/database.dart';
 import '../dose/dose_math.dart';
 import '../settings/settings.dart';
@@ -18,9 +19,12 @@ import '../theme/aloft_theme.dart';
 Future<void> pickShotsyFile(BuildContext context) async {
   final messenger = ScaffoldMessenger.of(context);
   final navigator = Navigator.of(context);
+  final lock = ProviderScope.containerOf(context).read(appLockProvider);
   ShotsyFile? file;
   try {
-    final picked = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['csv', 'txt']);
+    final picked = await lock.awayOnPurpose(
+      () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['csv', 'txt']),
+    );
     final path = picked.singleOrNull?.path;
     if (path == null) return;
     file = parseShotsy(utf8.decode(await File(path).readAsBytes(), allowMalformed: true));

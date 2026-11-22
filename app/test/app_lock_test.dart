@@ -95,4 +95,43 @@ void main() {
     l.onForeground();
     expect(l.locked, isFalse);
   });
+
+  test("Aloft's own camera or file chooser doesn't lock the app, unless it stays open a long time", () async {
+    var now = DateTime(2026, 11, 22, 9);
+    final lock = AppLock(
+      authenticator: FakeAuthenticator(),
+      enabled: true,
+      lockAfter: LockAfter.immediately,
+      clock: () => now,
+    );
+    await lock.unlock();
+    expect(lock.locked, isFalse);
+
+    // The camera opens: the phone says the app left the screen, then came back.
+    final photo = await lock.awayOnPurpose(() async {
+      lock.onBackground();
+      now = now.add(const Duration(seconds: 40));
+      lock.onForeground();
+      return 'photo';
+    });
+    expect((photo, lock.locked), ('photo', false));
+
+    // Leaving for real still locks straight away.
+    lock.onBackground();
+    expect(lock.locked, isTrue);
+    await lock.unlock();
+
+    // A chooser that fails still puts things back.
+    await expectLater(lock.awayOnPurpose<void>(() async => throw StateError('no camera')), throwsStateError);
+    lock.onBackground();
+    expect(lock.locked, isTrue);
+    await lock.unlock();
+
+    // Left sitting in the camera: locked on the way back.
+    await lock.awayOnPurpose(() async {
+      lock.onBackground();
+      now = now.add(AppLock.awayOnPurposeLimit);
+    });
+    expect(lock.locked, isTrue);
+  });
 }
