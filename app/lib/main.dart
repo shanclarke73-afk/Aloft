@@ -16,6 +16,7 @@ import 'photos/photo_picker.dart';
 import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
 import 'settings/settings.dart';
+import 'pro/pro.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,9 @@ Future<void> main() async {
           remindersProvider.overrideWithValue(DeviceReminders()),
           photoPickerProvider.overrideWithValue(DevicePhotoPicker(lock)),
           backupFilesProvider.overrideWithValue(DeviceBackupFiles(lock)),
+          // Only a build that was given a store key can sell Pro.
+          if (canUseStoreKey(revenueCatKey, releaseBuild: kReleaseMode))
+            proStoreProvider.overrideWithValue(RevenueCatStore(revenueCatKey, lock)),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],
         child: const AloftApp(),

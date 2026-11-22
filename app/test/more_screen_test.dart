@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aloft/app.dart';
 import 'package:aloft/data/database.dart';
+import 'package:aloft/data/medication_store.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/body_store.dart';
 import 'package:aloft/photos/photo_picker.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'app_lock_test.dart' show FakeAuthenticator;
+import 'support/wait.dart';
+import 'medication_store_test.dart' show tirzepatideVial;
 
 void main() {
   testWidgets('turning on the lock from More saves it, and the app locks when it leaves the screen', (tester) async {
@@ -107,6 +110,9 @@ void main() {
 
     // Taps run for real, so the database work that follows a tap isn't stuck on the test clock.
     Future<void> tap(Finder target) async {
+      // Clear of the tab bar at the foot of the screen, which would otherwise take the tap.
+      await tester.ensureVisible(target);
+      await tester.pumpAndSettle();
       await tester.runAsync(() async {
         await tester.tap(target);
         await Future<void>.delayed(const Duration(milliseconds: 600));
@@ -145,6 +151,8 @@ void main() {
       db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
       await db.loadSettings(countryCode: 'US');
       settings = await db.saveSettings(const AppSettingsTableCompanion(onboardingDone: Value(true)));
+      // The warnings are about reminders, so they wait until there is something to remind about.
+      await db.addMedication(tirzepatideVial);
     });
     final lock = AppLock(authenticator: FakeAuthenticator(), enabled: false, lockAfter: LockAfter.immediately);
     await tester.runAsync(lock.detectMethod);
@@ -164,6 +172,8 @@ void main() {
     await tester.pumpAndSettle();
     final warning = find.textContaining('Notifications are turned off for Aloft');
     await tester.scrollUntilVisible(find.text('Shot and dose days'), 200, scrollable: find.byType(Scrollable).last);
+    // The medication list arrives from the database in real time.
+    await pumpUntilFound(tester, warning);
     expect(warning, findsOneWidget);
 
     // Switched back on in the phone's settings: the warning goes when the app returns.

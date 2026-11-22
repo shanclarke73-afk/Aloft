@@ -28,6 +28,7 @@ class MoreScreen extends ConsumerWidget {
     final controller = ref.read(settingsProvider.notifier);
     final lock = ref.watch(appLockProvider);
     final pro = ref.watch(proProvider);
+    final hasMedication = ref.watch(medicationsProvider).value?.isNotEmpty ?? false;
 
     return Scaffold(
       appBar: AppBar(title: const Text('More')),
@@ -50,6 +51,20 @@ class MoreScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () =>
                     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MyMedicationsScreen())),
+              ),
+            ],
+          ),
+          const _SectionTitle('Aloft Pro'),
+          _Section(
+            children: [
+              ListTile(
+                key: const Key('aloft-pro'),
+                title: Text(pro ? 'You have Aloft Pro' : 'Aloft Pro'),
+                subtitle: Text(pro ? 'Manage or restore your purchase' : 'The provider report and spreadsheet export'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () =>
+                    Navigator.of(context)
+                        .push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => const ProScreen())),
               ),
             ],
           ),
@@ -89,7 +104,9 @@ class MoreScreen extends ConsumerWidget {
           ),
           const _SectionTitle('Reminders'),
           // Reminders that are switched on here but blocked by the phone would otherwise fail silently.
-          if (ref.watch(notificationsAllowedProvider).value == false &&
+          // Only once there is a medication: before that the phone hasn't been asked yet.
+          if (hasMedication &&
+              ref.watch(notificationsAllowedProvider).value == false &&
               (settings.remindShots || settings.remindReorder || settings.remindUseBy))
             const Padding(
               padding: EdgeInsets.only(bottom: 8),
@@ -100,7 +117,8 @@ class MoreScreen extends ConsumerWidget {
               ),
             ),
           // Allowed, but the phone may hold reminders back: offer the setting that makes them punctual.
-          if (ref.watch(notificationsAllowedProvider).value != false &&
+          if (hasMedication &&
+              ref.watch(notificationsAllowedProvider).value != false &&
               ref.watch(remindersOnTimeProvider).value == false &&
               (settings.remindShots || settings.remindReorder || settings.remindUseBy))
             Padding(
