@@ -99,13 +99,13 @@ class MoreScreen extends ConsumerWidget {
                     'Your phone may deliver reminders late, sometimes by up to an hour. To get them on time, '
                     'allow "Alarms & reminders" for Aloft.',
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      key: const Key('on-time-reminders'),
-                      onPressed: () => ref.read(remindersProvider).askForOnTime(),
-                      child: const Text('Open the setting'),
-                    ),
+                  const SizedBox(height: 8),
+                  // An outlined button: as plain text it didn't read as something to tap.
+                  OutlinedButton.icon(
+                    key: const Key('on-time-reminders'),
+                    onPressed: () => ref.read(remindersProvider).askForOnTime(),
+                    icon: const Icon(Icons.open_in_new, size: 18),
+                    label: const Text('Open the setting'),
                   ),
                 ],
               ),
