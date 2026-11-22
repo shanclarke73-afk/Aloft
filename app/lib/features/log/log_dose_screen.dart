@@ -84,15 +84,17 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
   @override
   void initState() {
     super.initState();
-    // Starts from the last dose taken, else the usual dose. Both were typed by the person.
+    // Starts from the saved dose, in the unit it was saved in; with none saved, from the last
+    // dose taken. Both were typed by the person. The saved dose comes first so that a one-off
+    // amount, or imported history recorded in another unit, doesn't become the starting point.
     final editing = _editing;
     final last = _d.lastDose, usual = _d.usualDose;
     final wasTaken = editing != null && !editing.skipped;
-    final amount = wasTaken ? editing.amountEntered : last?.amountEntered ?? usual?.prescribedDose;
+    final amount = wasTaken ? editing.amountEntered : usual?.prescribedDose ?? last?.amountEntered;
     _unit =
         (wasTaken ? editing.unitEntered : null) ??
-        last?.unitEntered ??
         usual?.unit ??
+        last?.unitEntered ??
         (_strength != null ? DoseUnit.units : DoseUnit.mg);
     if (widget.initialWhen != null) _when = widget.initialWhen!;
     if (editing != null) {

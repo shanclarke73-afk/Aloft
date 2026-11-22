@@ -298,7 +298,18 @@ class DueCard extends ConsumerWidget {
               'prescriber. Aloft only keeps your record.',
               style: soft,
             ),
-          ] else
+          ] else if (status?.state == DueState.upcoming)
+            // Nothing is due, so the button stays quiet: a bright one reads as "you haven't logged this".
+            OutlinedButton(
+              key: const Key('log-early'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: const BorderSide(color: AloftColors.mist),
+              ),
+              onPressed: () => openLogDose(context, detail),
+              child: Text(pill ? 'Log a dose early' : 'Log a shot early'),
+            )
+          else
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: Colors.white, foregroundColor: AloftColors.navy),
               onPressed: () => openLogDose(context, detail),
