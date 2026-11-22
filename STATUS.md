@@ -102,7 +102,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
   A forgotten backup password can't be recovered.
 - Onboarding differs from the spec and mockups where the feature behind a screen isn't built: the welcome screen
   says data stays on the phone with a backup file you save yourself (no iCloud / Google Drive promise), and there
-  is no label scan, Apple Health import, goal weight, BMI, or backup switch. Add those when the features exist.
+  is no label scan, Apple Health import, or backup switch. Add those when the features exist. Goal weight and
+  height (for BMI) are on the starting-weight step and in More; BMI is not yet on the charts or in a report.
 - The Android icon has only been built, never seen on a phone or emulator. Its generated file was edited by hand
   to drop an extra 16% inset (the artwork already sits in the safe area); re-running the icon tool puts the inset
   back, and it also changes an unrelated Xcode setting that should be reverted (`git checkout` the `.pbxproj`).

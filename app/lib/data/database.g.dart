@@ -119,6 +119,24 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("onboarding_done" IN (0, 1))'),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _goalWeightKgMeta = const VerificationMeta('goalWeightKg');
+  @override
+  late final GeneratedColumn<double> goalWeightKg = GeneratedColumn<double>(
+    'goal_weight_kg',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _heightCmMeta = const VerificationMeta('heightCm');
+  @override
+  late final GeneratedColumn<double> heightCm = GeneratedColumn<double>(
+    'height_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -132,6 +150,8 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
     remindReorder,
     remindUseBy,
     onboardingDone,
+    goalWeightKg,
+    heightCm,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -172,6 +192,12 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
         onboardingDone.isAcceptableOrUnknown(data['onboarding_done']!, _onboardingDoneMeta),
       );
     }
+    if (data.containsKey('goal_weight_kg')) {
+      context.handle(_goalWeightKgMeta, goalWeightKg.isAcceptableOrUnknown(data['goal_weight_kg']!, _goalWeightKgMeta));
+    }
+    if (data.containsKey('height_cm')) {
+      context.handle(_heightCmMeta, heightCm.isAcceptableOrUnknown(data['height_cm']!, _heightCmMeta));
+    }
     return context;
   }
 
@@ -203,6 +229,8 @@ class $AppSettingsTableTable extends AppSettingsTable with TableInfo<$AppSetting
       remindReorder: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_reorder'])!,
       remindUseBy: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}remind_use_by'])!,
       onboardingDone: attachedDatabase.typeMapping.read(DriftSqlType.bool, data['${effectivePrefix}onboarding_done'])!,
+      goalWeightKg: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}goal_weight_kg']),
+      heightCm: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}height_cm']),
     );
   }
 
@@ -239,6 +267,10 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
 
   /// Set once the welcome screens are finished and the disclaimer has been acknowledged.
   final bool onboardingDone;
+
+  /// Both optional (SPEC 6.7). BMI is shown only once a height has been entered.
+  final double? goalWeightKg;
+  final double? heightCm;
   const AppSettings({
     required this.id,
     required this.weightUnit,
@@ -251,6 +283,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     required this.remindReorder,
     required this.remindUseBy,
     required this.onboardingDone,
+    this.goalWeightKg,
+    this.heightCm,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -274,6 +308,12 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     map['remind_reorder'] = Variable<bool>(remindReorder);
     map['remind_use_by'] = Variable<bool>(remindUseBy);
     map['onboarding_done'] = Variable<bool>(onboardingDone);
+    if (!nullToAbsent || goalWeightKg != null) {
+      map['goal_weight_kg'] = Variable<double>(goalWeightKg);
+    }
+    if (!nullToAbsent || heightCm != null) {
+      map['height_cm'] = Variable<double>(heightCm);
+    }
     return map;
   }
 
@@ -290,6 +330,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindReorder: Value(remindReorder),
       remindUseBy: Value(remindUseBy),
       onboardingDone: Value(onboardingDone),
+      goalWeightKg: goalWeightKg == null && nullToAbsent ? const Value.absent() : Value(goalWeightKg),
+      heightCm: heightCm == null && nullToAbsent ? const Value.absent() : Value(heightCm),
     );
   }
 
@@ -307,6 +349,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindReorder: serializer.fromJson<bool>(json['remindReorder']),
       remindUseBy: serializer.fromJson<bool>(json['remindUseBy']),
       onboardingDone: serializer.fromJson<bool>(json['onboardingDone']),
+      goalWeightKg: serializer.fromJson<double?>(json['goalWeightKg']),
+      heightCm: serializer.fromJson<double?>(json['heightCm']),
     );
   }
   @override
@@ -324,6 +368,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       'remindReorder': serializer.toJson<bool>(remindReorder),
       'remindUseBy': serializer.toJson<bool>(remindUseBy),
       'onboardingDone': serializer.toJson<bool>(onboardingDone),
+      'goalWeightKg': serializer.toJson<double?>(goalWeightKg),
+      'heightCm': serializer.toJson<double?>(heightCm),
     };
   }
 
@@ -339,6 +385,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     bool? remindReorder,
     bool? remindUseBy,
     bool? onboardingDone,
+    Value<double?> goalWeightKg = const Value.absent(),
+    Value<double?> heightCm = const Value.absent(),
   }) => AppSettings(
     id: id ?? this.id,
     weightUnit: weightUnit ?? this.weightUnit,
@@ -351,6 +399,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     remindReorder: remindReorder ?? this.remindReorder,
     remindUseBy: remindUseBy ?? this.remindUseBy,
     onboardingDone: onboardingDone ?? this.onboardingDone,
+    goalWeightKg: goalWeightKg.present ? goalWeightKg.value : this.goalWeightKg,
+    heightCm: heightCm.present ? heightCm.value : this.heightCm,
   );
   AppSettings copyWithCompanion(AppSettingsTableCompanion data) {
     return AppSettings(
@@ -365,6 +415,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
       remindReorder: data.remindReorder.present ? data.remindReorder.value : this.remindReorder,
       remindUseBy: data.remindUseBy.present ? data.remindUseBy.value : this.remindUseBy,
       onboardingDone: data.onboardingDone.present ? data.onboardingDone.value : this.onboardingDone,
+      goalWeightKg: data.goalWeightKg.present ? data.goalWeightKg.value : this.goalWeightKg,
+      heightCm: data.heightCm.present ? data.heightCm.value : this.heightCm,
     );
   }
 
@@ -381,7 +433,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           ..write('remindShots: $remindShots, ')
           ..write('remindReorder: $remindReorder, ')
           ..write('remindUseBy: $remindUseBy, ')
-          ..write('onboardingDone: $onboardingDone')
+          ..write('onboardingDone: $onboardingDone, ')
+          ..write('goalWeightKg: $goalWeightKg, ')
+          ..write('heightCm: $heightCm')
           ..write(')'))
         .toString();
   }
@@ -399,6 +453,8 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
     remindReorder,
     remindUseBy,
     onboardingDone,
+    goalWeightKg,
+    heightCm,
   );
   @override
   bool operator ==(Object other) =>
@@ -414,7 +470,9 @@ class AppSettings extends DataClass implements Insertable<AppSettings> {
           other.remindShots == this.remindShots &&
           other.remindReorder == this.remindReorder &&
           other.remindUseBy == this.remindUseBy &&
-          other.onboardingDone == this.onboardingDone);
+          other.onboardingDone == this.onboardingDone &&
+          other.goalWeightKg == this.goalWeightKg &&
+          other.heightCm == this.heightCm);
 }
 
 class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
@@ -429,6 +487,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
   final Value<bool> remindReorder;
   final Value<bool> remindUseBy;
   final Value<bool> onboardingDone;
+  final Value<double?> goalWeightKg;
+  final Value<double?> heightCm;
   const AppSettingsTableCompanion({
     this.id = const Value.absent(),
     this.weightUnit = const Value.absent(),
@@ -441,6 +501,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.remindReorder = const Value.absent(),
     this.remindUseBy = const Value.absent(),
     this.onboardingDone = const Value.absent(),
+    this.goalWeightKg = const Value.absent(),
+    this.heightCm = const Value.absent(),
   });
   AppSettingsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -454,6 +516,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     this.remindReorder = const Value.absent(),
     this.remindUseBy = const Value.absent(),
     this.onboardingDone = const Value.absent(),
+    this.goalWeightKg = const Value.absent(),
+    this.heightCm = const Value.absent(),
   }) : weightUnit = Value(weightUnit),
        lengthUnit = Value(lengthUnit);
   static Insertable<AppSettings> custom({
@@ -468,6 +532,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Expression<bool>? remindReorder,
     Expression<bool>? remindUseBy,
     Expression<bool>? onboardingDone,
+    Expression<double>? goalWeightKg,
+    Expression<double>? heightCm,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -481,6 +547,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       if (remindReorder != null) 'remind_reorder': remindReorder,
       if (remindUseBy != null) 'remind_use_by': remindUseBy,
       if (onboardingDone != null) 'onboarding_done': onboardingDone,
+      if (goalWeightKg != null) 'goal_weight_kg': goalWeightKg,
+      if (heightCm != null) 'height_cm': heightCm,
     });
   }
 
@@ -496,6 +564,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     Value<bool>? remindReorder,
     Value<bool>? remindUseBy,
     Value<bool>? onboardingDone,
+    Value<double?>? goalWeightKg,
+    Value<double?>? heightCm,
   }) {
     return AppSettingsTableCompanion(
       id: id ?? this.id,
@@ -509,6 +579,8 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
       remindReorder: remindReorder ?? this.remindReorder,
       remindUseBy: remindUseBy ?? this.remindUseBy,
       onboardingDone: onboardingDone ?? this.onboardingDone,
+      goalWeightKg: goalWeightKg ?? this.goalWeightKg,
+      heightCm: heightCm ?? this.heightCm,
     );
   }
 
@@ -548,6 +620,12 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
     if (onboardingDone.present) {
       map['onboarding_done'] = Variable<bool>(onboardingDone.value);
     }
+    if (goalWeightKg.present) {
+      map['goal_weight_kg'] = Variable<double>(goalWeightKg.value);
+    }
+    if (heightCm.present) {
+      map['height_cm'] = Variable<double>(heightCm.value);
+    }
     return map;
   }
 
@@ -564,7 +642,9 @@ class AppSettingsTableCompanion extends UpdateCompanion<AppSettings> {
           ..write('remindShots: $remindShots, ')
           ..write('remindReorder: $remindReorder, ')
           ..write('remindUseBy: $remindUseBy, ')
-          ..write('onboardingDone: $onboardingDone')
+          ..write('onboardingDone: $onboardingDone, ')
+          ..write('goalWeightKg: $goalWeightKg, ')
+          ..write('heightCm: $heightCm')
           ..write(')'))
         .toString();
   }
@@ -4954,6 +5034,8 @@ typedef $$AppSettingsTableTableCreateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> remindReorder,
   Value<bool> remindUseBy,
   Value<bool> onboardingDone,
+  Value<double?> goalWeightKg,
+  Value<double?> heightCm,
 });
 typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanion Function({
   Value<int> id,
@@ -4967,6 +5049,8 @@ typedef $$AppSettingsTableTableUpdateCompanionBuilder = AppSettingsTableCompanio
   Value<bool> remindReorder,
   Value<bool> remindUseBy,
   Value<bool> onboardingDone,
+  Value<double?> goalWeightKg,
+  Value<double?> heightCm,
 });
 
 class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -5008,6 +5092,12 @@ class $$AppSettingsTableTableFilterComposer extends Composer<_$AloftDatabase, $A
 
   ColumnFilters<bool> get onboardingDone =>
       $composableBuilder(column: $table.onboardingDone, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get goalWeightKg =>
+      $composableBuilder(column: $table.goalWeightKg, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get heightCm =>
+      $composableBuilder(column: $table.heightCm, builder: (column) => ColumnFilters(column));
 }
 
 class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -5049,6 +5139,12 @@ class $$AppSettingsTableTableOrderingComposer extends Composer<_$AloftDatabase, 
 
   ColumnOrderings<bool> get onboardingDone =>
       $composableBuilder(column: $table.onboardingDone, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get goalWeightKg =>
+      $composableBuilder(column: $table.goalWeightKg, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get heightCm =>
+      $composableBuilder(column: $table.heightCm, builder: (column) => ColumnOrderings(column));
 }
 
 class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase, $AppSettingsTableTable> {
@@ -5087,6 +5183,11 @@ class $$AppSettingsTableTableAnnotationComposer extends Composer<_$AloftDatabase
 
   GeneratedColumn<bool> get onboardingDone =>
       $composableBuilder(column: $table.onboardingDone, builder: (column) => column);
+
+  GeneratedColumn<double> get goalWeightKg =>
+      $composableBuilder(column: $table.goalWeightKg, builder: (column) => column);
+
+  GeneratedColumn<double> get heightCm => $composableBuilder(column: $table.heightCm, builder: (column) => column);
 }
 
 class $$AppSettingsTableTableTableManager
@@ -5125,6 +5226,8 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> remindReorder = const Value.absent(),
                 Value<bool> remindUseBy = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
+                Value<double?> goalWeightKg = const Value.absent(),
+                Value<double?> heightCm = const Value.absent(),
               }) => AppSettingsTableCompanion(
                 id: id,
                 weightUnit: weightUnit,
@@ -5137,6 +5240,8 @@ class $$AppSettingsTableTableTableManager
                 remindReorder: remindReorder,
                 remindUseBy: remindUseBy,
                 onboardingDone: onboardingDone,
+                goalWeightKg: goalWeightKg,
+                heightCm: heightCm,
               ),
           createCompanionCallback:
               ({
@@ -5151,6 +5256,8 @@ class $$AppSettingsTableTableTableManager
                 Value<bool> remindReorder = const Value.absent(),
                 Value<bool> remindUseBy = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
+                Value<double?> goalWeightKg = const Value.absent(),
+                Value<double?> heightCm = const Value.absent(),
               }) => AppSettingsTableCompanion.insert(
                 id: id,
                 weightUnit: weightUnit,
@@ -5163,6 +5270,8 @@ class $$AppSettingsTableTableTableManager
                 remindReorder: remindReorder,
                 remindUseBy: remindUseBy,
                 onboardingDone: onboardingDone,
+                goalWeightKg: goalWeightKg,
+                heightCm: heightCm,
               ),
           withReferenceMapper: (p0) => p0
               .map(

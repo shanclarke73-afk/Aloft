@@ -133,8 +133,21 @@ void main() {
     expect(find.text('Enter your weight, or skip this step.'), findsOneWidget);
     await tester.enterText(find.byKey(const Key('start-weight')), '197');
     await tester.pump();
+    // Goal and height are optional; BMI shows only once there is a height.
+    expect(find.textContaining('BMI 3'), findsNothing);
+    await tester.enterText(find.byKey(const Key('goal-weight')), '150');
+    await tester.enterText(find.byKey(const Key('height-ft')), '5');
+    await tester.enterText(find.byKey(const Key('height-in')), '6');
+    await tester.pump();
+    expect(find.text('Starting BMI 31.8'), findsOneWidget);
+    expect(find.text('Goal BMI 24.2'), findsOneWidget);
     await tap(tester, const Key('weight-continue'));
     expect(find.text('Starting photos'), findsOneWidget);
+    await tester.runAsync(() async {
+      final settings = await db.loadSettings();
+      expect(settings.goalWeightKg, closeTo(toKg(150, WeightUnit.lb), 1e-9));
+      expect(settings.heightCm, closeTo(167.64, 1e-9));
+    });
     await tester.runAsync(() async {
       final saved = (await db.select(db.weights).get()).single;
       expect(saved.kg, closeTo(toKg(197, WeightUnit.lb), 1e-9));
@@ -142,7 +155,7 @@ void main() {
     });
     // Going back doesn't ask for it, or save it, a second time.
     await tap(tester, const Key('onboarding-back'));
-    expect(find.text('Your starting weight is saved. You can edit it in History.'), findsOneWidget);
+    expect(find.textContaining('Your starting weight is saved.'), findsOneWidget);
     await tap(tester, const Key('weight-continue'));
     await tester.runAsync(() async => expect((await db.select(db.weights).get()).length, 1));
     await finish(tester);

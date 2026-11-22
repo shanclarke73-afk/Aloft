@@ -11,6 +11,7 @@ import '../../theme/aloft_theme.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../backup/backup_screen.dart';
+import '../body/goal_screen.dart';
 import '../about/about_screen.dart';
 import '../medications/medication_setup_screen.dart';
 import '../progress/add_photos_screen.dart';
@@ -35,12 +36,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   DateTime _weightDay = DateTime.now();
   bool _weightProblem = false;
   bool _weightSaved = false;
+  late final _goal = GoalHeightDraft(
+    weightUnit: ref.read(settingsProvider).weightUnit,
+    lengthUnit: ref.read(settingsProvider).lengthUnit,
+  );
 
   bool _understood = false;
 
   @override
   void dispose() {
     _weight.dispose();
+    _goal.dispose();
     super.dispose();
   }
 
@@ -55,12 +61,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _saveWeight() async {
     final kg = _kg;
-    if (kg == null) {
+    final lengthUnit = ref.read(settingsProvider).lengthUnit;
+    if (kg == null || _goal.problems(_unit, lengthUnit).isNotEmpty) {
       setState(() => _weightProblem = true);
       return;
     }
     await ref.read(databaseProvider).logWeight(kg: kg, measuredAt: _weightDay);
-    await ref.read(settingsProvider.notifier).setWeightUnit(_unit);
+    final settings = ref.read(settingsProvider.notifier);
+    await settings.setWeightUnit(_unit);
+    await settings.setGoalAndHeight(goalWeightKg: _goal.goalKg(_unit), heightCm: _goal.heightCm(lengthUnit));
     _weightSaved = true;
     _go(3);
   }
@@ -277,7 +286,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         'This is optional.',
       ),
       if (_weightSaved)
-        InfoBox('Your starting weight is saved. You can edit it in History.')
+        InfoBox('Your starting weight is saved. You can edit it in History, and your goal and height in More.')
       else ...[
         SegmentedButton<WeightUnit>(
           showSelectedIcon: false,
@@ -287,9 +296,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ],
           selected: {_unit},
           onSelectionChanged: (s) => setState(() {
-            final current = _kg;
+            final current = _kg, goal = _goal.goalKg(_unit);
             _unit = s.single;
             if (current != null) _weight.text = fromKg(current, _unit).toStringAsFixed(1);
+            if (goal != null) _goal.goal.text = fromKg(goal, _unit).toStringAsFixed(1);
           }),
         ),
         const FieldLabel('Starting weight'),
@@ -310,6 +320,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
         const FieldLabel('When that was'),
         PickerField(text: formatFullDate(context, _weightDay), onTap: _chooseWeightDay),
+        GoalHeightFields(
+          draft: _goal,
+          weightUnit: _unit,
+          lengthUnit: ref.watch(settingsProvider).lengthUnit,
+          onChanged: () => setState(() {}),
+          weights: {'Starting': _kg},
+        ),
+        if (_weightProblem)
+          for (final problem in _goal.problems(_unit, ref.watch(settingsProvider).lengthUnit))
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                problem,
+                style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600),
+              ),
+            ),
       ],
       const SizedBox(height: 20),
       FilledButton(

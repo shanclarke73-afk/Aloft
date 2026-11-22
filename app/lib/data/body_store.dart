@@ -24,6 +24,14 @@ String severityWord(int severity) => severity <= 3 ? 'mild' : (severity <= 6 ? '
 String sideEffectName(SideEffect e) =>
     e.type == SideEffectType.custom ? (e.customName ?? SideEffectType.custom.label) : e.type.label;
 
+const cmPerInch = 2.54;
+
+/// Body mass index: kg divided by height in metres squared. A plain calculation; Aloft
+/// shows the number and never a category or a judgement.
+double bmi(double kg, double heightCm) => kg / ((heightCm / 100) * (heightCm / 100));
+
+String formatBmi(double kg, double heightCm) => bmi(kg, heightCm).toStringAsFixed(1);
+
 extension BodyStore on AloftDatabase {
   Future<Weight> logWeight({required double kg, required DateTime measuredAt, String? notes}) {
     final clean = notes?.trim();
