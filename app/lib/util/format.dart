@@ -15,9 +15,22 @@ String formatWhen(BuildContext context, DateTime when, {DateTime? now}) {
   return '${formatDay(context, when, now: now)}, $time';
 }
 
-/// "Thu, Nov 20".
-String formatLongDay(BuildContext context, DateTime when) =>
-    '${weekdayShort[when.weekday - 1]}, ${MaterialLocalizations.of(context).formatShortMonthDay(when)}';
+/// "Nov 20", or "Apr 14, 2025" when it isn't this year, so an older date can't be read as recent.
+String formatMonthDay(BuildContext context, DateTime when, {DateTime? now}) {
+  final dates = MaterialLocalizations.of(context);
+  return when.year == (now ?? DateTime.now()).year ? dates.formatShortMonthDay(when) : dates.formatShortDate(when);
+}
+
+/// For a chart axis, where there's little room: "Nov 20", or "Apr '25" when it isn't this year.
+String formatAxisDate(BuildContext context, DateTime when, {DateTime? now}) {
+  final monthDay = MaterialLocalizations.of(context).formatShortMonthDay(when);
+  if (when.year == (now ?? DateTime.now()).year) return monthDay;
+  return "${monthDay.split(' ').first} '${(when.year % 100).toString().padLeft(2, '0')}";
+}
+
+/// "Thu, Nov 20", or "Mon, Apr 14, 2025" when it isn't this year.
+String formatLongDay(BuildContext context, DateTime when, {DateTime? now}) =>
+    '${weekdayShort[when.weekday - 1]}, ${formatMonthDay(context, when, now: now)}';
 
 /// "Nov 20, 2026": for dates that may be in another year.
 String formatFullDate(BuildContext context, DateTime when) => MaterialLocalizations.of(context).formatShortDate(when);
@@ -29,7 +42,7 @@ String formatDay(BuildContext context, DateTime when, {DateTime? now}) {
   final days = today.difference(DateUtils.dateOnly(when)).inDays;
   if (days == 0) return 'Today';
   if (days == 1) return 'Yesterday';
-  return MaterialLocalizations.of(context).formatShortMonthDay(when);
+  return formatMonthDay(context, when, now: now);
 }
 
 /// "Weekly · Thu, 8:00 PM", "Mon, Wed, Fri · 9:00 AM", "Every 3 days · 9:00 AM", "As needed".

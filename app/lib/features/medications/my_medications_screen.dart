@@ -163,7 +163,7 @@ class _MedicationCard extends ConsumerWidget {
                           if (s.lotNumber != null) 'Lot ${s.lotNumber}',
                           if (s.concentrationMgPerMl != null) '${formatNumber(s.concentrationMgPerMl!, 3)} mg/mL',
                           if (s.pillStrengthMg != null) '${formatNumber(s.pillStrengthMg!, 2)} mg',
-                          'started ${dates.formatShortMonthDay(s.dateOpened ?? s.createdAt)}',
+                          'started ${formatMonthDay(context, s.dateOpened ?? s.createdAt)}',
                         ].join(' · '),
                         style: const TextStyle(fontSize: 13, height: 1.5),
                       ),
