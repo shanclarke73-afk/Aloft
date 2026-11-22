@@ -46,3 +46,6 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Store keys for test builds: flutter build ... --dart-define-from-file=dart_defines.local.json
+dart_defines.local.json

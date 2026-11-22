@@ -69,11 +69,18 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       so and has no buy button. Test builds pass `--dart-define=ALOFT_PRO=true`. Not in the report yet: the
       estimated-level curve, choosing medications, measurements, photos, and bold text (the bundled font has one
       weight). A step heading can be left alone at the foot of a page.
-- [ ] Connect purchases: RevenueCat project "Aloft" has the `pro` entitlement, Test Store products
-      `aloft_pro_monthly` ($1.99), `aloft_pro_yearly` ($14.99), `aloft_pro_lifetime` ($29.99) and a `default`
-      offering (set up Nov 22). Still needed: the real products in Play Console and App Store Connect, the store
-      connections in RevenueCat, the SDK in the app, a real paywall, Restore purchases, Manage subscription, and
-      the second-medication limit.
+- [x] **Purchases connected to RevenueCat's Test Store** (Nov 22): `purchases_flutter`, a `ProStore` the app
+      talks to, and a real paywall (three plans with the store's prices, renewal terms, Restore purchases, Manage
+      subscription). More has an "Aloft Pro" row. Seen working on an Android emulator: plans loaded, a failed test
+      purchase said no charge was made, a valid one switched Pro on, and it stayed on after a restart.
+      The key comes from `--dart-define-from-file=dart_defines.local.json` (git-ignored). **RevenueCat closes the
+      app if a release build uses a Test Store key**, so the app ignores a `test_` key in release: test purchases
+      need a debug build. A build with no key has no store and says buying isn't available.
+- [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
+      `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
+      three products in each store (Play needs an uploaded build first), each store connected to RevenueCat and
+      its products attached to `pro` and the `default` offering, the platform keys in release builds, Terms and
+      Privacy links on the paywall (required by both stores), and the second-medication limit.
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
