@@ -135,3 +135,60 @@ class InfoBox extends StatelessWidget {
     );
   }
 }
+
+/// mg per mL from a label written as "5 mg in 0.5 mL". A blank volume means 1 mL.
+double? vialStrength(String mg, String perMl) {
+  final amount = parseAmount(mg);
+  final volume = perMl.trim().isEmpty ? 1.0 : parseAmount(perMl);
+  if (amount == null || volume == null || volume <= 0) return null;
+  return amount / volume;
+}
+
+/// Strength of a vial as printed on its label: an amount of mg and the mL it is in. Labels
+/// are written both as "10 mg/mL" and as "5 mg/0.5 mL"; this takes either as printed and
+/// shows the per-mL figure it works out to.
+class VialStrengthField extends StatelessWidget {
+  const VialStrengthField({
+    super.key,
+    required this.mg,
+    required this.perMl,
+    required this.mgKey,
+    required this.perMlKey,
+    this.onChanged,
+  });
+  final TextEditingController mg;
+  final TextEditingController perMl;
+  final Key mgKey;
+  final Key perMlKey;
+  final ValueChanged<String>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final strength = vialStrength(mg.text, perMl.text);
+    final volume = perMl.text.trim().isEmpty ? 1.0 : parseAmount(perMl.text);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: NumberField(key: mgKey, controller: mg, suffix: 'mg', onChanged: onChanged),
+            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('in')),
+            Expanded(
+              child: NumberField(key: perMlKey, controller: perMl, suffix: 'mL', onChanged: onChanged),
+            ),
+          ],
+        ),
+        if (strength != null && volume != 1)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              '= ${formatNumber(strength, 3)} mg per mL',
+              style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
+          ),
+      ],
+    );
+  }
+}

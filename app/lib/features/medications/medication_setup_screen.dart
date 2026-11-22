@@ -76,6 +76,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   KnownDrug? _drug;
   final _customName = TextEditingController();
   final _strength = TextEditingController();
+  final _strengthPer = TextEditingController(text: '1');
   final _vialSize = TextEditingController();
   final _pillCount = TextEditingController();
   final _dose = TextEditingController();
@@ -115,7 +116,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
 
   @override
   void dispose() {
-    for (final c in [_customName, _strength, _vialSize, _pillCount, _dose, _pharmacy, _lot, _cost]) {
+    for (final c in [_customName, _strength, _strengthPer, _vialSize, _pillCount, _dose, _pharmacy, _lot, _cost]) {
       c.dispose();
     }
     _scheduleDraft.dispose();
@@ -127,7 +128,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   }
 
   String get _name => _drug == null || _drug == _other ? _customName.text.trim() : _drug!.label;
-  double? get _strengthValue => parseAmount(_strength.text);
+  double? get _strengthValue => _isVial ? vialStrength(_strength.text, _strengthPer.text) : parseAmount(_strength.text);
   double? get _doseValue => _isPill ? _tablets : parseAmount(_dose.text);
 
   List<Additive> get _additiveValues => [
@@ -139,7 +140,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   /// What still needs filling in, in plain words. Empty when ready to save.
   List<String> get _problems => [
     if (_name.isEmpty) 'Choose or type the medication.',
-    if (_isVial && _strengthValue == null) 'Enter the strength in mg per mL from your label.',
+    if (_isVial && _strengthValue == null) 'Enter the strength from your label: the mg, and the mL it is in.',
     if (_isPill && _strengthValue == null) 'Enter the strength per pill in mg.',
     if (_doseValue == null) 'Enter your dose.',
     if (_isVial && _vialSize.text.trim().isNotEmpty && parseAmount(_vialSize.text) == null)
@@ -250,40 +251,16 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
                 ),
               ),
             if (_isVial) ...[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const FieldLabel('Strength (mg per mL)'),
-                        NumberField(
-                          key: const Key('strength'),
-                          controller: _strength,
-                          suffix: 'mg/mL',
-                          onChanged: _refresh,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const FieldLabel('Vial size'),
-                        NumberField(
-                          key: const Key('vialSize'),
-                          controller: _vialSize,
-                          suffix: 'mL',
-                          onChanged: _refresh,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              const FieldLabel('Strength, as printed on your label'),
+              VialStrengthField(
+                mg: _strength,
+                perMl: _strengthPer,
+                mgKey: const Key('strength'),
+                perMlKey: const Key('strengthPer'),
+                onChanged: _refresh,
               ),
+              const FieldLabel('Vial size'),
+              NumberField(key: const Key('vialSize'), controller: _vialSize, suffix: 'mL', onChanged: _refresh),
               const FieldLabel('Other ingredients'),
               for (final row in _additives) _additiveRow(row),
               Align(

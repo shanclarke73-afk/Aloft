@@ -33,7 +33,7 @@ void main() {
     await tester.tap(save);
     await tester.pump();
     expect(find.text('Choose or type the medication.'), findsOneWidget);
-    expect(find.text('Enter the strength in mg per mL from your label.'), findsOneWidget);
+    expect(find.text('Enter the strength from your label: the mg, and the mL it is in.'), findsOneWidget);
     expect(find.text('Enter your dose.'), findsOneWidget);
 
     await tester.scrollUntilVisible(find.byKey(const Key('medication')), -300, scrollable: scroll);
@@ -90,7 +90,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Tirzepatide').last);
     await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(const Key('strength')), '10');
+    // A label printed as "5 mg in 0.5 mL" is entered as printed and saved as 10 mg per mL.
+    await tester.enterText(find.byKey(const Key('strength')), '5');
+    await tester.enterText(find.byKey(const Key('strengthPer')), '0.5');
+    await tester.pump();
+    expect(find.text('= 10 mg per mL'), findsOneWidget);
     await tester.scrollUntilVisible(find.text('Add ingredient'), 200, scrollable: scroll);
     await tester.tap(find.text('Add ingredient'));
     await tester.pumpAndSettle();
@@ -108,8 +112,9 @@ void main() {
     await tester.enterText(find.widgetWithText(TextField, 'Per mL'), '1');
 
     await tester.scrollUntilVisible(find.byKey(const Key('dose')), 200, scrollable: scroll);
-    await tester.enterText(find.byKey(const Key('dose')), '25');
+    await tester.enterText(find.byKey(const Key('dose')), '50');
     await tester.pump();
+    expect(find.text('= 0.5 mL = 5 mg tirzepatide'), findsOneWidget);
     await tester.scrollUntilVisible(save, 300, scrollable: scroll);
     await tester.runAsync(() async {
       await tester.tap(save);
@@ -117,6 +122,7 @@ void main() {
     });
     late MedicationDetail saved;
     await tester.runAsync(() async => saved = (await db.watchMedications().first).single);
+    expect(saved.supply!.concentrationMgPerMl, 10);
     expect(
       saved.supply!.additives.single.toString(),
       const Additive(name: 'Methylcobalamin', amountPerMl: 1, unit: 'mg').toString(),
