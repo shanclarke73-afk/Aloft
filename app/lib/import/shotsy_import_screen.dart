@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../security/app_lock.dart';
 import '../data/database.dart';
 import '../dose/dose_math.dart';
+import '../features/medications/medication_limit.dart';
+import '../pro/pro.dart';
 import '../settings/settings.dart';
 import '../widgets/form_widgets.dart';
 import 'shotsy_file.dart';
@@ -109,7 +111,7 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
 
   Future<void> _import() async {
     setState(() => _importing = true);
-    final result = await ref.read(databaseProvider).importShotsy(widget.file, {
+    final result = await ref.read(databaseProvider).importShotsy(oneActiveOnly: !ref.read(proProvider), widget.file, {
       for (final name in widget.file.medications)
         name: ShotsyMedicationChoice(
           form: _forms[name]!,
@@ -160,6 +162,9 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
                       if (result.duplicates > 0)
                         '${_count(result.duplicates, 'entry was', 'entries were')} already in Aloft and skipped.',
                       if (result.medicationsAdded > 0) 'Check the dose and schedule in More → My medications: they were taken from your most recent shot.',
+                      if (result.paused.isNotEmpty)
+                        '${joinNames(result.paused)} ${result.paused.length == 1 ? 'was' : 'were'} added as paused, with all '
+                            'the history. One medication at a time is free; tracking more at once is part of Aloft Pro.',
                     ].join('\n'),
                   ),
                   const SizedBox(height: 20),

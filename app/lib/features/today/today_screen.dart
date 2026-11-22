@@ -194,11 +194,11 @@ String describeDue(BuildContext context, DueStatus status) {
   };
 }
 
-class _NoMedication extends StatelessWidget {
+class _NoMedication extends ConsumerWidget {
   const _NoMedication();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 40, 16, 28),
@@ -215,7 +215,7 @@ class _NoMedication extends StatelessWidget {
             style: TextStyle(fontSize: 15, height: 1.45, color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 24),
-          FilledButton(onPressed: () => startAddMedication(context), child: const Text('Add medication')),
+          FilledButton(onPressed: () => startAddMedication(context, ref), child: const Text('Add medication')),
         ],
       ),
     );

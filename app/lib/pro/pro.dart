@@ -34,6 +34,7 @@ final proPlansProvider = FutureProvider.autoDispose<List<ProPlan>>((ref) => ref.
 
 /// What Pro adds, in the order the Pro screen lists it (SPEC section 8).
 const proFeatures = [
+  (Icons.medication_outlined, 'More than one medication', 'Track two or more at the same time'),
   (Icons.picture_as_pdf_outlined, 'Report for your provider', 'A PDF of your doses, weight and side effects'),
   (Icons.table_chart_outlined, 'Spreadsheet export', 'Your history as CSV files'),
 ];
@@ -47,15 +48,22 @@ const plannedPlans = [
 
 /// True when the person has Pro. Otherwise shows the Pro screen, and returns whether they
 /// have it once that screen closes.
-Future<bool> requirePro(BuildContext context, WidgetRef ref) async {
+///
+/// [reason] says what the person was doing when Pro came up, such as "Track NAD+ alongside
+/// Zepbound with Pro."; it is shown at the top of the Pro screen.
+Future<bool> requirePro(BuildContext context, WidgetRef ref, {String? reason}) async {
   if (ref.read(proProvider)) return true;
-  await Navigator.of(context).push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => const ProScreen()));
+  await Navigator.of(context)
+      .push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => ProScreen(reason: reason)));
   return ref.read(proProvider);
 }
 
 /// What Aloft Pro is, and where it is bought, restored and managed.
 class ProScreen extends ConsumerStatefulWidget {
-  const ProScreen({super.key});
+  const ProScreen({super.key, this.reason});
+
+  /// What brought the person here, when it wasn't the Pro row in More.
+  final String? reason;
 
   @override
   ConsumerState<ProScreen> createState() => _ProScreenState();
@@ -127,79 +135,89 @@ class _ProScreenState extends ConsumerState<ProScreen> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
+      // Not a lazy list: the buy button and the terms must exist even before they scroll into view.
+      body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-        children: [
-          Text(
-            'Tracking, photos, reminders and backup stay free. Pro adds the extras.',
-            style: TextStyle(fontSize: 16, height: 1.45, color: scheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: 16),
-          for (final (icon, title, detail) in proFeatures)
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(icon, color: scheme.secondary),
-              title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text(detail),
-            ),
-          const SizedBox(height: 16),
-          if (pro) ...[
-            const InfoBox('You have Aloft Pro.', key: Key('pro-active')),
-            if (store.available) ...[
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.reason != null && !pro) ...[
+              InfoBox(widget.reason!, key: const Key('pro-reason')),
               const SizedBox(height: 12),
-              OutlinedButton(
-                key: const Key('pro-manage'),
-                onPressed: _manage,
-                child: const Text('Manage subscription'),
-              ),
             ],
-          ] else if (!store.available) ...[
-            for (final plan in plannedPlans) _planCard(plan, selectable: false),
-            const SizedBox(height: 12),
-            const InfoBox('Buying Pro isn\'t available in this version of Aloft yet. Nothing here can charge you.'),
-          ] else
-            ...plans.when(
-              loading: () => const [
-                Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
+            Text(
+              'Tracking, photos, reminders and backup stay free. Pro adds the extras.',
+              style: TextStyle(fontSize: 16, height: 1.45, color: scheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 16),
+            for (final (icon, title, detail) in proFeatures)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                leading: Icon(icon, color: scheme.secondary),
+                title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                subtitle: Text(detail, style: const TextStyle(fontSize: 13)),
+              ),
+            const SizedBox(height: 16),
+            if (pro) ...[
+              const InfoBox('You have Aloft Pro.', key: Key('pro-active')),
+              if (store.available) ...[
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  key: const Key('pro-manage'),
+                  onPressed: _manage,
+                  child: const Text('Manage subscription'),
                 ),
               ],
-              error: (_, _) => [_unreachable()],
-              data: (found) {
-                if (found.isEmpty) return [_unreachable()];
-                final chosen = found.firstWhere((p) => p.kind == _chosen, orElse: () => found.first);
-                return [
-                  for (final plan in found) _planCard(plan, selectable: true, selected: plan.kind == chosen.kind),
-                  const SizedBox(height: 12),
-                  FilledButton(
-                    key: const Key('pro-buy'),
-                    onPressed: _busy ? null : () => _buy(chosen),
-                    child: Text(_busy ? 'Working…' : 'Continue with ${chosen.name}'),
+            ] else if (!store.available) ...[
+              for (final plan in plannedPlans) _planCard(plan, selectable: false),
+              const SizedBox(height: 12),
+              const InfoBox('Buying Pro isn\'t available in this version of Aloft yet. Nothing here can charge you.'),
+            ] else
+              ...plans.when(
+                loading: () => const [
+                  Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
-                  const SizedBox(height: 8),
-                  Text(chosen.terms, key: const Key('pro-terms'), style: muted),
-                ];
-              },
-            ),
-          if (_message != null) ...[const SizedBox(height: 12), InfoBox(_message!, key: const Key('pro-message'))],
-          if (store.available && !pro) ...[
-            const SizedBox(height: 12),
-            OutlinedButton(
-              key: const Key('pro-restore'),
-              onPressed: _busy ? null : _restore,
-              child: const Text('Restore purchases'),
+                ],
+                error: (_, _) => [_unreachable()],
+                data: (found) {
+                  if (found.isEmpty) return [_unreachable()];
+                  final chosen = found.firstWhere((p) => p.kind == _chosen, orElse: () => found.first);
+                  return [
+                    for (final plan in found) _planCard(plan, selectable: true, selected: plan.kind == chosen.kind),
+                    const SizedBox(height: 12),
+                    FilledButton(
+                      key: const Key('pro-buy'),
+                      onPressed: _busy ? null : () => _buy(chosen),
+                      child: Text(_busy ? 'Working…' : 'Continue with ${chosen.name}'),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(chosen.terms, key: const Key('pro-terms'), style: muted),
+                  ];
+                },
+              ),
+            if (_message != null) ...[const SizedBox(height: 12), InfoBox(_message!, key: const Key('pro-message'))],
+            if (store.available && !pro) ...[
+              const SizedBox(height: 12),
+              OutlinedButton(
+                key: const Key('pro-restore'),
+                onPressed: _busy ? null : _restore,
+                child: const Text('Restore purchases'),
+              ),
+            ],
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LinkButton(key: const Key('pro-terms-link'), label: 'Terms of use', url: termsUrl),
+                LinkButton(key: const Key('pro-privacy-link'), label: 'Privacy policy', url: privacyPolicyUrl),
+              ],
             ),
           ],
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LinkButton(key: const Key('pro-terms-link'), label: 'Terms of use', url: termsUrl),
-              LinkButton(key: const Key('pro-privacy-link'), label: 'Privacy policy', url: privacyPolicyUrl),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
