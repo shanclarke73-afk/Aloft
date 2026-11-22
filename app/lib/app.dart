@@ -49,6 +49,7 @@ class _AloftAppState extends ConsumerState<AloftApp> with WidgetsBindingObserver
     if (state == AppLifecycleState.resumed) {
       lock.onForeground();
       _syncReminders();
+      ref.invalidate(notificationsAllowedProvider);
     } else if (state == AppLifecycleState.hidden || state == AppLifecycleState.paused) {
       lock.onBackground();
     }

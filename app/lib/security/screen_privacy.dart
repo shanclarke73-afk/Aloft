@@ -7,8 +7,12 @@ import 'package:flutter/services.dart';
 abstract final class ScreenPrivacy {
   static const _channel = MethodChannel('aloft/screen_privacy');
 
+  /// Test builds only: `--dart-define=ALOFT_ALLOW_SCREENSHOTS=true` leaves the screen
+  /// capturable, so the app can be checked and photographed on an emulator.
+  static const _allowScreenshots = bool.fromEnvironment('ALOFT_ALLOW_SCREENSHOTS');
+
   static Future<void> setHidden(bool hidden) async {
-    if (!Platform.isAndroid) return;
+    if (!Platform.isAndroid || _allowScreenshots) return;
     try {
       await _channel.invokeMethod<void>('setSecure', hidden);
     } on PlatformException catch (_) {

@@ -17,7 +17,15 @@ class Reminders {
 
   /// Replaces every pending notification with [plan].
   Future<void> sync(List<PlannedReminder> plan) async {}
+
+  /// Whether the phone will show Aloft's notifications. False when the person said no to the
+  /// phone's own question, or switched them off in the phone's settings. Never asks.
+  Future<bool> allowed() async => true;
 }
+
+/// Whether the phone lets Aloft show notifications right now. Checked again whenever the
+/// app comes back to the screen, since the answer is changed in the phone's settings.
+final notificationsAllowedProvider = FutureProvider<bool>((ref) => ref.watch(remindersProvider).allowed());
 
 /// Local notifications only: scheduled on the phone, nothing is sent anywhere.
 class DeviceReminders implements Reminders {
@@ -54,6 +62,21 @@ class DeviceReminders implements Reminders {
     }
     final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     return await android?.requestNotificationsPermission() ?? true;
+  }
+
+  @override
+  Future<bool> allowed() async {
+    try {
+      await _init();
+      if (Platform.isIOS) {
+        final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+        return (await ios?.checkPermissions())?.isEnabled ?? true;
+      }
+      final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      return await android?.areNotificationsEnabled() ?? true;
+    } catch (_) {
+      return true;
+    }
   }
 
   @override

@@ -11,6 +11,8 @@ import '../../import/shotsy_import_screen.dart';
 import '../../security/app_lock.dart';
 import '../../photos/photo_picker.dart';
 import '../../settings/settings.dart';
+import '../../widgets/form_widgets.dart';
+import '../../reminders/reminders.dart';
 import '../../util/format.dart';
 import '../medications/my_medications_screen.dart';
 
@@ -73,6 +75,17 @@ class MoreScreen extends ConsumerWidget {
             ],
           ),
           const _SectionTitle('Reminders'),
+          // Reminders that are switched on here but blocked by the phone would otherwise fail silently.
+          if (ref.watch(notificationsAllowedProvider).value == false &&
+              (settings.remindShots || settings.remindReorder || settings.remindUseBy))
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: InfoBox(
+                'Notifications are turned off for Aloft in your phone\'s settings, so these reminders won\'t '
+                'show. Turn them on in your phone\'s Settings → Notifications → Aloft.',
+                warning: true,
+              ),
+            ),
           _Section(
             children: [
               SwitchListTile(
