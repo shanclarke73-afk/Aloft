@@ -156,6 +156,18 @@ class _LogWeightScreenState extends ConsumerState<LogWeightScreen> {
               if (first != null && first.id != previous.id)
                 Text('${formatWeightChange(first.kg, kg, _unit)} since you started', style: muted),
             ],
+            if (kg != null)
+              if (describeGoalAndBmi(
+                    kg,
+                    goalKg: ref.watch(settingsProvider).goalWeightKg,
+                    heightCm: ref.watch(settingsProvider).heightCm,
+                    unit: _unit,
+                  )
+                  case final line?)
+                Padding(
+                  padding: EdgeInsets.only(top: previous == null ? 10 : 0),
+                  child: Text(line, style: muted),
+                ),
             const FieldLabel('When'),
             PickerField(text: formatWhen(context, _when), onTap: _chooseWhen),
             const FieldLabel('Note'),

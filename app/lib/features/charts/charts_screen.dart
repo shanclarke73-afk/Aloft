@@ -71,6 +71,7 @@ class ChartsScreen extends ConsumerWidget {
     final series = ref.watch(levelSeriesProvider);
     final weights = ref.watch(weightsProvider).value ?? const <Weight>[];
     final unit = ref.watch(settingsProvider.select((s) => s.weightUnit));
+    final settings = ref.watch(settingsProvider);
     final muted = TextStyle(fontSize: 13, height: 1.4, color: scheme.onSurfaceVariant);
 
     return Scaffold(
@@ -145,10 +146,18 @@ class ChartsScreen extends ConsumerWidget {
                       '${formatMonthDay(context, weights.last.measuredAt)}',
                       style: muted,
                     ),
+                    if (describeGoalAndBmi(
+                          weights.first.kg,
+                          goalKg: settings.goalWeightKg,
+                          heightCm: settings.heightCm,
+                          unit: unit,
+                        )
+                        case final line?)
+                      Text(line, style: muted),
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 180,
-                      child: WeightChart(weights: weights, unit: unit),
+                      child: WeightChart(weights: weights, unit: unit, goalKg: settings.goalWeightKg),
                     ),
                   ],
                 ],
@@ -285,7 +294,10 @@ class LevelChart extends StatelessWidget {
 }
 
 class WeightChart extends StatelessWidget {
-  const WeightChart({super.key, required this.weights, required this.unit});
+  const WeightChart({super.key, required this.weights, required this.unit, this.goalKg});
+
+  /// Drawn as a dashed line when set.
+  final double? goalKg;
 
   /// Newest first.
   final List<Weight> weights;
@@ -298,7 +310,10 @@ class WeightChart extends StatelessWidget {
     double x(DateTime t) => t.difference(start).inMinutes / 1440;
     final spots = [for (final w in weights.reversed) FlSpot(x(w.measuredAt), fromKg(w.kg, unit))];
     final values = spots.map((s) => s.y);
-    final low = values.reduce((a, b) => a < b ? a : b), high = values.reduce((a, b) => a > b ? a : b);
+    // The goal counts towards the range, so its line is always on the chart.
+    final goal = goalKg == null ? null : fromKg(goalKg!, unit);
+    final inRange = [...values, ?goal];
+    final low = inRange.reduce((a, b) => a < b ? a : b), high = inRange.reduce((a, b) => a > b ? a : b);
     final pad = ((high - low) * 0.15).clamp(1.0, 50.0);
     final style = TextStyle(fontSize: 11, color: scheme.onSurfaceVariant);
     final span = spots.last.x - spots.first.x;
@@ -312,6 +327,23 @@ class WeightChart extends StatelessWidget {
         gridData: FlGridData(
           drawVerticalLine: false,
           getDrawingHorizontalLine: (_) => FlLine(color: scheme.outlineVariant, strokeWidth: 1),
+        ),
+        extraLinesData: ExtraLinesData(
+          horizontalLines: [
+            if (goal != null)
+              HorizontalLine(
+                y: goal,
+                color: AloftColors.teal,
+                strokeWidth: 1.5,
+                dashArray: const [6, 4],
+                label: HorizontalLineLabel(
+                  show: true,
+                  alignment: Alignment.topRight,
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: scheme.onSurfaceVariant),
+                  labelResolver: (_) => 'Goal',
+                ),
+              ),
+          ],
         ),
         titlesData: _titles(context, bottom: (_, _) => const SizedBox.shrink()).copyWith(
           bottomTitles: AxisTitles(

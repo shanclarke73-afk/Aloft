@@ -16,6 +16,22 @@ import 'package:sqlite3/sqlite3.dart' show sqlite3;
 import 'medication_store_test.dart' show tirzepatideVial;
 
 void main() {
+  test('goal and BMI are described from whichever has been set, as plain numbers', () {
+    String? line(double lb, {double? goalLb, double? heightCm}) => describeGoalAndBmi(
+      toKg(lb, WeightUnit.lb),
+      goalKg: goalLb == null ? null : toKg(goalLb, WeightUnit.lb),
+      heightCm: heightCm,
+      unit: WeightUnit.lb,
+    );
+    expect(line(190), isNull);
+    expect(line(190, goalLb: 150), 'Goal 150 lb · 40.0 lb from goal');
+    expect(line(190, goalLb: 150.5, heightCm: 167.64), 'Goal 150.5 lb · 39.5 lb from goal · BMI 30.7');
+    expect(line(150, goalLb: 150), 'Goal 150 lb · reached');
+    // Below the goal is still just a distance: no praise and no warning.
+    expect(line(145, goalLb: 150), 'Goal 150 lb · 5.0 lb from goal');
+    expect(line(190, heightCm: 167.64), 'BMI 30.7');
+  });
+
   group('weight units', () {
     test('pounds and kilograms convert both ways', () {
       expect(toKg(184.6, WeightUnit.lb), closeTo(83.733, 0.001));
