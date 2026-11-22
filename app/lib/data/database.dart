@@ -39,6 +39,10 @@ class AppSettingsTable extends Table {
   /// Set once the welcome screens are finished and the disclaimer has been acknowledged.
   BoolColumn get onboardingDone => boolean().withDefault(const Constant(false))();
 
+  /// Both optional (SPEC 6.7). BMI is shown only once a height has been entered.
+  RealColumn get goalWeightKg => real().nullable()();
+  RealColumn get heightCm => real().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -264,7 +268,7 @@ class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -295,6 +299,12 @@ class AloftDatabase extends _$AloftDatabase {
         if (!columns.any((c) => c.read<String>('name') == 'onboarding_done')) {
           await m.addColumn(appSettingsTable, appSettingsTable.onboardingDone);
         }
+      }
+      if (from < 8) {
+        final columns = await customSelect('PRAGMA table_info(app_settings)').get();
+        bool has(String name) => columns.any((c) => c.read<String>('name') == name);
+        if (!has('goal_weight_kg')) await m.addColumn(appSettingsTable, appSettingsTable.goalWeightKg);
+        if (!has('height_cm')) await m.addColumn(appSettingsTable, appSettingsTable.heightCm);
       }
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),

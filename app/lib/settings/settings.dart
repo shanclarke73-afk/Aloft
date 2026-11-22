@@ -25,6 +25,8 @@ class SettingsController extends Notifier<AppSettings> {
   Future<void> reload() async => state = await ref.read(databaseProvider).loadSettings();
 
   Future<void> finishOnboarding() => _save(const AppSettingsTableCompanion(onboardingDone: Value(true)));
+  Future<void> setGoalAndHeight({required double? goalWeightKg, required double? heightCm}) =>
+      _save(AppSettingsTableCompanion(goalWeightKg: Value(goalWeightKg), heightCm: Value(heightCm)));
   Future<void> setWeightUnit(WeightUnit unit) => _save(AppSettingsTableCompanion(weightUnit: Value(unit)));
   Future<void> setLengthUnit(LengthUnit unit) => _save(AppSettingsTableCompanion(lengthUnit: Value(unit)));
   Future<void> setAppearance(Appearance value) => _save(AppSettingsTableCompanion(appearance: Value(value)));

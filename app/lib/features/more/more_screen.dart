@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../about/about_screen.dart';
 import '../backup/backup_screen.dart';
+import '../body/goal_screen.dart';
 
 import '../../data/database.dart';
 import '../../import/shotsy_import_screen.dart';
@@ -89,6 +90,13 @@ class MoreScreen extends ConsumerWidget {
           const _SectionTitle('Preferences'),
           _Section(
             children: [
+              ListTile(
+                key: const Key('goal-and-bmi'),
+                title: const Text('Goal weight and BMI'),
+                subtitle: Text(describeGoal(settings)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GoalScreen())),
+              ),
               _ChoiceRow<WeightUnit>(
                 title: 'Weight',
                 value: settings.weightUnit,
