@@ -68,4 +68,59 @@ void main() {
     expect(saved.medication.scheduleType, ScheduleType.weekly);
     await tester.runAsync(db.close);
   });
+
+  testWidgets('an ingredient that is not in the list can be typed in', (tester) async {
+    final dir = Directory.systemTemp.createTempSync('aloft_setup');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    late AloftDatabase db;
+    await tester.runAsync(() async {
+      db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
+      await db.loadSettings(countryCode: 'US');
+    });
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: const MaterialApp(home: MedicationSetupScreen(form: MedicationForm.compoundedVial)),
+      ),
+    );
+    final scroll = find.byType(Scrollable).first;
+    final save = find.byKey(const Key('save'));
+
+    await tester.tap(find.byKey(const Key('medication')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tirzepatide').last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('strength')), '10');
+    await tester.scrollUntilVisible(find.text('Add ingredient'), 200, scrollable: scroll);
+    await tester.tap(find.text('Add ingredient'));
+    await tester.pumpAndSettle();
+
+    final name = find.widgetWithText(TextField, 'Type or choose');
+    await tester.tap(name);
+    await tester.pumpAndSettle();
+    expect(find.text('Glycine'), findsOneWidget);
+    await tester.enterText(name, 'Methylcobalamin');
+    await tester.pumpAndSettle();
+    // Nothing in the list matches, so the typed name is offered as its own choice.
+    expect(find.text('Glycine'), findsNothing);
+    await tester.tap(find.text('Use "Methylcobalamin"'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.widgetWithText(TextField, 'Per mL'), '1');
+
+    await tester.scrollUntilVisible(find.byKey(const Key('dose')), 200, scrollable: scroll);
+    await tester.enterText(find.byKey(const Key('dose')), '25');
+    await tester.pump();
+    await tester.scrollUntilVisible(save, 300, scrollable: scroll);
+    await tester.runAsync(() async {
+      await tester.tap(save);
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    late MedicationDetail saved;
+    await tester.runAsync(() async => saved = (await db.watchMedications().first).single);
+    expect(
+      saved.supply!.additives.single.toString(),
+      const Additive(name: 'Methylcobalamin', amountPerMl: 1, unit: 'mg').toString(),
+    );
+    await tester.runAsync(db.close);
+  });
 }

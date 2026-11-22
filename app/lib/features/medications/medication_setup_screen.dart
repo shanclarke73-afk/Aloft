@@ -346,14 +346,43 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
           Expanded(
             flex: 5,
             child: Autocomplete<String>(
-              optionsBuilder: (value) => value.text.isEmpty
-                  ? commonAdditives
-                  : commonAdditives.where((a) => a.toLowerCase().contains(value.text.toLowerCase())),
+              // The list is only a shortcut: whatever is typed is kept, and offered back as
+              // its own choice so it is clear a name outside the list is fine.
+              optionsBuilder: (value) {
+                final typed = value.text.trim();
+                if (typed.isEmpty) return commonAdditives;
+                final matches = commonAdditives.where((a) => a.toLowerCase().contains(typed.toLowerCase())).toList();
+                return [...matches, if (!matches.any((a) => a.toLowerCase() == typed.toLowerCase())) typed];
+              },
               onSelected: (value) => setState(() => row.name.text = value),
+              optionsViewBuilder: (context, onSelected, options) => Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4,
+                  borderRadius: BorderRadius.circular(12),
+                  clipBehavior: Clip.antiAlias,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 240, maxWidth: 260),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: [
+                        for (final option in options)
+                          ListTile(
+                            dense: true,
+                            title: Text(commonAdditives.contains(option) ? option : 'Use "$option"'),
+                            onTap: () => onSelected(option),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               fieldViewBuilder: (context, controller, focus, onSubmit) => TextField(
                 controller: controller,
                 focusNode: focus,
-                decoration: const InputDecoration(hintText: 'Ingredient'),
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(hintText: 'Type or choose'),
                 onChanged: (value) => setState(() => row.name.text = value),
               ),
             ),
