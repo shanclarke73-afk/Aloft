@@ -121,6 +121,25 @@ void main() {
       saved.supply!.additives.single.toString(),
       const Additive(name: 'Methylcobalamin', amountPerMl: 1, unit: 'mg').toString(),
     );
+
+    // On the next vial the typed name is in the list, ahead of the common ones.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: const MaterialApp(home: MedicationSetupScreen(form: MedicationForm.compoundedVial)),
+      ),
+    );
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump();
+    await tester.scrollUntilVisible(find.text('Add ingredient'), 200, scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Add ingredient'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextField, 'Type or choose'));
+    await tester.pumpAndSettle();
+    expect(find.text('Methylcobalamin'), findsOneWidget);
+    expect(find.text('Glycine'), findsOneWidget);
+    expect(tester.getTopLeft(find.text('Methylcobalamin')).dy, lessThan(tester.getTopLeft(find.text('Glycine')).dy));
     await tester.runAsync(db.close);
   });
 }

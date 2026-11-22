@@ -84,6 +84,9 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
   final _cost = TextEditingController();
   final _additives = <_AdditiveRow>[];
 
+  /// Names offered when adding an ingredient: ones typed on earlier vials, then the common ones.
+  List<String> _suggestions = commonAdditives;
+
   late DoseUnit _doseUnit;
   double _tablets = 1;
   late final ScheduleDraft _scheduleDraft;
@@ -100,6 +103,14 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
     super.initState();
     _doseUnit = _isVial ? DoseUnit.units : DoseUnit.mg;
     _scheduleDraft = ScheduleDraft(type: _isPill ? ScheduleType.daily : ScheduleType.weekly);
+    if (_isVial) _loadSuggestions();
+  }
+
+  Future<void> _loadSuggestions() async {
+    final used = await ref.read(databaseProvider).usedAdditiveNames();
+    if (!mounted || used.isEmpty) return;
+    final seen = <String>{};
+    setState(() => _suggestions = [...used, ...commonAdditives].where((a) => seen.add(a.toLowerCase())).toList());
   }
 
   @override
@@ -350,8 +361,8 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
               // its own choice so it is clear a name outside the list is fine.
               optionsBuilder: (value) {
                 final typed = value.text.trim();
-                if (typed.isEmpty) return commonAdditives;
-                final matches = commonAdditives.where((a) => a.toLowerCase().contains(typed.toLowerCase())).toList();
+                if (typed.isEmpty) return _suggestions;
+                final matches = _suggestions.where((a) => a.toLowerCase().contains(typed.toLowerCase())).toList();
                 return [...matches, if (!matches.any((a) => a.toLowerCase() == typed.toLowerCase())) typed];
               },
               onSelected: (value) => setState(() => row.name.text = value),
@@ -370,7 +381,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
                         for (final option in options)
                           ListTile(
                             dense: true,
-                            title: Text(commonAdditives.contains(option) ? option : 'Use "$option"'),
+                            title: Text(_suggestions.contains(option) ? option : 'Use "$option"'),
                             onTap: () => onSelected(option),
                           ),
                       ],
