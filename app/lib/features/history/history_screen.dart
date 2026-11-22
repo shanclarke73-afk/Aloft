@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../body/edit_entry_screens.dart';
 import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
-import '../../import/shotsy_import.dart';
 import '../../dose/dose_math.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
@@ -129,20 +129,7 @@ class _NoteRow extends ConsumerWidget {
       child: ListTile(
         title: const Text('Note', style: TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(note.body),
-        onLongPress: () async {
-          final db = ref.read(databaseProvider);
-          final messenger = ScaffoldMessenger.of(context);
-          await db.deleteDayNote(note);
-          messenger.showSnackBar(
-            SnackBar(
-              duration: const Duration(seconds: 10),
-              content: const Text('Note deleted'),
-              // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
-              persist: false,
-              action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreDayNote(note)),
-            ),
-          );
-        },
+        onTap: () => openNote(context, editing: note),
       ),
     );
   }
@@ -185,38 +172,7 @@ class _EffectRow extends ConsumerWidget {
         ),
         subtitle: details.isEmpty ? null : Text(details.join(' · ')),
         trailing: Text(formatTime(context, effect.occurredAt.hour * 60 + effect.occurredAt.minute)),
-        onTap: () async {
-          final db = ref.read(databaseProvider);
-          final messenger = ScaffoldMessenger.of(context);
-          final delete = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(name),
-              content: Text(
-                '${formatWhen(context, effect.occurredAt)}\n${severityWord(effect.severity)} (${effect.severity} of 10)',
-              ),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Delete'),
-                ),
-                TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Close')),
-              ],
-            ),
-          );
-          if (delete != true) return;
-          await db.deleteSideEffect(effect);
-          messenger.showSnackBar(
-            SnackBar(
-              duration: const Duration(seconds: 10),
-              content: const Text('Side effect deleted'),
-              // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
-              persist: false,
-              action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreSideEffect(effect)),
-            ),
-          );
-        },
+        onTap: () => openEditSideEffect(context, effect),
       ),
     );
   }

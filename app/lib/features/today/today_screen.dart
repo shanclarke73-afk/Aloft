@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../body/edit_entry_screens.dart';
 import '../progress/add_photos_screen.dart';
 
 import '../../data/body_store.dart';
@@ -32,7 +33,8 @@ class TodayScreen extends ConsumerWidget {
     final at = now ?? DateTime.now();
     return Scaffold(
       appBar: AppBar(title: const Text('Today')),
-      floatingActionButton: medications.value?.isNotEmpty ?? false
+      // Weight, side effects, notes and photos can be logged before any medication is set up.
+      floatingActionButton: medications.hasValue
           ? FloatingActionButton(
               tooltip: 'Add to your log',
               backgroundColor: AloftColors.teal,
@@ -46,7 +48,12 @@ class TodayScreen extends ConsumerWidget {
         error: (error, _) =>
             Center(child: Text('Couldn\'t load your medications.\n$error', textAlign: TextAlign.center)),
         data: (all) {
-          if (all.isEmpty) return const _NoMedication();
+          if (all.isEmpty) {
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
+              children: const [_NoMedication(), SizedBox(height: 12), WeightCard()],
+            );
+          }
           final active = [
             for (final d in all)
               if (d.medication.status == MedicationStatus.active) d,
@@ -145,6 +152,15 @@ Future<void> showQuickAdd(BuildContext context, List<MedicationDetail> medicatio
           ),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            leading: const Icon(Icons.edit_note),
+            title: const Text('Note', style: TextStyle(fontWeight: FontWeight.w700)),
+            onTap: () {
+              Navigator.pop(sheet);
+              openNote(context);
+            },
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
             leading: const Icon(Icons.photo_camera_outlined),
             title: const Text('Progress photos', style: TextStyle(fontWeight: FontWeight.w700)),
             onTap: () {
@@ -177,9 +193,8 @@ class _NoMedication extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.fromLTRB(16, 40, 16, 28),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
             'Add your medication',

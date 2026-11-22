@@ -101,6 +101,33 @@ extension BodyStore on AloftDatabase {
     });
   }
 
+  /// Changes how strong it was, when it was, and the note. What it was stays as logged.
+  Future<void> updateSideEffect(SideEffect e, {required int severity, required DateTime occurredAt, String? notes}) {
+    final clean = notes?.trim();
+    return (update(sideEffects)..where((x) => x.id.equals(e.id))).write(
+      SideEffectsCompanion(
+        severity: Value(severity),
+        occurredAt: Value(occurredAt),
+        notes: Value(clean == null || clean.isEmpty ? null : clean),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  /// A note for a day, typed by hand. The day only: a note has no time.
+  Future<void> addDayNote({required String body, required DateTime day}) =>
+      into(dayNotes)
+          .insert(DayNotesCompanion.insert(noteDate: DateTime(day.year, day.month, day.day), body: body.trim()));
+
+  Future<void> updateDayNote(DayNote note, {required String body, required DateTime day}) =>
+      (update(dayNotes)..where((n) => n.id.equals(note.id))).write(
+        DayNotesCompanion(
+          body: Value(body.trim()),
+          noteDate: Value(DateTime(day.year, day.month, day.day)),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
   Future<void> deleteSideEffect(SideEffect e) => (delete(sideEffects)..where((x) => x.id.equals(e.id))).go();
   Future<void> restoreSideEffect(SideEffect e) => into(sideEffects).insert(e);
 
