@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
+import '../../pro/pro.dart';
 import '../../backup/csv_export.dart';
 import '../../backup/backup_file.dart';
 import '../../backup/backup_files.dart';
@@ -83,6 +84,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   }
 
   Future<void> _export() async {
+    if (!await requirePro(context, ref) || !mounted) return;
     final box = context.findRenderObject() as RenderBox?;
     final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
     setState(() {
@@ -281,7 +283,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             OutlinedButton(
               key: const Key('export-csv'),
               onPressed: _busy ? null : _export,
-              child: const Text('Export as CSV'),
+              child: Text(ref.watch(proProvider) ? 'Export as CSV' : 'Export as CSV · Aloft Pro'),
             ),
             if (_problem != null)
               Padding(

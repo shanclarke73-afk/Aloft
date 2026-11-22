@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../about/about_screen.dart';
 import '../backup/backup_screen.dart';
+import '../report/report_screen.dart';
 import '../body/goal_screen.dart';
 
 import '../../backup/backup_file.dart';
@@ -12,6 +13,7 @@ import '../../security/app_lock.dart';
 import '../../photos/photo_picker.dart';
 import '../../settings/settings.dart';
 import '../../widgets/form_widgets.dart';
+import '../../pro/pro.dart';
 import '../../reminders/reminders.dart';
 import '../../util/format.dart';
 import '../medications/my_medications_screen.dart';
@@ -25,6 +27,7 @@ class MoreScreen extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     final controller = ref.read(settingsProvider.notifier);
     final lock = ref.watch(appLockProvider);
+    final pro = ref.watch(proProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('More')),
@@ -59,6 +62,16 @@ class MoreScreen extends ConsumerWidget {
                 subtitle: const Text('Save everything to a file, or bring a backup back'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
+              ),
+              ListTile(
+                key: const Key('provider-report'),
+                title: const Text('Report for your provider'),
+                subtitle: Text(pro ? 'A PDF of your doses, weight and side effects' : 'Aloft Pro'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  if (!await requirePro(context, ref) || !context.mounted) return;
+                  await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ReportScreen()));
+                },
               ),
               ListTile(
                 title: const Text('Import from Shotsy'),

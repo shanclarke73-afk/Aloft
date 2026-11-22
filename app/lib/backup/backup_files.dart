@@ -34,7 +34,7 @@ class DeviceBackupFiles implements BackupFiles {
     await _lock.awayOnPurpose(
       () => SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path, mimeType: 'application/zip')],
+          files: [XFile(file.path, mimeType: _mime(file))],
           sharePositionOrigin: origin,
         ),
       ),
@@ -52,13 +52,19 @@ class DeviceBackupFiles implements BackupFiles {
 
   static const _files = MethodChannel('aloft/files');
 
+  static String _mime(File file) => file.path.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'application/zip';
+
   @override
   Future<String?> saveOnPhone(File file) async {
     final name = p.basename(file.path);
     try {
       if (Platform.isAndroid) {
         // Documents/Aloft through the phone's media store: no chooser and no storage permission.
-        final saved = await _files.invokeMethod<bool>('saveToDocuments', {'path': file.path, 'name': name});
+        final saved = await _files.invokeMethod<bool>('saveToDocuments', {
+          'path': file.path,
+          'name': name,
+          'mime': _mime(file),
+        });
         return saved == true ? 'Documents › Aloft' : null;
       }
       if (Platform.isIOS) {

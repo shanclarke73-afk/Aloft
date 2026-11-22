@@ -48,7 +48,7 @@ class MainActivity : FlutterFragmentActivity() {
                     val resolver = applicationContext.contentResolver
                     val values = ContentValues().apply {
                         put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-                        put(MediaStore.MediaColumns.MIME_TYPE, "application/zip")
+                        put(MediaStore.MediaColumns.MIME_TYPE, call.argument<String>("mime") ?: "application/zip")
                         put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/Aloft")
                         put(MediaStore.MediaColumns.IS_PENDING, 1)
                     }
