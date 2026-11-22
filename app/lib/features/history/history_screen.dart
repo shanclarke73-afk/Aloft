@@ -137,6 +137,8 @@ class _NoteRow extends ConsumerWidget {
             SnackBar(
               duration: const Duration(seconds: 10),
               content: const Text('Note deleted'),
+              // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
+              persist: false,
               action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreDayNote(note)),
             ),
           );
@@ -209,6 +211,8 @@ class _EffectRow extends ConsumerWidget {
             SnackBar(
               duration: const Duration(seconds: 10),
               content: const Text('Side effect deleted'),
+              // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
+              persist: false,
               action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreSideEffect(effect)),
             ),
           );
