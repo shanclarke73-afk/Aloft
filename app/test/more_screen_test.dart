@@ -52,6 +52,12 @@ void main() {
       await tester.tap(find.text('Lock with Face ID'));
       await Future<void>.delayed(const Duration(milliseconds: 300));
     });
+    // Waits for the saved setting to arrive rather than for a fixed time, which was too short
+    // on a busy machine.
+    for (var i = 0; i < 100 && find.text('Lock after').evaluate().isEmpty; i++) {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+      await tester.pump();
+    }
     await tester.pumpAndSettle();
     expect(find.text('Lock after'), findsOneWidget);
     await tester.runAsync(() async => expect((await db.loadSettings()).appLock, isTrue));
