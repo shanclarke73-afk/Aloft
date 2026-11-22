@@ -113,6 +113,8 @@ class GoalHeightFields extends StatelessWidget {
         if (lengthUnit == LengthUnit.cm)
           NumberField(
             key: const Key('height-cm'),
+            // The unit only shows inside a field once it has focus; the hint labels it before that.
+            hint: 'cm',
             controller: draft.heightMain,
             suffix: 'cm',
             onChanged: (_) => onChanged(),
@@ -123,6 +125,8 @@ class GoalHeightFields extends StatelessWidget {
               Expanded(
                 child: NumberField(
                   key: const Key('height-ft'),
+                  // The unit only shows inside a field once it has focus; the hint labels it before that.
+                  hint: 'ft',
                   controller: draft.heightMain,
                   suffix: 'ft',
                   wholeNumber: true,
@@ -133,6 +137,8 @@ class GoalHeightFields extends StatelessWidget {
               Expanded(
                 child: NumberField(
                   key: const Key('height-in'),
+                  // The unit only shows inside a field once it has focus; the hint labels it before that.
+                  hint: 'in',
                   controller: draft.heightInches,
                   suffix: 'in',
                   onChanged: (_) => onChanged(),

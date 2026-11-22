@@ -5,6 +5,7 @@ import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/body_store.dart';
 import 'package:aloft/photos/photo_picker.dart';
+import 'package:aloft/reminders/reminders.dart';
 import 'package:aloft/security/app_lock.dart';
 import 'package:aloft/settings/settings.dart';
 import 'package:drift/drift.dart' show Value;
@@ -128,4 +129,52 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 5));
   });
+
+  testWidgets('More says so when the phone is blocking Aloft notifications', (tester) async {
+    final dir = Directory.systemTemp.createTempSync('aloft_widget');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    late AloftDatabase db;
+    late AppSettings settings;
+    await tester.runAsync(() async {
+      db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
+      await db.loadSettings(countryCode: 'US');
+      settings = await db.saveSettings(const AppSettingsTableCompanion(onboardingDone: Value(true)));
+    });
+    final lock = AppLock(authenticator: FakeAuthenticator(), enabled: false, lockAfter: LockAfter.immediately);
+    await tester.runAsync(lock.detectMethod);
+    final reminders = _BlockedReminders();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          initialSettingsProvider.overrideWithValue(settings),
+          appLockProvider.overrideWithValue(lock),
+          remindersProvider.overrideWithValue(reminders),
+        ],
+        child: const AloftApp(),
+      ),
+    );
+    await tester.tap(find.text('More'));
+    await tester.pumpAndSettle();
+    final warning = find.textContaining('Notifications are turned off for Aloft');
+    await tester.scrollUntilVisible(find.text('Shot and dose days'), 200, scrollable: find.byType(Scrollable).last);
+    expect(warning, findsOneWidget);
+
+    // Switched back on in the phone's settings: the warning goes when the app returns.
+    reminders.blocked = false;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(warning, findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 5));
+  });
+}
+
+class _BlockedReminders extends Reminders {
+  bool blocked = true;
+
+  @override
+  Future<bool> allowed() async => !blocked;
 }
