@@ -105,7 +105,7 @@ void main() {
         await tester.tap(target);
         await Future<void>.delayed(const Duration(milliseconds: 600));
       });
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 20; i++) {
         await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 30)));
         await tester.pump();
       }
