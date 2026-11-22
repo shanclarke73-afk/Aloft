@@ -75,6 +75,10 @@ void main() {
     expect(find.text('Next shot'), findsOneWidget);
     expect(find.text('Thursday, 8:00 PM'), findsOneWidget);
     expect(find.text('in 7 days'), findsOneWidget);
+    // Nothing is due: the bright button is gone, and logging early is a quiet outline button.
+    expect(find.text('Log shot'), findsNothing);
+    expect(find.widgetWithText(OutlinedButton, 'Log a shot early'), findsOneWidget);
+    expect(find.byType(FilledButton), findsNothing);
     expect(find.text('6 doses left'), findsOneWidget);
     await tester.runAsync(db.close);
   });

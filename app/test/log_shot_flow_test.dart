@@ -85,4 +85,35 @@ void main() {
     expect(saved.injectionSite, InjectionSite.abdomenLowerRight);
     await tester.runAsync(db.close);
   });
+
+  testWidgets('Log shot starts from the saved dose, not from a last shot recorded another way', (tester) async {
+    await open(tester);
+    late MedicationDetail detail;
+    await tester.runAsync(() async {
+      await db.addMedication(tirzepatideVial);
+      final d = (await db.watchMedications().first).single;
+      // Like an imported shot: a different amount, written in mg.
+      await db.logDose(
+        medication: d.medication,
+        supply: d.supply!,
+        amount: 2,
+        unit: DoseUnit.mg,
+        takenAt: DateTime(2026, 11, 13, 20),
+      );
+      detail = (await db.watchMedications().first).single;
+    });
+    expect((detail.lastDose!.amountEntered, detail.lastDose!.unitEntered), (2, DoseUnit.mg));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: overrides(),
+        child: MaterialApp(
+          home: LogDoseScreen(detail: detail, siteHistory: const []),
+        ),
+      ),
+    );
+    expect(find.widgetWithText(TextField, '25'), findsOneWidget);
+    expect(find.text('= 0.25 mL = 2.5 mg tirzepatide'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 5));
+  });
 }
