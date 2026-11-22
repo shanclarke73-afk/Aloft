@@ -1,6 +1,8 @@
 package com.shannonsonlinebookkeeping.aloft
 
 import android.content.ContentValues
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -30,10 +32,26 @@ class MainActivity : FlutterFragmentActivity() {
             }
 
         // Saves a backup or export straight into Documents/Aloft, with no chooser and no
-        // storage permission. Returns false on Android 9 and older, which have no such folder
+        // storage permission. Returns nothing on Android 9 and older, which have no such folder
         // an app can write to without a permission; the app then offers the share sheet.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "aloft/files")
             .setMethodCallHandler { call, result ->
+                if (call.method == "view") {
+                    // Opens a file this app saved in whatever the phone uses for that type.
+                    val opened = try {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndType(Uri.parse(call.argument<String>("uri")), call.argument<String>("mime"))
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        startActivity(intent)
+                        true
+                    } catch (e: Exception) {
+                        // No app on the phone can show it.
+                        false
+                    }
+                    result.success(opened)
+                    return@setMethodCallHandler
+                }
                 if (call.method != "saveToDocuments") {
                     result.notImplemented()
                     return@setMethodCallHandler
@@ -41,7 +59,7 @@ class MainActivity : FlutterFragmentActivity() {
                 val path = call.argument<String>("path")
                 val name = call.argument<String>("name")
                 if (path == null || name == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    result.success(false)
+                    result.success(null)
                     return@setMethodCallHandler
                 }
                 Thread {
@@ -68,7 +86,8 @@ class MainActivity : FlutterFragmentActivity() {
                             try { resolver.delete(uri, null, null) } catch (ignored: Exception) {}
                         }
                     }
-                    runOnUiThread { result.success(saved) }
+                    // The saved file's address, for opening it afterwards; null when it wasn't saved.
+                    runOnUiThread { result.success(if (saved) uri.toString() else null) }
                 }.start()
             }
     }

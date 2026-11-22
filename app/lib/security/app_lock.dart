@@ -73,6 +73,8 @@ class AppLock extends ChangeNotifier {
   bool _authenticating = false;
   DateTime? _backgroundedAt;
   int _awayOnPurpose = 0;
+  DateTime? _expectedLeaveAt;
+  DateTime? _leftOnPurposeAt;
   String methodName = 'passcode';
 
   /// How long Aloft's own camera, photo chooser, file chooser or share sheet can stay open
@@ -90,7 +92,13 @@ class AppLock extends ChangeNotifier {
   /// The app left the screen. The system's own Face ID sheet also sends the app to the
   /// background briefly, so that doesn't count.
   void onBackground() {
-    if (_authenticating || _awayOnPurpose > 0) return;
+    if (_authenticating || _awayOnPurpose > 0 || _leftOnPurposeAt != null) return;
+    final expected = _expectedLeaveAt;
+    _expectedLeaveAt = null;
+    if (expected != null && _now().difference(expected) < const Duration(seconds: 10)) {
+      _leftOnPurposeAt = _now();
+      return;
+    }
     _backgroundedAt ??= _now();
     if (_enabled && !_locked && lockAfter == LockAfter.immediately) {
       _locked = true;
@@ -99,6 +107,15 @@ class AppLock extends ChangeNotifier {
   }
 
   void onForeground() {
+    final leftOnPurpose = _leftOnPurposeAt;
+    if (leftOnPurpose != null) {
+      _leftOnPurposeAt = null;
+      if (_enabled && !_locked && _now().difference(leftOnPurpose) >= awayOnPurposeLimit) {
+        _locked = true;
+        notifyListeners();
+      }
+      return;
+    }
     final since = _backgroundedAt;
     _backgroundedAt = null;
     if (_enabled && !_locked && since != null && _now().difference(since) >= const Duration(minutes: 1)) {
@@ -125,6 +142,11 @@ class AppLock extends ChangeNotifier {
       }
     }
   }
+
+  /// Aloft is about to hand the screen to another app for something the person asked for
+  /// (opening a saved report), with nothing to wait on that says when they are back. The next
+  /// time the app leaves the screen, within a few seconds, is treated like [awayOnPurpose].
+  void expectLeaving() => _expectedLeaveAt = _now();
 
   /// Shows the system prompt. Returns a message to show, or null.
   Future<String?> unlock() async {
