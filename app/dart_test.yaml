@@ -1,0 +1,3 @@
+# Several tests open a real encrypted database and wait on it in real time. Run side by side on
+# every core they starve each other and time out at random, so keep it to a few at once.
+concurrency: 3

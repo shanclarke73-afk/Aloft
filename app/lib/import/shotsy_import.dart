@@ -8,8 +8,12 @@ import 'shotsy_file.dart';
 
 /// The answer to "brand pen or compounded vial?" for one medication name in the file.
 class ShotsyMedicationChoice {
-  const ShotsyMedicationChoice({required this.form, this.concentrationMgPerMl});
+  const ShotsyMedicationChoice({required this.form, this.concentrationMgPerMl, this.addToMedicationId});
   final MedicationForm form;
+
+  /// A medication already in Aloft, under another name, that these shots belong to. When set,
+  /// no new medication is made and the other answers aren't used.
+  final String? addToMedicationId;
 
   /// Optional, for a compounded vial, so units and mL can be shown for its shots.
   final double? concentrationMgPerMl;
@@ -53,9 +57,16 @@ extension ShotsyImport on AloftDatabase {
           for (final s in file.shots)
             if (s.medication == name) s,
         ];
-        var medication = await (select(
-          medications,
-        )..where((m) => m.name.lower().equals(name.toLowerCase()))).getSingleOrNull();
+        // The one the person pointed at, else one with the same name.
+        final chosenId = choices[name]?.addToMedicationId;
+        var medication = chosenId == null
+            ? null
+            : await (select(medications)..where((m) => m.id.equals(chosenId))).getSingleOrNull();
+        medication ??=
+            await (select(medications)
+                  ..where((m) => m.name.lower().equals(name.toLowerCase()))
+                  ..limit(1))
+                .getSingleOrNull();
         Supply? supply;
         if (medication != null) {
           supply =

@@ -96,7 +96,7 @@ void main() {
 
     await tester.runAsync(() async {
       await tester.tap(find.text('Skipped this one'));
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await Future<void>.delayed(const Duration(milliseconds: 600));
     });
     await settle(tester);
     expect(find.text('Next shot'), findsOneWidget);
@@ -127,7 +127,7 @@ void main() {
     expect(find.textContaining('0.25 mL goes back to your vial'), findsOneWidget);
     await tester.runAsync(() async {
       await tester.tap(find.text('Delete shot'));
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await Future<void>.delayed(const Duration(milliseconds: 600));
     });
     await settle(tester);
     expect(find.text('Thu, Nov 19'), findsNothing);
@@ -137,7 +137,7 @@ void main() {
 
     await tester.runAsync(() async {
       await tester.tap(find.text('Undo'));
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await Future<void>.delayed(const Duration(milliseconds: 600));
     });
     await settle(tester);
     expect(find.text('Thu, Nov 19'), findsOneWidget);

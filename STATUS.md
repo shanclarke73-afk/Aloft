@@ -75,6 +75,20 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 7. Build step 6b-2 (automatic iCloud / Google Drive backup), step 5b (outline camera), then Health sync, all of
    which need a real phone.
 
+## Checked on a real phone
+On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installed over USB:
+- Works: the app icon, welcome screens, fingerprint lock (and no second prompt after Aloft's own camera), typing
+  a vial with "5 mg in 0.5 mL", taking a progress photo with the camera, the real Shotsy export (doses included),
+  saving a backup file, Delete all my data, restoring that backup, goal weight and BMI, dates with years, and
+  the quiet "Log a shot early" button.
+- Not yet: a reminder was not seen on the phone. On an Android 17 emulator the same build schedules and shows it
+  (a weekly 11:45 reminder appeared at 11:48), so the next step is to read the phone's permission and alarm
+  state over USB. Android only promises "within a few minutes" unless the exact-alarm permission is added.
+- Nothing has run on a real iPhone. Shannon has no iPhone; a TestFlight tester or a borrowed phone is needed.
+- The phone build is signed with the debug key, so it must be uninstalled before a Play Store build goes on.
+- To see the Android screen on an emulator, build with `--dart-define=ALOFT_ALLOW_SCREENSHOTS=true` (the normal
+  build blocks screenshots while "Hide screen in app switcher" is on, which also blocks the person's own).
+
 ## Not done / not verified
 - No trademark check.
 - Step 1 was run on the iPhone simulator only. Not yet tried: Face ID on a real iPhone, the lock on a real Android
@@ -82,15 +96,15 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - Left out so far, to pick up later: the body-map picture for injection sites (it's a list for now), "Something
   else" medications, the pill wait timer, "Remind me tonight" on a late dose, pen counts, and the "second
   medication is Pro" limit (any number can be added until Pro is built in step 7).
-- Reminders have not been seen firing on a real phone. They are rebuilt each time the app opens or something is
+- Reminders have been seen firing on an Android emulator only (see above). They are rebuilt each time the app opens or something is
   logged, and cover the next 14 doses per medication, so they'd stop if the app weren't opened for that long.
 - Half-life and time to peak for the level chart were read from section 12.3 of each US prescribing information on
   DailyMed on Nov 21, 2026 (semaglutide 1 week / 1–3 days; tirzepatide 5 days / median 24 h; liraglutide 13 h /
   8–12 h; dulaglutide 5 days / median 48 h). Shannon should look these over once, and they need re-checking before
   each release. Retatrutide has no prescribing information, so it gets no curve. The numbers are built in and
   can't be edited in the app yet.
-- The Shotsy import has only been run on made-up files in Shotsy's format. The real export is on the laptop
-  (`samples/`, git-ignored) and hasn't been tried. Day notes come in as notes in History; notes can't be added or
+- The Shotsy import was run with the real export on the Pixel (Nov 22) and worked; the totals were not compared
+  with Shotsy's Summary PDF. Shots can be sent to a medication already in Aloft under another name. Day notes come in as notes in History; notes can't be added or
   edited by hand yet (long-press deletes one).
 - Progress photos were checked on the iPhone simulator with library photos only. The simulator has no camera, so
   taking a photo has not been tried, and nothing has run on Android. Photos are saved at up to 2400 pixels on the
@@ -104,7 +118,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
   says data stays on the phone with a backup file you save yourself (no iCloud / Google Drive promise), and there
   is no label scan, Apple Health import, or backup switch. Add those when the features exist. Goal weight and
   height (for BMI) are on the starting-weight step and in More; BMI is not yet on the charts or in a report.
-- The Android icon has only been built, never seen on a phone or emulator. Its generated file was edited by hand
+- The Android icon was seen on the Pixel and on an emulator's notification (Nov 22). Its generated file was edited by hand
   to drop an extra 16% inset (the artwork already sits in the safe area); re-running the icon tool puts the inset
   back, and it also changes an unrelated Xcode setting that should be reverted (`git checkout` the `.pbxproj`).
 - About has no privacy policy, terms or support links yet: the pages on peaceofmindapps.com don't exist. The
