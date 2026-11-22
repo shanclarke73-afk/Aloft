@@ -18,6 +18,21 @@ String formatWeightChange(double fromKgValue, double toKgValue, WeightUnit unit)
   return '${change < 0 ? '−' : '+'}$text ${unit.name}';
 }
 
+/// "Goal 150 lb · 12.4 lb from goal · BMI 31.8" for a weight, from whichever of the goal and the
+/// height have been set; null when neither has. States the numbers only: no praise, no
+/// category, and "from goal" is the plain distance whichever side of the goal the weight is.
+String? describeGoalAndBmi(double kg, {required double? goalKg, required double? heightCm, required WeightUnit unit}) {
+  final parts = <String>[];
+  if (goalKg != null) {
+    final toGo = (fromKg(kg, unit) - fromKg(goalKg, unit)).abs().toStringAsFixed(1);
+    final goal = fromKg(goalKg, unit).toStringAsFixed(1).replaceFirst(RegExp(r'\.0$'), '');
+    parts.add('Goal $goal ${unit.name}');
+    parts.add(toGo == '0.0' ? 'reached' : '$toGo ${unit.name} from goal');
+  }
+  if (heightCm != null) parts.add('BMI ${formatBmi(kg, heightCm)}');
+  return parts.isEmpty ? null : parts.join(' · ');
+}
+
 /// Plain words for the 1 to 10 scale. Describes the number; it isn't an assessment.
 String severityWord(int severity) => severity <= 3 ? 'mild' : (severity <= 6 ? 'moderate' : 'strong');
 

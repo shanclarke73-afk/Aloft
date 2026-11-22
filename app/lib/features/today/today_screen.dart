@@ -420,6 +420,7 @@ class WeightCard extends ConsumerWidget {
     final unit = ref.watch(settingsProvider.select((s) => s.weightUnit));
     final weights = ref.watch(weightsProvider).value ?? const <Weight>[];
     final latest = weights.firstOrNull, first = weights.lastOrNull;
+    final goal = ref.watch(settingsProvider.select((s) => (s.goalWeightKg, s.heightCm)));
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -449,6 +450,10 @@ class WeightCard extends ConsumerWidget {
                       )
                     else if (latest != null)
                       Text('Starting point', style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
+                    if (latest != null)
+                      if (describeGoalAndBmi(latest.kg, goalKg: goal.$1, heightCm: goal.$2, unit: unit)
+                          case final line?)
+                        Text(line, style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
                   ],
                 ),
               ),
