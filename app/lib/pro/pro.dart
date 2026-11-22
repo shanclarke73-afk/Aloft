@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../theme/aloft_theme.dart';
+import '../util/links.dart';
 import '../widgets/form_widgets.dart';
 import 'pro_store.dart';
 
@@ -190,6 +191,14 @@ class _ProScreenState extends ConsumerState<ProScreen> {
               child: const Text('Restore purchases'),
             ),
           ],
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LinkButton(key: const Key('pro-terms-link'), label: 'Terms of use', url: termsUrl),
+              LinkButton(key: const Key('pro-privacy-link'), label: 'Privacy policy', url: privacyPolicyUrl),
+            ],
+          ),
         ],
       ),
     );

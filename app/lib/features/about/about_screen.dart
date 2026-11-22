@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../util/links.dart';
 import '../../theme/aloft_theme.dart';
 
 /// The medical disclaimer (SPEC section 9). The same words are used wherever it appears.
@@ -110,6 +111,19 @@ class AboutScreen extends ConsumerWidget {
             ),
             section('Trademarks', trademarkNotice),
             const SizedBox(height: 22),
+            for (final (key, label, url) in [
+              ('privacy-policy', 'Privacy policy', privacyPolicyUrl),
+              ('terms', 'Terms of use', termsUrl),
+              ('support', 'Help and support', supportUrl),
+            ]) ...[
+              OutlinedButton.icon(
+                key: Key(key),
+                onPressed: () => openLink(context, ref, url),
+                icon: const Icon(Icons.open_in_new, size: 18),
+                label: Text(label),
+              ),
+              const SizedBox(height: 8),
+            ],
             OutlinedButton(
               key: const Key('licenses'),
               onPressed: () => showLicensePage(context: context, applicationName: 'Aloft', applicationVersion: version),

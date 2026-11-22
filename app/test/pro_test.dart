@@ -1,4 +1,5 @@
 import 'package:aloft/pro/pro.dart';
+import 'package:aloft/util/links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -44,6 +45,8 @@ class FakeStore implements ProStore {
   Future<Uri?> manageUrl() async => null;
 }
 
+final openedLinks = <Uri>[];
+
 void main() {
   test('a release build never connects with a test-store key, which would shut the app down', () {
     expect(canUseStoreKey('', releaseBuild: false), isFalse);
@@ -57,7 +60,13 @@ void main() {
     late ProviderContainer container;
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [if (store != null) proStoreProvider.overrideWithValue(store)],
+        overrides: [
+          if (store != null) proStoreProvider.overrideWithValue(store),
+          linkOpenerProvider.overrideWithValue((url) async {
+            openedLinks.add(url);
+            return true;
+          }),
+        ],
         child: Consumer(
           builder: (context, ref, _) {
             container = ProviderScope.containerOf(context);
@@ -158,5 +167,13 @@ void main() {
     await tester.tap(find.text('Try again'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('pro-buy')), findsOneWidget);
+  });
+
+  testWidgets('the paywall links to the terms and the privacy policy, as the stores require', (tester) async {
+    openedLinks.clear();
+    await show(tester, store: FakeStore());
+    await tap(tester, const Key('pro-terms-link'));
+    await tap(tester, const Key('pro-privacy-link'));
+    expect(openedLinks.map((u) => u.path), ['/aloft/terms', '/aloft/privacy']);
   });
 }

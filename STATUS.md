@@ -79,8 +79,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
       three products in each store (Play needs an uploaded build first), each store connected to RevenueCat and
-      its products attached to `pro` and the `default` offering, the platform keys in release builds, Terms and
-      Privacy links on the paywall (required by both stores), and the second-medication limit.
+      its products attached to `pro` and the `default` offering, the platform keys in release builds, and the
+      second-medication limit.
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -159,7 +159,9 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
 - The Android icon was seen on the Pixel and on an emulator's notification (Nov 22). Its generated file was edited by hand
   to drop an extra 16% inset (the artwork already sits in the safe area); re-running the icon tool puts the inset
   back, and it also changes an unrelated Xcode setting that should be reverted (`git checkout` the `.pbxproj`).
-- About has no privacy policy, terms or support links yet: the pages on peaceofmindapps.com don't exist. The
+- The privacy policy, terms and support pages are live at peaceofmindapps.com/aloft/ (Nov 22) and linked from
+  About and the paywall. They are plain-language drafts, not reviewed by a lawyer, and Aloft isn't linked from
+  the website's home page, apps page, footer or support form yet. The
   trademark owners named there (Novo Nordisk, Eli Lilly) are from memory and should be checked before release.
 - Shotsy side effects are confirmed as whole numbers 1–10 (Aloft now uses 1–10 too). Pain level is a 0–10 slider that
   starts at 0, in Shotsy and in Aloft.
