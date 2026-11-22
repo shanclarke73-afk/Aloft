@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
+import '../../backup/csv_export.dart';
 import '../../backup/backup_file.dart';
 import '../../backup/backup_files.dart';
 import '../../photos/photo_picker.dart';
@@ -63,6 +64,29 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       await ref.read(backupFilesProvider).share(file, origin: origin);
     } catch (_) {
       if (mounted) setState(() => _problem = "The backup couldn't be made. Check that your phone has free space.");
+    } finally {
+      // Don't leave a readable copy of someone's health data lying in temporary storage.
+      try {
+        folder.deleteSync(recursive: true);
+      } catch (_) {}
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _export() async {
+    final box = context.findRenderObject() as RenderBox?;
+    final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
+    setState(() {
+      _busy = true;
+      _problem = null;
+    });
+    final folder = Directory.systemTemp.createTempSync('aloft_export');
+    final file = File(p.join(folder.path, csvExportFileName(DateTime.now())));
+    try {
+      await ref.read(databaseProvider).writeCsvExport(to: file, weightUnit: ref.read(settingsProvider).weightUnit);
+      await ref.read(backupFilesProvider).share(file, origin: origin);
+    } catch (_) {
+      if (mounted) setState(() => _problem = "The export couldn't be made. Check that your phone has free space.");
     } finally {
       // Don't leave a readable copy of someone's health data lying in temporary storage.
       try {
@@ -221,6 +245,21 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
               key: const Key('restore-backup'),
               onPressed: _busy ? null : _restore,
               child: const Text('Restore from a backup file'),
+            ),
+            const SizedBox(height: 28),
+            const Text('Open in a spreadsheet', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 6),
+            Text(
+              'Your doses, weights, side effects and notes as CSV files, for Excel, Numbers or Google Sheets. '
+              'This is a copy to read, not a backup: it has no photos and can\'t be restored. It isn\'t locked, '
+              'so anyone who has the file can read it.',
+              style: TextStyle(fontSize: 15, height: 1.45, color: scheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              key: const Key('export-csv'),
+              onPressed: _busy ? null : _export,
+              child: const Text('Export as CSV'),
             ),
             if (_problem != null)
               Padding(

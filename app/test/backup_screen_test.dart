@@ -9,6 +9,7 @@ import 'package:aloft/data/photo_store.dart';
 import 'package:aloft/features/backup/backup_screen.dart';
 import 'package:aloft/photos/photo_picker.dart';
 import 'package:aloft/settings/settings.dart';
+import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -179,5 +180,24 @@ void main() {
     await tester.runAsync(() async => expect((await db.select(db.weights).get()).single.kg, 80));
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 5));
+  });
+
+  testWidgets('Export as CSV shares a zip of spreadsheet files and leaves no copy behind', (tester) async {
+    dir = Directory.systemTemp.createTempSync('aloft_backup_ui');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    files = FakeFiles(dir);
+    final (db, settings, photos) = await phone(tester, 'only');
+    await tester.runAsync(() => db.logWeight(kg: 89.4, measuredAt: DateTime(2026, 9, 4, 7)));
+    await show(tester, db, settings, photos);
+    // Says plainly that it is neither a backup nor locked.
+    expect(find.textContaining("can't be restored"), findsOneWidget);
+    expect(find.textContaining("isn't locked"), findsOneWidget);
+
+    await tapAndWait(tester, find.byKey(const Key('export-csv')));
+    expect(files.shared!.uri.pathSegments.last, startsWith('Aloft export '));
+    final names = ZipDecoder().decodeBytes(files.shared!.readAsBytesSync()).files.map((f) => f.name);
+    expect(names, ['doses.csv', 'weights.csv', 'side_effects.csv', 'notes.csv']);
+    expect(files.sharedFrom!.existsSync(), isFalse);
+    await tester.runAsync(db.close);
   });
 }

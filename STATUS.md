@@ -59,7 +59,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [ ] Step 6b-2: automatic backup to the person's own iCloud / Google Drive with snapshots, the "no backup in 7
       days" warning on Today, and restore during onboarding. Needs the iCloud capability, a Google sign-in setup
       and real phones.
-- [ ] CSV and PDF export (Pro, step 7).
+- [x] CSV export (Nov 22): More → Backup and restore → Export as CSV shares a zip of doses, weights, side
+      effects and notes. **Free for now**: the spec lists it as Pro, so gate it when Pro is built in step 7.
+      Measurements aren't in it (not built). Not opened in Excel, Numbers or Sheets yet.
+- [ ] PDF export (Pro, step 7).
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
@@ -90,6 +93,9 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   build blocks screenshots while "Hide screen in app switcher" is on, which also blocks the person's own).
 
 ## Not done / not verified
+- Added Nov 22 and seen only on an Android emulator: the goal line on the weight chart, goal and BMI lines,
+  adding and editing notes. Not seen on any device: editing a side effect, the import's "where do these shots
+  go?" choice, Export as CSV.
 - No trademark check.
 - Step 1 was run on the iPhone simulator only. Not yet tried: Face ID on a real iPhone, the lock on a real Android
   phone, and moving the encrypted data to a new phone.
