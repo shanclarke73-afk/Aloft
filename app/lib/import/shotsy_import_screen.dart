@@ -55,8 +55,49 @@ class ShotsyImportScreen extends ConsumerStatefulWidget {
 class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
   late final _forms = {for (final name in widget.file.medications) name: MedicationForm.brandPen};
   late final _strengths = {for (final name in widget.file.medications) name: TextEditingController()};
+
+  /// Medications already in Aloft, and for each name in the file the one its shots go to
+  /// (null for a new medication).
+  List<Medication> _existing = const [];
+  final _targets = <String, String?>{};
   ShotsyImportResult? _result;
   bool _importing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExisting();
+  }
+
+  Future<void> _loadExisting() async {
+    final db = ref.read(databaseProvider);
+    final existing = [
+      for (final m in await db.select(db.medications).get())
+        if (m.status != MedicationStatus.ended) m,
+    ];
+    if (!mounted) return;
+    setState(() {
+      _existing = existing;
+      for (final name in widget.file.medications) {
+        if (_sameName(name) != null) continue;
+        // One medication with the same ingredient is almost certainly the same thing under
+        // another name ("Zepbound" in Shotsy, "Tirzepatide" here). The person can change it.
+        final ingredient = ingredientFor(name).ingredient;
+        final alike = [
+          for (final m in existing)
+            if (ingredient != 'other' && m.activeIngredient == ingredient) m,
+        ];
+        _targets[name] = alike.length == 1 ? alike.single.id : null;
+      }
+    });
+  }
+
+  Medication? _sameName(String name) {
+    for (final m in _existing) {
+      if (m.name.toLowerCase() == name.toLowerCase()) return m;
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -72,6 +113,7 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
       for (final name in widget.file.medications)
         name: ShotsyMedicationChoice(
           form: _forms[name]!,
+          addToMedicationId: _targets[name],
           concentrationMgPerMl: _forms[name] == MedicationForm.compoundedVial
               ? parseAmount(_strengths[name]!.text)
               : null,
@@ -153,37 +195,63 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
                       ),
                     ),
                   ),
-                  for (final name in file.medications) ...[
-                    FieldLabel('$name: what was it?'),
-                    SegmentedButton<MedicationForm>(
-                      showSelectedIcon: false,
-                      segments: const [
-                        ButtonSegment(value: MedicationForm.brandPen, label: Text('Brand-name pen')),
-                        ButtonSegment(value: MedicationForm.compoundedVial, label: Text('Compounded vial')),
-                      ],
-                      selected: {_forms[name]!},
-                      onSelectionChanged: (s) => setState(() => _forms[name] = s.single),
-                    ),
-                    if (_forms[name] == MedicationForm.compoundedVial) ...[
-                      const FieldLabel('Strength in mg per mL (optional)'),
-                      NumberField(controller: _strengths[name]!, suffix: 'mg/mL'),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          'With the strength, Aloft can also show these shots in units. Without it they stay in mg. '
-                          'If your vials changed strength, leave it empty.',
-                          style: muted,
+                  for (final name in file.medications)
+                    if (_sameName(name) != null) ...[
+                      FieldLabel(name),
+                      Text('$name is already in Aloft, so its shots are added to it.', style: muted),
+                    ] else ...[
+                      if (_existing.isNotEmpty) ...[
+                        FieldLabel('$name: where do these shots go?'),
+                        RadioGroup<String?>(
+                          groupValue: _targets[name],
+                          onChanged: (id) => setState(() => _targets[name] = id),
+                          child: Column(
+                            children: [
+                              for (final m in _existing)
+                                RadioListTile<String?>(
+                                  key: Key('target-$name-${m.name}'),
+                                  contentPadding: EdgeInsets.zero,
+                                  dense: true,
+                                  value: m.id,
+                                  title: Text('Add to ${m.name}'),
+                                  subtitle: const Text('Already in Aloft. Its dose and schedule stay as they are.'),
+                                ),
+                              RadioListTile<String?>(
+                                key: Key('target-$name-new'),
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                value: null,
+                                title: const Text('A new medication'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
+                      if (_targets[name] == null) ...[
+                        FieldLabel('$name: what was it?'),
+                        SegmentedButton<MedicationForm>(
+                          showSelectedIcon: false,
+                          segments: const [
+                            ButtonSegment(value: MedicationForm.brandPen, label: Text('Brand-name pen')),
+                            ButtonSegment(value: MedicationForm.compoundedVial, label: Text('Compounded vial')),
+                          ],
+                          selected: {_forms[name]!},
+                          onSelectionChanged: (s) => setState(() => _forms[name] = s.single),
+                        ),
+                        if (_forms[name] == MedicationForm.compoundedVial) ...[
+                          const FieldLabel('Strength in mg per mL (optional)'),
+                          NumberField(controller: _strengths[name]!, suffix: 'mg/mL'),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              'With the strength, Aloft can also show these shots in units. Without it they stay in '
+                              'mg. If your vials changed strength, leave it empty.',
+                              style: muted,
+                            ),
+                          ),
+                        ],
+                      ],
                     ],
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(
-                        'If $name is already in Aloft, its shots are added to it and this answer isn\'t used.',
-                        style: muted,
-                      ),
-                    ),
-                  ],
                   const SizedBox(height: 20),
                   FilledButton(
                     key: const Key('import'),

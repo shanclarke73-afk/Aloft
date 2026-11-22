@@ -112,6 +112,36 @@ void main() {
     expect((await db.watchHistory().first).first.dose.volumeMl, 0.5);
   });
 
+  test('shots can be sent to a medication set up under another name, and a second import adds nothing', () async {
+    await db.addMedication(
+      const NewMedication(
+        name: 'Zepbound®',
+        activeIngredient: 'tirzepatide',
+        isGlp1: true,
+        form: MedicationForm.brandPen,
+        scheduleType: ScheduleType.weekly,
+        scheduleDays: [4],
+        doseAmount: 5,
+        doseUnit: DoseUnit.mg,
+      ),
+    );
+    final zepbound = (await db.watchMedications().first).single.medication;
+    final choices = {
+      'Tirzepatide': ShotsyMedicationChoice(form: MedicationForm.brandPen, addToMedicationId: zepbound.id),
+    };
+    final first = await db.importShotsy(parseShotsy(sampleShotsy)!, choices);
+    expect((first.medicationsAdded, first.shots), (0, 3));
+    final second = await db.importShotsy(parseShotsy(sampleShotsy)!, choices);
+    expect((second.medicationsAdded, second.shots), (0, 0));
+    final d = (await db.watchMedications().first).single;
+    expect((d.medication.name, d.usualDose!.prescribedDose), ('Zepbound®', 5));
+    expect((await db.select(db.doses).get()).every((dose) => dose.medicationId == zepbound.id), isTrue);
+
+    // Without pointing at it, the different name makes a second medication (the old behaviour).
+    final other = await db.importShotsy(parseShotsy(sampleShotsy)!, asPen);
+    expect((other.medicationsAdded, other.shots), (1, 3));
+  });
+
   test('names are matched to their ingredient', () {
     expect(ingredientFor('Compounded Tirzepatide').ingredient, 'tirzepatide');
     expect(ingredientFor('Zepbound').ingredient, 'tirzepatide');
