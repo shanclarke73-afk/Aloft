@@ -291,4 +291,43 @@ void main() {
     expect(photos.listSync().length, 2);
     expect((await db.loadSettings()).goalWeightKg, 70);
   });
+
+  test('the backup reminder waits for something worth losing, respects "Not now", and returns after a month', () {
+    final now = DateTime(2026, 11, 22, 9);
+    BackupNudge nudge({DateTime? last, DateTime? snoozed, int entries = 5}) =>
+        backupNudge(lastBackupAt: last, snoozedUntil: snoozed, entries: entries, now: now);
+    expect(nudge(entries: 4), BackupNudge.none);
+    expect(nudge(), BackupNudge.never);
+    expect(nudge(snoozed: now.add(const Duration(days: 3))), BackupNudge.none);
+    expect(nudge(snoozed: now.subtract(const Duration(minutes: 1))), BackupNudge.never);
+    expect(nudge(last: now.subtract(const Duration(days: 29))), BackupNudge.none);
+    expect(nudge(last: now.subtract(const Duration(days: 30))), BackupNudge.old);
+    expect(
+      nudge(last: now.subtract(const Duration(days: 90)), snoozed: now.add(const Duration(days: 1))),
+      BackupNudge.none,
+    );
+  });
+
+  test('when a backup was last saved belongs to the phone: a restore never brings it over', () async {
+    final (old, oldPhotos) = newPhone();
+    addTearDown(old.close);
+    await fill(old, oldPhotos);
+    await old.saveSettings(
+      AppSettingsTableCompanion(
+        lastBackupAt: Value(DateTime(2026, 11, 1)),
+        backupReminderSnoozedUntil: Value(DateTime(2027, 1, 1)),
+      ),
+    );
+    final file = File('${dir.path}/with-times.zip');
+    await old.writeBackup(to: file, photoFolder: oldPhotos);
+    final backup = await openBackup(file, currentSchemaVersion: old.schemaVersion);
+
+    final (phone, phonePhotos) = newPhone();
+    addTearDown(phone.close);
+    await phone.loadSettings(countryCode: 'US');
+    await phone.restoreBackup(backup, photoFolder: phonePhotos, replace: true);
+    final settings = await phone.loadSettings();
+    expect((settings.lastBackupAt, settings.backupReminderSnoozedUntil), (null, null));
+    expect(settings.weightUnit, WeightUnit.kg, reason: 'the rest of the settings still come over');
+  });
 }

@@ -104,6 +104,27 @@ Future<void> _unzipPhotos(String zipPath, String? password, String intoPath, Set
 
 String _platformName() => Platform.isIOS ? 'iPhone' : (Platform.isAndroid ? 'Android' : Platform.operatingSystem);
 
+/// What the Today reminder should say about backups, if anything.
+enum BackupNudge { none, never, old }
+
+/// How long a saved backup counts as recent, and how long "Not now" hides the reminder.
+const backupFreshFor = Duration(days: 30);
+const backupSnooze = Duration(days: 7);
+
+/// Whether to remind the person to save a backup file. Never before there is something
+/// worth losing ([entries] logged shots and weights), and never while snoozed.
+BackupNudge backupNudge({
+  required DateTime? lastBackupAt,
+  required DateTime? snoozedUntil,
+  required int entries,
+  required DateTime now,
+}) {
+  if (entries < 5) return BackupNudge.none;
+  if (snoozedUntil != null && now.isBefore(snoozedUntil)) return BackupNudge.none;
+  if (lastBackupAt == null) return BackupNudge.never;
+  return now.difference(lastBackupAt) >= backupFreshFor ? BackupNudge.old : BackupNudge.none;
+}
+
 extension BackupData on AloftDatabase {
   /// Parents before children, so rows can be put back in this order.
   List<TableInfo<Table, Object?>> get _backupTables => [
@@ -237,7 +258,15 @@ extension BackupData on AloftDatabase {
                 // choices, and whether the welcome screens are done, always stay as they are on this phone.
                 if (!replace) continue;
                 final keep = columns.where(
-                  (c) => !const {'id', 'app_lock', 'lock_after', 'hide_in_app_switcher', 'onboarding_done'}.contains(c),
+                  (c) => !const {
+                    'id',
+                    'app_lock',
+                    'lock_after',
+                    'hide_in_app_switcher',
+                    'onboarding_done',
+                    'last_backup_at',
+                    'backup_reminder_snoozed_until',
+                  }.contains(c),
                 );
                 if (keep.isEmpty) continue;
                 await customStatement('UPDATE "$name" SET ${keep.map((c) => '"$c" = ?').join(', ')}', [

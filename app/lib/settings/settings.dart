@@ -27,6 +27,18 @@ class SettingsController extends Notifier<AppSettings> {
   Future<void> finishOnboarding() => _save(const AppSettingsTableCompanion(onboardingDone: Value(true)));
   Future<void> setGoalAndHeight({required double? goalWeightKg, required double? heightCm}) =>
       _save(AppSettingsTableCompanion(goalWeightKg: Value(goalWeightKg), heightCm: Value(heightCm)));
+
+  /// A backup file was just handed to the share sheet.
+  Future<void> backupSaved({DateTime? now}) => _save(
+    AppSettingsTableCompanion(
+      lastBackupAt: Value(now ?? DateTime.now()),
+      backupReminderSnoozedUntil: const Value(null),
+    ),
+  );
+
+  /// "Not now" on the Today reminder.
+  Future<void> snoozeBackupReminder(DateTime until) =>
+      _save(AppSettingsTableCompanion(backupReminderSnoozedUntil: Value(until)));
   Future<void> setWeightUnit(WeightUnit unit) => _save(AppSettingsTableCompanion(weightUnit: Value(unit)));
   Future<void> setLengthUnit(LengthUnit unit) => _save(AppSettingsTableCompanion(lengthUnit: Value(unit)));
   Future<void> setAppearance(Appearance value) => _save(AppSettingsTableCompanion(appearance: Value(value)));

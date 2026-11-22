@@ -43,6 +43,11 @@ class AppSettingsTable extends Table {
   RealColumn get goalWeightKg => real().nullable()();
   RealColumn get heightCm => real().nullable()();
 
+  /// When a backup file was last handed to the share sheet, and how long "Not now" on the
+  /// Today reminder lasts. Both belong to this phone and never travel in a backup.
+  DateTimeColumn get lastBackupAt => dateTime().nullable()();
+  DateTimeColumn get backupReminderSnoozedUntil => dateTime().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -268,7 +273,7 @@ class AloftDatabase extends _$AloftDatabase {
   AloftDatabase(super.executor);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -305,6 +310,14 @@ class AloftDatabase extends _$AloftDatabase {
         bool has(String name) => columns.any((c) => c.read<String>('name') == name);
         if (!has('goal_weight_kg')) await m.addColumn(appSettingsTable, appSettingsTable.goalWeightKg);
         if (!has('height_cm')) await m.addColumn(appSettingsTable, appSettingsTable.heightCm);
+      }
+      if (from < 9) {
+        final columns = await customSelect('PRAGMA table_info(app_settings)').get();
+        bool has(String name) => columns.any((c) => c.read<String>('name') == name);
+        if (!has('last_backup_at')) await m.addColumn(appSettingsTable, appSettingsTable.lastBackupAt);
+        if (!has('backup_reminder_snoozed_until')) {
+          await m.addColumn(appSettingsTable, appSettingsTable.backupReminderSnoozedUntil);
+        }
       }
     },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),

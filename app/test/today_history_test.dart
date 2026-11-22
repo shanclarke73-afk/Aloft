@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aloft/data/body_store.dart';
 import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/medication_store.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/wait.dart';
 import 'medication_store_test.dart' show tirzepatideVial;
 
 void main() {
@@ -141,6 +143,45 @@ void main() {
     });
     await settle(tester);
     expect(find.text('Thu, Nov 19'), findsOneWidget);
+    await tester.runAsync(db.close);
+  });
+
+  testWidgets('Today suggests a backup file once there is history, and "Not now" hides it for a week', (tester) async {
+    await open(tester);
+    final now = DateTime(2026, 11, 19, 7);
+    final card = find.text('Save a backup file');
+    await shot(tester, DateTime(2026, 10, 22, 20));
+    await show(tester, TodayScreen(now: now));
+    // One shot isn't much to lose yet.
+    expect(card, findsNothing);
+
+    // The screen re-reads after each change; let it finish before the next write, or the two
+    // wait on each other.
+    for (final day in [29, 5, 12]) {
+      await shot(tester, DateTime(2026, day > 20 ? 10 : 11, day, 20));
+      await settle(tester);
+    }
+    await tester.runAsync(() => db.logWeight(kg: 80, measuredAt: DateTime(2026, 11, 18, 7)));
+    await settle(tester);
+    await pumpUntilFound(tester, card);
+    await tester.scrollUntilVisible(card, 200, scrollable: find.byType(Scrollable).first);
+    expect(card, findsOneWidget);
+    expect(find.textContaining('only on this phone'), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const Key('backup-reminder-later')));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.byKey(const Key('backup-reminder-later')));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    });
+    for (var i = 0; i < 200 && card.evaluate().isNotEmpty; i++) {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+      await tester.pump();
+    }
+    expect(card, findsNothing);
+    await tester.runAsync(() async {
+      expect((await db.loadSettings()).backupReminderSnoozedUntil, now.add(const Duration(days: 7)));
+    });
     await tester.runAsync(db.close);
   });
 }

@@ -68,6 +68,28 @@ void main() {
     await db.close();
   });
 
+  test('a version 8 database gains empty backup-reminder times', () async {
+    final dir = Directory.systemTemp.createTempSync('aloft_v8_db');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final key = generateDatabaseKey();
+    final file = File('${dir.path}/v8.db');
+    var db = openEncryptedDatabase(file, key);
+    await db.loadSettings(countryCode: 'US');
+    await db.saveSettings(const AppSettingsTableCompanion(goalWeightKg: Value(70)));
+    await db.close();
+    final raw = sqlite3.open(file.path);
+    applyDatabaseKey(raw, key);
+    raw.execute(
+      'ALTER TABLE app_settings DROP COLUMN last_backup_at; '
+      'ALTER TABLE app_settings DROP COLUMN backup_reminder_snoozed_until; PRAGMA user_version = 8;',
+    );
+    raw.close();
+    db = openEncryptedDatabase(file, key);
+    final settings = await db.loadSettings();
+    expect((settings.goalWeightKg, settings.lastBackupAt, settings.backupReminderSnoozedUntil), (70, null, null));
+    await db.close();
+  });
+
   testWidgets('goal and height are saved from More, and BMI appears once there is a height', (tester) async {
     final dir = Directory.systemTemp.createTempSync('aloft_goal');
     addTearDown(() => dir.deleteSync(recursive: true));
@@ -122,7 +144,11 @@ void main() {
       await tester.tap(find.byKey(const Key('goal-save')));
       await Future<void>.delayed(const Duration(milliseconds: 300));
     });
-    await tester.pumpAndSettle();
+    // Waits for the save to finish rather than for a fixed time.
+    for (var i = 0; i < 200 && find.byType(GoalScreen).evaluate().isNotEmpty; i++) {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+      await tester.pumpAndSettle();
+    }
     expect(find.byType(GoalScreen), findsNothing);
     late AppSettings saved;
     await tester.runAsync(() async => saved = await db.loadSettings());

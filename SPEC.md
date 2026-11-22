@@ -474,18 +474,25 @@ major releases.
 - Log shot / log dose: units ⇄ mL ⇄ mg, added ingredients, site rotation incl. back of arm, typed doses only
 - Vial/pen/pill setup **typed in (no scanning yet)**, compounded medication picker, supply + reorder reminders
 - Per-medication schedules and reminders
-- Weight (manual + Apple Health / Health Connect), side effects
-- Progress photos: capture with outline, gallery, side-by-side compare
+- Weight (manual entry), side effects
+- Progress photos: the phone's camera or the photo library, gallery, side-by-side compare
 - History (with edit/delete), medication level chart
 - **Import from Shotsy** (its CSV export, auto-detected; preview and duplicate check; see
   [docs/shotsy-import.md](docs/shotsy-import.md)), plus backup zip / JSON restore. **Moved into 1.0 at the owner's
   request** so the owner's Shotsy history comes over on day one.
-- App lock, automatic iCloud / Google Drive backup + restore (tested on a second device), JSON + backup-zip export
+- App lock, a backup file the person saves themselves (with restore), and a reminder on Today to save one
 - Settings (units, lock, reminders, Manage subscription, Restore purchases, Delete all data, disclaimer, terms,
   privacy, support) and My medications (change usual dose, finish/start vial, pause)
 - **Pro at launch** ($1.99/mo, $14.99/yr, $29.99 lifetime): second medication + PDF report for your provider
 
 ### Release 1.5: "Smarter"
+- **Moved from 1.0 on Nov 22, 2026** (owner's decision, to ship 1.0 sooner; each needs outside setup and
+  real-device testing):
+  - Automatic backup to the person's own iCloud / Google Drive, with snapshots and restore during onboarding
+  - Apple Health / Health Connect sync for weight
+  - Aloft's own camera with the faint outline of the last photo and the timer
+  Until automatic backup ships, nothing in the app or the store listing may promise it; 1.0 says data stays on
+  the phone with a backup file you save yourself.
 - Label / prescription scanning (on-device), built and tested against real labels
 - **General CSV import** from any app or spreadsheet: column-matching screen, preview, duplicate check
   (Shotsy-specific import ships in 1.0; this is the "any CSV" version, decided Nov 20, 2026)

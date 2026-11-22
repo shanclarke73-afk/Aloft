@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 21, 2026 (1.0 build: steps 1–4 done except Health sync; Shotsy import done)_
+_Last updated: November 22, 2026 (1.0: features built; left are Pro + PDF report, legal pages, store setup, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -32,13 +32,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Step 4b, level chart and Charts tab** (Nov 21): estimated level for injected semaglutide, tirzepatide,
       liraglutide and dulaglutide, with a projection to the next scheduled dose, always labelled as an estimate;
       weight chart; an estimated-level card on Today.
-- [ ] Step 4c: Apple Health / Health Connect (needs the HealthKit capability set up in Xcode and a real phone)
+- [ ] Step 4c: Apple Health / Health Connect. **Moved to 1.5** (Nov 22).
 - [x] **Step 5a, progress photos** (Nov 21): the Progress tab. Add photos with the phone's camera or choose older
       ones from the library (they keep the date stored inside the photo; pose and date can be changed). Gallery by
       day with that day's weight; Compare shows two days of one pose side by side with the time and weight change
       between them; full-screen view with zoom, edit and delete. Files are kept in the app's private folder, never
       the camera roll, and the chooser only hands Aloft the photos picked.
-- [ ] Step 5b: Aloft's own camera screen with the faint outline of the last photo and the 3 / 10 second timer;
+- [ ] Step 5b, **moved to 1.5** (Nov 22): Aloft's own camera screen with the faint outline of the last photo and the 3 / 10 second timer;
       the swipe slider and timelapse (both Pro); the monthly photo reminder and the Today "Photo check-in" card.
 - [x] **Step 6a, Shotsy import** (Nov 21): More → Import from Shotsy reads the CSV export, shows a preview (date
       range, counts, pen or compounded vial for each medication), and brings in shots, weights, day notes and
@@ -56,7 +56,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       from `brand/` with `dart run flutter_launcher_icons`); Inter for body text and Plus Jakarta Sans for headings
       and big numbers are bundled (open font license, no download at run time); More → About Aloft has the
       version, medical disclaimer, privacy summary, level-chart note, trademark notice and open-source licenses.
-- [ ] Step 6b-2: automatic backup to the person's own iCloud / Google Drive with snapshots, the "no backup in 7
+- [ ] Step 6b-2, **moved to 1.5** (Nov 22): automatic backup to the person's own iCloud / Google Drive with snapshots, the "no backup in 7
       days" warning on Today, and restore during onboarding. Needs the iCloud capability, a Google sign-in setup
       and real phones.
 - [x] CSV export (Nov 22): More → Backup and restore → Export as CSV shares a zip of doses, weights, side
@@ -75,8 +75,11 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 5. USPTO trademark search for "Aloft" (classes 9 and 44); pick a page (likely peaceofmindapps.com/aloft/).
 6. **Try the Shotsy import with the real export** on the Mac mini or a phone, and compare the totals with
    Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
-7. Build step 6b-2 (automatic iCloud / Google Drive backup), step 5b (outline camera), then Health sync, all of
-   which need a real phone.
+7. **Left for 1.0** (Nov 22): Pro with RevenueCat (second medication, PDF report, Manage subscription, Restore
+   purchases); the PDF report itself; privacy policy, terms and support pages, linked from About; store listings,
+   screenshots and declarations (health apps, "Alarms & reminders"); Android release signing; trademark check;
+   closed testing, including someone with a real iPhone. Automatic backup, Health sync and the outline camera
+   are now 1.5.
 
 ## Checked on a real phone
 On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installed over USB:
@@ -96,6 +99,10 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   build blocks screenshots while "Hide screen in app switcher" is on, which also blocks the person's own).
 
 ## Not done / not verified
+- Backup reminder (Nov 22): Today shows "Save a backup file" once there are 5 logged shots and weights and no
+  backup file has been saved from this phone, and "Time for a fresh backup" 30 days after the last one. "Not now"
+  hides it for 7 days. Aloft only knows a file was offered to the share sheet, not that it was kept. Not seen on
+  a screen yet.
 - Added Nov 22 and seen only on an Android emulator: the goal line on the weight chart, goal and BMI lines,
   adding and editing notes. Not seen on any device: editing a side effect, the import's "where do these shots
   go?" choice, Export as CSV.
