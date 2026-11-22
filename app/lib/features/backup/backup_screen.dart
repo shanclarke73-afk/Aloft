@@ -32,6 +32,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   final _password = TextEditingController();
   bool _includePhotos = true;
   bool _busy = false;
+  String? _savedTo;
   String? _problem;
 
   @override
@@ -40,12 +41,15 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     super.dispose();
   }
 
-  Future<void> _save() async {
+  /// [send] opens the share sheet; otherwise the file goes straight to the phone's set folder,
+  /// falling back to the share sheet where the phone has none.
+  Future<void> _save({bool send = false}) async {
     final box = context.findRenderObject() as RenderBox?;
     final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
     setState(() {
       _busy = true;
       _problem = null;
+      _savedTo = null;
     });
     final now = DateTime.now();
     // A folder of its own, so the file keeps its plain name.
@@ -61,9 +65,12 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             password: _password.text,
             now: now,
           );
-      await ref.read(backupFilesProvider).share(file, origin: origin);
-      // The share sheet doesn't say whether the file was kept, so this is "offered", not "saved".
+      final files = ref.read(backupFilesProvider);
+      final place = send ? null : await files.saveOnPhone(file);
+      // The share sheet doesn't say whether the file was kept, so there it is "offered", not "saved".
+      if (place == null) await files.share(file, origin: origin);
       await ref.read(settingsProvider.notifier).backupSaved();
+      if (mounted && place != null) setState(() => _savedTo = 'Saved to $place as ${p.basename(file.path)}.');
     } catch (_) {
       if (mounted) setState(() => _problem = "The backup couldn't be made. Check that your phone has free space.");
     } finally {
@@ -233,7 +240,20 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             FilledButton(
               key: const Key('save-backup'),
               onPressed: _busy ? null : _save,
-              child: Text(_busy ? 'Working…' : 'Save a backup file'),
+              child: Text(_busy ? 'Working…' : 'Save a backup to this phone'),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              key: const Key('send-backup'),
+              onPressed: _busy ? null : () => _save(send: true),
+              child: const Text('Send a backup somewhere else'),
+            ),
+            if (_savedTo != null) ...[const SizedBox(height: 12), InfoBox(_savedTo!, key: const Key('saved-to'))],
+            const SizedBox(height: 8),
+            Text(
+              'A backup kept only on this phone won\'t help if the phone is lost or broken. Every so often, '
+              'send one somewhere else too: your email, a computer, or a cloud drive.',
+              style: muted,
             ),
             const SizedBox(height: 28),
             const Text('Restore', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
