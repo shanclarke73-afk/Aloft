@@ -7,7 +7,9 @@ import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
 import 'package:aloft/data/photo_store.dart';
 import 'package:aloft/features/backup/backup_screen.dart';
+import 'package:aloft/features/report/report_screen.dart';
 import 'package:aloft/photos/photo_picker.dart';
+import 'package:aloft/pro/pro.dart';
 import 'package:aloft/settings/settings.dart';
 import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
@@ -70,17 +72,25 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> show(WidgetTester tester, AloftDatabase db, AppSettings settings, Directory photos) async {
+  Future<void> show(
+    WidgetTester tester,
+    AloftDatabase db,
+    AppSettings settings,
+    Directory photos, {
+    bool pro = true,
+    Widget screen = const BackupScreen(),
+  }) async {
     await tester.pumpWidget(
       ProviderScope(
         key: UniqueKey(),
         overrides: [
+          proProvider.overrideWithBuild((ref, notifier) => pro),
           databaseProvider.overrideWithValue(db),
           initialSettingsProvider.overrideWithValue(settings),
           photoFolderProvider.overrideWithValue(photos),
           backupFilesProvider.overrideWithValue(files),
         ],
-        child: const MaterialApp(home: BackupScreen()),
+        child: MaterialApp(home: screen),
       ),
     );
     await settle(tester);
@@ -244,6 +254,61 @@ void main() {
     await tapAndWait(tester, find.byKey(const Key('send-backup')));
     expect(files.shared, isNotNull);
     expect(find.byKey(const Key('saved-to')), findsNothing);
+    await tester.runAsync(db.close);
+  });
+
+  testWidgets('without Pro, Export as CSV shows what Pro is and exports nothing', (tester) async {
+    dir = Directory.systemTemp.createTempSync('aloft_backup_ui');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    files = FakeFiles(dir);
+    final (db, settings, photos) = await phone(tester, 'only');
+    await show(tester, db, settings, photos, pro: false);
+    final button = find.byKey(const Key('export-csv'));
+    await tester.ensureVisible(button);
+    await tester.pumpAndSettle();
+    expect(find.text('Export as CSV · Aloft Pro'), findsOneWidget);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    expect(find.byType(ProScreen), findsOneWidget);
+    expect(find.text('Report for your provider'), findsOneWidget);
+    // It explains; it doesn't sell. Nothing on it can be bought yet.
+    expect(find.textContaining("isn't available in this version"), findsOneWidget);
+    expect(find.byType(FilledButton), findsNothing);
+    expect(files.shared, isNull);
+    // Backups stay free.
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await tapAndWait(tester, find.byKey(const Key('send-backup')));
+    expect(files.shared, isNotNull);
+    await tester.runAsync(db.close);
+  });
+
+  testWidgets('the provider report is saved as a PDF for the chosen period and paper', (tester) async {
+    dir = Directory.systemTemp.createTempSync('aloft_backup_ui');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    files = FakeFiles(dir)..place = 'Documents › Aloft';
+    final (db, settings, photos) = await phone(tester, 'only');
+    await tester.runAsync(() async {
+      await db.logWeight(kg: 89.4, measuredAt: DateTime(2026, 9, 4, 7));
+      await db.logWeight(kg: 83.7, measuredAt: DateTime(2026, 11, 20, 7));
+    });
+    await show(tester, db, settings, photos, screen: ReportScreen(now: DateTime(2026, 11, 22, 9)));
+    expect(find.textContaining("isn't medical advice"), findsOneWidget);
+    expect(find.textContaining("isn't locked"), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('period-all')));
+    await tester.tap(find.text('A4'));
+    await tester.pump();
+    await tapAndWait(tester, find.byKey(const Key('report-save')));
+    await pumpUntilFound(tester, find.byKey(const Key('report-message')));
+    expect(find.text('Saved to Documents › Aloft as Aloft report 2026-11-22.pdf.'), findsOneWidget);
+    final bytes = files.savedOnPhone!.readAsBytesSync();
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+    expect(files.shared, isNull);
+
+    await tapAndWait(tester, find.byKey(const Key('report-send')));
+    await pumpUntilFound(tester, find.text('Send the report somewhere else'));
+    expect(files.shared!.path, endsWith('Aloft report 2026-11-22.pdf'));
     await tester.runAsync(db.close);
   });
 }

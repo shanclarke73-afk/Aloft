@@ -60,9 +60,20 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       days" warning on Today, and restore during onboarding. Needs the iCloud capability, a Google sign-in setup
       and real phones.
 - [x] CSV export (Nov 22): More → Backup and restore → Export as CSV shares a zip of doses, weights, side
-      effects and notes. **Free for now**: the spec lists it as Pro, so gate it when Pro is built in step 7.
+      effects and notes. Behind Pro since Nov 22.
       Measurements aren't in it (not built). Not opened in Excel, Numbers or Sheets yet.
-- [ ] PDF export (Pro, step 7).
+- [x] **PDF report and the Pro switch** (Nov 22): More → Report for your provider makes a PDF (real text; summary,
+      weight chart, dose history by step, side effects, notes; Letter or A4; last 3 / 6 / 12 months or everything)
+      and saves it to Documents › Aloft or the share sheet. It and CSV export are behind one Pro switch
+      (`proProvider`). **Purchases are not connected**, so in a normal build nobody can get Pro; the Pro screen says
+      so and has no buy button. Test builds pass `--dart-define=ALOFT_PRO=true`. Not in the report yet: the
+      estimated-level curve, choosing medications, measurements, photos, and bold text (the bundled font has one
+      weight). A step heading can be left alone at the foot of a page.
+- [ ] Connect purchases: RevenueCat project "Aloft" has the `pro` entitlement, Test Store products
+      `aloft_pro_monthly` ($1.99), `aloft_pro_yearly` ($14.99), `aloft_pro_lifetime` ($29.99) and a `default`
+      offering (set up Nov 22). Still needed: the real products in Play Console and App Store Connect, the store
+      connections in RevenueCat, the SDK in the app, a real paywall, Restore purchases, Manage subscription, and
+      the second-medication limit.
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).
