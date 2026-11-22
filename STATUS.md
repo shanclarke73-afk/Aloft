@@ -99,6 +99,10 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   build blocks screenshots while "Hide screen in app switcher" is on, which also blocks the person's own).
 
 ## Not done / not verified
+- Backup to a set folder (Nov 22): "Save a backup to this phone" writes to Documents › Aloft on Android (10 and
+  newer; older phones get the share sheet) and to Files › On My iPhone › Aloft on iPhone, with no chooser.
+  "Send a backup somewhere else" is the share sheet. The iPhone side has not been run at all, and files kept in
+  the app's own folder there are removed if the app is deleted.
 - Backup reminder (Nov 22): Today shows "Save a backup file" once there are 5 logged shots and weights and no
   backup file has been saved from this phone, and "Time for a fresh backup" 30 days after the last one. "Not now"
   hides it for 7 days. Aloft only knows a file was offered to the share sheet, not that it was kept. Not seen on

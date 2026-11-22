@@ -34,6 +34,17 @@ class FakeFiles implements BackupFiles {
 
   @override
   Future<File?> pick() async => toPick;
+
+  /// The phone's set folder, in words; null for a phone that has none.
+  String? place;
+  File? savedOnPhone;
+
+  @override
+  Future<String?> saveOnPhone(File file) async {
+    if (place == null) return null;
+    savedOnPhone = file.copySync('${keepIn.path}/on-phone-${file.uri.pathSegments.last}');
+    return place;
+  }
 }
 
 void main() {
@@ -205,6 +216,34 @@ void main() {
     final names = ZipDecoder().decodeBytes(files.shared!.readAsBytesSync()).files.map((f) => f.name);
     expect(names, ['doses.csv', 'weights.csv', 'side_effects.csv', 'notes.csv']);
     expect(files.sharedFrom!.existsSync(), isFalse);
+    await tester.runAsync(db.close);
+  });
+
+  testWidgets('a backup goes straight to the phone\'s folder without asking, or can be sent elsewhere', (tester) async {
+    dir = Directory.systemTemp.createTempSync('aloft_backup_ui');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    files = FakeFiles(dir)..place = 'Documents › Aloft';
+    final (db, settings, photos) = await phone(tester, 'only');
+    await tester.runAsync(() => db.logWeight(kg: 89.4, measuredAt: DateTime(2026, 9, 4, 7)));
+    await show(tester, db, settings, photos);
+    // Says that a copy on the phone alone isn't enough.
+    expect(find.textContaining("won't help if the phone is lost"), findsOneWidget);
+
+    await tapAndWait(tester, find.byKey(const Key('save-backup')));
+    await pumpUntilFound(tester, find.byKey(const Key('saved-to')));
+    expect(files.shared, isNull, reason: 'no share sheet');
+    final name = files.savedOnPhone!.uri.pathSegments.last.replaceFirst('on-phone-', '');
+    expect(find.text('Saved to Documents › Aloft as $name.'), findsOneWidget);
+    await tester.runAsync(() async {
+      // What landed there is a real backup, and it counts for the Today reminder.
+      final opened = await openBackup(files.savedOnPhone!, currentSchemaVersion: db.schemaVersion);
+      expect(opened.tables['weights']!.length, 1);
+      expect((await db.loadSettings()).lastBackupAt, isNotNull);
+    });
+
+    await tapAndWait(tester, find.byKey(const Key('send-backup')));
+    expect(files.shared, isNotNull);
+    expect(find.byKey(const Key('saved-to')), findsNothing);
     await tester.runAsync(db.close);
   });
 }
