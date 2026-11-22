@@ -113,6 +113,9 @@ void main() {
     expect(find.byType(HomeShell), findsOneWidget);
     expect(find.byType(OnboardingScreen), findsNothing);
     expect(find.text('Add your medication'), findsOneWidget);
+    // Weight, notes and photos don't have to wait for a medication.
+    expect(find.text('Add your starting weight'), findsOneWidget);
+    expect(find.byTooltip('Add to your log'), findsOneWidget);
     await tester.runAsync(() async {
       expect((await db.loadSettings()).onboardingDone, isTrue);
       expect(await db.select(db.weights).get(), isEmpty);
