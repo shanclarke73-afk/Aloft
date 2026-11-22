@@ -267,4 +267,28 @@ void main() {
     final result = await phone.restoreBackup(sneaky, photoFolder: phonePhotos, replace: false);
     expect((result.photos, result.added['progress_photos']), (0, 0));
   });
+
+  test('deleting all data empties the phone but keeps its settings, and a backup brings it back', () async {
+    final (db, photos) = newPhone();
+    addTearDown(db.close);
+    await fill(db, photos);
+    await db.saveSettings(const AppSettingsTableCompanion(goalWeightKg: Value(70), heightCm: Value(170)));
+    final file = File('${dir.path}/before-delete.zip');
+    await db.writeBackup(to: file, photoFolder: photos);
+
+    await db.deleteAllData(photoFolder: photos);
+    expect((await counts(db)).values.toSet(), {0});
+    expect(photos.existsSync(), isFalse);
+    final settings = await db.loadSettings();
+    expect((settings.weightUnit, settings.appLock), (WeightUnit.kg, true));
+    expect((settings.goalWeightKg, settings.heightCm), (null, null));
+    // Nothing to delete is fine too.
+    await db.deleteAllData(photoFolder: photos);
+
+    final backup = await openBackup(file, currentSchemaVersion: db.schemaVersion);
+    await db.restoreBackup(backup, photoFolder: photos, replace: true);
+    expect(await counts(db), full);
+    expect(photos.listSync().length, 2);
+    expect((await db.loadSettings()).goalWeightKg, 70);
+  });
 }

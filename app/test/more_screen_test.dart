@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:aloft/app.dart';
 import 'package:aloft/data/database.dart';
 import 'package:aloft/data/encrypted_database.dart';
+import 'package:aloft/data/body_store.dart';
+import 'package:aloft/photos/photo_picker.dart';
 import 'package:aloft/security/app_lock.dart';
 import 'package:aloft/settings/settings.dart';
 import 'package:drift/drift.dart' show Value;
@@ -59,5 +61,71 @@ void main() {
     expect(find.text('Aloft is locked'), findsOneWidget);
 
     await tester.runAsync(db.close);
+  });
+
+  testWidgets('Delete all my data asks first, and cancelling keeps everything', (tester) async {
+    final dir = Directory.systemTemp.createTempSync('aloft_widget');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    late AloftDatabase db;
+    late AppSettings settings;
+    await tester.runAsync(() async {
+      db = openEncryptedDatabase(File('${dir.path}/aloft.db'), generateDatabaseKey());
+      await db.loadSettings(countryCode: 'US');
+      settings = await db.saveSettings(
+        const AppSettingsTableCompanion(onboardingDone: Value(true), goalWeightKg: Value(70)),
+      );
+      await db.logWeight(kg: 80, measuredAt: DateTime(2026, 11, 20));
+    });
+    final lock = AppLock(authenticator: FakeAuthenticator(), enabled: false, lockAfter: LockAfter.immediately);
+    await tester.runAsync(lock.detectMethod);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          initialSettingsProvider.overrideWithValue(settings),
+          appLockProvider.overrideWithValue(lock),
+          photoFolderProvider.overrideWithValue(Directory('${dir.path}/photos')),
+        ],
+        child: const AloftApp(),
+      ),
+    );
+    await tester.tap(find.text('More'));
+    await tester.pumpAndSettle();
+    final row = find.byKey(const Key('delete-all-data'));
+    Future<int> weights() async {
+      late int n;
+      await tester.runAsync(() async => n = (await db.select(db.weights).get()).length);
+      return n;
+    }
+
+    // Taps run for real, so the database work that follows a tap isn't stuck on the test clock.
+    Future<void> tap(Finder target) async {
+      await tester.runAsync(() async {
+        await tester.tap(target);
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+      });
+      for (var i = 0; i < 8; i++) {
+        await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 30)));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+    }
+
+    await tester.scrollUntilVisible(row, 200, scrollable: find.byType(Scrollable).last);
+    await tap(row);
+    expect(find.textContaining("It can't be undone"), findsOneWidget);
+    await tap(find.text('Cancel'));
+    expect(await weights(), 1);
+
+    await tap(row);
+    await tap(find.byKey(const Key('confirm-delete-all')));
+    expect(await weights(), 0);
+    expect(find.text('All your data was deleted from this phone.'), findsOneWidget);
+    await tester.runAsync(() async => expect((await db.loadSettings()).goalWeightKg, isNull));
+    // Still past the welcome screens.
+    expect(find.text('Delete all my data'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 5));
   });
 }
