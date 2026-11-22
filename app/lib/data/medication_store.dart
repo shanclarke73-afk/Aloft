@@ -129,6 +129,18 @@ extension MedicationStore on AloftDatabase {
   }
 
   /// Medications that aren't ended, oldest first, kept up to date as doses are logged.
+  /// Names of the extra ingredients already entered on any vial, newest vial first, so a
+  /// name typed once can be picked next time.
+  Future<List<String>> usedAdditiveNames() async {
+    final rows = await (select(supplies)..orderBy([(s) => OrderingTerm.desc(s.id)])).get();
+    final seen = <String>{};
+    return [
+      for (final supply in rows)
+        for (final additive in supply.additives)
+          if (seen.add(additive.name.toLowerCase())) additive.name,
+    ];
+  }
+
   Stream<List<MedicationDetail>> watchMedications() {
     final query = select(medications)
       ..where((m) => m.status.equalsValue(MedicationStatus.ended).not())
