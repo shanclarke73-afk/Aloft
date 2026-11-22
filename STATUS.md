@@ -86,7 +86,10 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   the quiet "Log a shot early" button.
 - Not yet: a reminder was not seen on the phone. On an Android 17 emulator the same build schedules and shows it
   (a weekly 11:45 reminder appeared at 11:48), so the next step is to read the phone's permission and alarm
-  state over USB. Android only promises "within a few minutes" unless the exact-alarm permission is added.
+  state over USB. Read Nov 22: notifications were allowed and the reminder was set, for 11:35 PM rather than AM.
+  Android gave it a one-hour delivery window, so Aloft now declares `SCHEDULE_EXACT_ALARM` and schedules exactly
+  when the person has switched on "Alarms & reminders" (More offers the setting); otherwise it falls back to the
+  old timing. **Before release:** declare the permission on the Play Console form and confirm the current policy.
 - Nothing has run on a real iPhone. Shannon has no iPhone; a TestFlight tester or a borrowed phone is needed.
 - The phone build is signed with the debug key, so it must be uninstalled before a Play Store build goes on.
 - To see the Android screen on an emulator, build with `--dart-define=ALOFT_ALLOW_SCREENSHOTS=true` (the normal

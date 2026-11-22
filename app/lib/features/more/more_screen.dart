@@ -86,6 +86,30 @@ class MoreScreen extends ConsumerWidget {
                 warning: true,
               ),
             ),
+          // Allowed, but the phone may hold reminders back: offer the setting that makes them punctual.
+          if (ref.watch(notificationsAllowedProvider).value != false &&
+              ref.watch(remindersOnTimeProvider).value == false &&
+              (settings.remindShots || settings.remindReorder || settings.remindUseBy))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const InfoBox(
+                    'Your phone may deliver reminders late, sometimes by up to an hour. To get them on time, '
+                    'allow "Alarms & reminders" for Aloft.',
+                  ),
+                  const SizedBox(height: 8),
+                  // An outlined button: as plain text it didn't read as something to tap.
+                  OutlinedButton.icon(
+                    key: const Key('on-time-reminders'),
+                    onPressed: () => ref.read(remindersProvider).askForOnTime(),
+                    icon: const Icon(Icons.open_in_new, size: 18),
+                    label: const Text('Open the setting'),
+                  ),
+                ],
+              ),
+            ),
           _Section(
             children: [
               SwitchListTile(
