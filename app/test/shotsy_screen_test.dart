@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/wait.dart';
 import 'shotsy_file_test.dart' show sampleShotsy;
 
 void main() {
@@ -46,7 +47,7 @@ void main() {
       await tester.tap(import);
       await Future<void>.delayed(const Duration(milliseconds: 400));
     });
-    await tester.pump();
+    await pumpUntilFound(tester, find.textContaining('Imported 3 shots'));
     expect(find.textContaining('Imported 3 shots, 3 weights, 1 note and 3 side effects.'), findsOneWidget);
     expect(find.textContaining('Check the dose and schedule'), findsOneWidget);
     late Medication medication;
@@ -105,7 +106,7 @@ void main() {
       await tester.tap(import);
       await Future<void>.delayed(const Duration(milliseconds: 400));
     });
-    await tester.pump();
+    await pumpUntilFound(tester, find.textContaining('Imported 3 shots'));
     expect(find.textContaining('Imported 3 shots'), findsOneWidget);
     late List<Medication> medications;
     await tester.runAsync(() async => medications = await db.select(db.medications).get());

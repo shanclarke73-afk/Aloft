@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/wait.dart';
 import 'photos_test.dart' show onePixel;
 
 /// Stands in for the share sheet and the file chooser. Keeps a copy of what was shared,
@@ -136,7 +137,7 @@ void main() {
     // The restore starts once the dialog has closed, so let it close before waiting on the file work.
     await tester.tap(find.byKey(const Key('confirm-replace')));
     await tester.pumpAndSettle();
-    await settle(tester, rounds: 40);
+    await pumpUntilFound(tester, find.text('Restored 2 weights, 1 photo.'));
     expect(find.text('Restored 2 weights, 1 photo.'), findsOneWidget);
 
     await tester.runAsync(() async {
