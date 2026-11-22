@@ -97,7 +97,14 @@ class PrivacyCover extends StatelessWidget {
         child: Text(
           'Aloft',
           textDirection: TextDirection.ltr,
-          style: TextStyle(fontFamily: displayFont, fontSize: 34, fontWeight: FontWeight.w800, color: Colors.white),
+          style: TextStyle(
+            fontFamily: displayFont,
+            fontSize: 34,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            // Outside any Material, text is drawn with yellow underlines unless told otherwise.
+            decoration: TextDecoration.none,
+          ),
         ),
       ),
     );
