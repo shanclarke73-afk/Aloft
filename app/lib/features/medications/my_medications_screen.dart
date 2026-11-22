@@ -292,13 +292,14 @@ class _MedicationCard extends ConsumerWidget {
         final value => formatNumber(value, 2),
       },
     );
+    final strengthPer = TextEditingController(text: '1');
     final lot = TextEditingController();
     DateTime? useBy;
     return _sheet(
       context,
       title: isPill ? 'Start new bottle' : 'Start new vial',
       builder: (context, setState) {
-        final newStrength = parseAmount(strength.text);
+        final newStrength = isPill ? parseAmount(strength.text) : vialStrength(strength.text, strengthPer.text);
         final usual = detail.usualDose;
         final oldStrength = old?.concentrationMgPerMl;
         // SPEC section 5: a changed strength is shown as a conversion, never as an instruction.
@@ -322,13 +323,22 @@ class _MedicationCard extends ConsumerWidget {
         }
         final date = MaterialLocalizations.of(context);
         return [
-          FieldLabel(isPill ? 'Strength per pill' : 'Strength (mg per mL)'),
-          NumberField(
-            key: const Key('newStrength'),
-            controller: strength,
-            suffix: isPill ? 'mg' : 'mg/mL',
-            onChanged: (_) => setState(() {}),
-          ),
+          FieldLabel(isPill ? 'Strength per pill' : 'Strength, as printed on your label'),
+          if (isPill)
+            NumberField(
+              key: const Key('newStrength'),
+              controller: strength,
+              suffix: 'mg',
+              onChanged: (_) => setState(() {}),
+            )
+          else
+            VialStrengthField(
+              mg: strength,
+              perMl: strengthPer,
+              mgKey: const Key('newStrength'),
+              perMlKey: const Key('newStrengthPer'),
+              onChanged: (_) => setState(() {}),
+            ),
           FieldLabel(isPill ? 'Pills in the bottle (optional)' : 'Vial size'),
           NumberField(controller: size, suffix: isPill ? 'tablets' : 'mL', onChanged: (_) => setState(() {})),
           if (!isPill) ...[
