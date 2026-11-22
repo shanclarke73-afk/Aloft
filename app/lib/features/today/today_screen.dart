@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../backup/backup_file.dart';
+import '../backup/backup_screen.dart';
 import '../body/edit_entry_screens.dart';
 import '../progress/add_photos_screen.dart';
 
@@ -51,7 +53,12 @@ class TodayScreen extends ConsumerWidget {
           if (all.isEmpty) {
             return ListView(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
-              children: const [_NoMedication(), SizedBox(height: 12), WeightCard()],
+              children: [
+                const _NoMedication(),
+                const SizedBox(height: 12),
+                const WeightCard(),
+                BackupReminderCard(now: at),
+              ],
             );
           }
           final active = [
@@ -80,6 +87,7 @@ class TodayScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
               ],
               const WeightCard(),
+              BackupReminderCard(now: at),
             ],
           );
         },
@@ -515,6 +523,70 @@ class LevelCard extends StatelessWidget {
             ),
             Text('Not a blood level. See Charts for the curve.', style: muted),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A calm nudge to save a backup file, since nothing is backed up automatically. Shown only
+/// once there is something worth losing, and "Not now" hides it for a week.
+class BackupReminderCard extends ConsumerWidget {
+  const BackupReminderCard({super.key, this.now});
+  final DateTime? now;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheme = Theme.of(context).colorScheme;
+    final settings = ref.watch(settingsProvider);
+    final at = now ?? DateTime.now();
+    final nudge = backupNudge(
+      lastBackupAt: settings.lastBackupAt,
+      snoozedUntil: settings.backupReminderSnoozedUntil,
+      entries: (ref.watch(historyProvider).value?.length ?? 0) + (ref.watch(weightsProvider).value?.length ?? 0),
+      now: at,
+    );
+    if (nudge == BackupNudge.none) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                nudge == BackupNudge.never ? 'Save a backup file' : 'Time for a fresh backup',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                nudge == BackupNudge.never
+                    ? 'Your history is only on this phone. A backup file kept somewhere else means a lost or '
+                          'broken phone doesn\'t take it with it.'
+                    : 'Your last backup file was saved ${formatMonthDay(context, settings.lastBackupAt!, now: at)}. '
+                          'Anything logged since is only on this phone.',
+                style: TextStyle(fontSize: 14, height: 1.4, color: scheme.onSurfaceVariant),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  FilledButton.tonal(
+                    key: const Key('backup-reminder-save'),
+                    onPressed: () =>
+                        Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
+                    child: const Text('Save a backup'),
+                  ),
+                  const SizedBox(width: 8),
+                  OutlinedButton(
+                    key: const Key('backup-reminder-later'),
+                    onPressed: () => ref.read(settingsProvider.notifier).snoozeBackupReminder(at.add(backupSnooze)),
+                    child: const Text('Not now'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

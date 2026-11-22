@@ -109,6 +109,12 @@ void main() {
     expect(files.shared!.path, matches(RegExp(r'Aloft backup \d{4}-\d{2}-\d{2}\.zip$')));
     // The screen's own temporary copy is gone once the share sheet closes.
     expect(files.sharedFrom!.existsSync(), isFalse);
+    // Remembered, so Today's reminder to save a backup stays quiet for a while.
+    await tester.runAsync(() async {
+      final saved = (await oldDb.loadSettings()).lastBackupAt;
+      expect(saved, isNotNull);
+      expect(DateTime.now().difference(saved!).inMinutes, 0);
+    });
 
     // The new phone already has one weight of its own.
     final (newDb, newSettings, newPhotos) = await phone(tester, 'new');

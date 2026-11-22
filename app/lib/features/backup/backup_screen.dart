@@ -62,6 +62,8 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             now: now,
           );
       await ref.read(backupFilesProvider).share(file, origin: origin);
+      // The share sheet doesn't say whether the file was kept, so this is "offered", not "saved".
+      await ref.read(settingsProvider.notifier).backupSaved();
     } catch (_) {
       if (mounted) setState(() => _problem = "The backup couldn't be made. Check that your phone has free space.");
     } finally {
