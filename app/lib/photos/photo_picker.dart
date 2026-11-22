@@ -1,3 +1,5 @@
+import '../security/app_lock.dart';
+
 import 'dart:io';
 
 import 'package:exif/exif.dart';
@@ -31,6 +33,10 @@ abstract class PhotoPicker {
 /// Uses the phone's own camera and photo chooser. Nothing is added to the camera roll, and
 /// the chooser hands over only the photos picked, so Aloft never sees the rest of the library.
 class DevicePhotoPicker implements PhotoPicker {
+  DevicePhotoPicker(this._lock);
+
+  /// The camera and the chooser cover Aloft; coming back from them shouldn't ask for the lock.
+  final AppLock _lock;
   final _picker = ImagePicker();
 
   // Big enough to zoom in on, small enough that years of photos still fit in a backup.
@@ -40,11 +46,13 @@ class DevicePhotoPicker implements PhotoPicker {
   @override
   Future<PickedPhoto?> fromCamera() async {
     try {
-      final shot = await _picker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: _maxSide,
-        maxHeight: _maxSide,
-        imageQuality: _quality,
+      final shot = await _lock.awayOnPurpose(
+        () => _picker.pickImage(
+          source: ImageSource.camera,
+          maxWidth: _maxSide,
+          maxHeight: _maxSide,
+          imageQuality: _quality,
+        ),
       );
       return shot == null ? null : PickedPhoto(File(shot.path));
     } on PlatformException {
@@ -54,7 +62,9 @@ class DevicePhotoPicker implements PhotoPicker {
 
   @override
   Future<List<PickedPhoto>> fromLibrary() async {
-    final chosen = await _picker.pickMultiImage(maxWidth: _maxSide, maxHeight: _maxSide, imageQuality: _quality);
+    final chosen = await _lock.awayOnPurpose(
+      () => _picker.pickMultiImage(maxWidth: _maxSide, maxHeight: _maxSide, imageQuality: _quality),
+    );
     return [for (final x in chosen) PickedPhoto(File(x.path), takenAt: await _dateInside(File(x.path)))];
   }
 

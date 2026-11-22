@@ -72,7 +72,12 @@ class AppLock extends ChangeNotifier {
   bool _locked;
   bool _authenticating = false;
   DateTime? _backgroundedAt;
+  int _awayOnPurpose = 0;
   String methodName = 'passcode';
+
+  /// How long Aloft's own camera, photo chooser, file chooser or share sheet can stay open
+  /// before coming back asks for the lock again.
+  static const awayOnPurposeLimit = Duration(minutes: 5);
 
   bool get enabled => _enabled;
   bool get locked => _locked;
@@ -85,7 +90,7 @@ class AppLock extends ChangeNotifier {
   /// The app left the screen. The system's own Face ID sheet also sends the app to the
   /// background briefly, so that doesn't count.
   void onBackground() {
-    if (_authenticating) return;
+    if (_authenticating || _awayOnPurpose > 0) return;
     _backgroundedAt ??= _now();
     if (_enabled && !_locked && lockAfter == LockAfter.immediately) {
       _locked = true;
@@ -99,6 +104,25 @@ class AppLock extends ChangeNotifier {
     if (_enabled && !_locked && since != null && _now().difference(since) >= const Duration(minutes: 1)) {
       _locked = true;
       notifyListeners();
+    }
+  }
+
+  /// Runs something that covers Aloft with a screen the person asked for from inside the
+  /// app: the camera, the photo or file chooser, the share sheet. The phone reports that as
+  /// leaving the app, but coming straight back shouldn't ask for the lock again. Staying
+  /// away longer than [awayOnPurposeLimit] still locks.
+  Future<T> awayOnPurpose<T>(Future<T> Function() task) async {
+    final started = _now();
+    _awayOnPurpose++;
+    try {
+      return await task();
+    } finally {
+      _awayOnPurpose--;
+      _backgroundedAt = null;
+      if (_enabled && !_locked && _now().difference(started) >= awayOnPurposeLimit) {
+        _locked = true;
+        notifyListeners();
+      }
     }
   }
 
