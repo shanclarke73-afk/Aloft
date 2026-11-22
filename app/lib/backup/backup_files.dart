@@ -21,6 +21,10 @@ abstract class BackupFiles {
   /// where. Returns that place in words ("Documents › Aloft"), or null when the phone has no
   /// such place or the copy failed, so the caller can fall back to the share sheet.
   Future<String?> saveOnPhone(File file);
+
+  /// Opens the file [saveOnPhone] last saved, in the phone's own viewer for it. Returns false
+  /// when there is nothing to open or nothing on the phone can show it.
+  Future<bool> openLastSaved();
 }
 
 class DeviceBackupFiles implements BackupFiles {
@@ -52,6 +56,21 @@ class DeviceBackupFiles implements BackupFiles {
 
   static const _files = MethodChannel('aloft/files');
 
+  ({String uri, String mime})? _lastSaved;
+
+  @override
+  Future<bool> openLastSaved() async {
+    final saved = _lastSaved;
+    if (saved == null || !Platform.isAndroid) return false;
+    try {
+      // The viewer covers Aloft; coming back from a look at the file shouldn't ask for the lock.
+      _lock.expectLeaving();
+      return await _files.invokeMethod<bool>('view', {'uri': saved.uri, 'mime': saved.mime}) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static String _mime(File file) => file.path.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'application/zip';
 
   @override
@@ -60,12 +79,13 @@ class DeviceBackupFiles implements BackupFiles {
     try {
       if (Platform.isAndroid) {
         // Documents/Aloft through the phone's media store: no chooser and no storage permission.
-        final saved = await _files.invokeMethod<bool>('saveToDocuments', {
+        final uri = await _files.invokeMethod<String>('saveToDocuments', {
           'path': file.path,
           'name': name,
           'mime': _mime(file),
         });
-        return saved == true ? 'Documents › Aloft' : null;
+        _lastSaved = uri == null ? null : (uri: uri, mime: _mime(file));
+        return uri == null ? null : 'Documents › Aloft';
       }
       if (Platform.isIOS) {
         // The app's Documents folder, which the Files app shows as "On My iPhone › Aloft".

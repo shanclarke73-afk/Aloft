@@ -134,4 +134,44 @@ void main() {
     });
     expect(lock.locked, isTrue);
   });
+
+  test('opening a saved report in another app does not lock, unless it stays open a long time', () async {
+    var now = DateTime(2026, 11, 22, 9);
+    final lock = AppLock(
+      authenticator: FakeAuthenticator(),
+      enabled: true,
+      lockAfter: LockAfter.immediately,
+      clock: () => now,
+    );
+    await lock.unlock();
+
+    lock.expectLeaving();
+    lock.onBackground();
+    lock.onBackground(); // The phone reports leaving twice (hidden, then paused).
+    expect(lock.locked, isFalse);
+    now = now.add(const Duration(minutes: 2));
+    lock.onForeground();
+    expect(lock.locked, isFalse);
+
+    // The allowance is used up: the next time the app leaves, it locks as usual.
+    lock.onBackground();
+    expect(lock.locked, isTrue);
+    await lock.unlock();
+    lock.onForeground();
+
+    // Expected but never left (no viewer opened): leaving later is an ordinary leave.
+    lock.expectLeaving();
+    now = now.add(const Duration(minutes: 1));
+    lock.onBackground();
+    expect(lock.locked, isTrue);
+    await lock.unlock();
+    lock.onForeground();
+
+    // Left sitting in the viewer: locked on the way back.
+    lock.expectLeaving();
+    lock.onBackground();
+    now = now.add(AppLock.awayOnPurposeLimit);
+    lock.onForeground();
+    expect(lock.locked, isTrue);
+  });
 }

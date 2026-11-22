@@ -78,7 +78,17 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
       final files = ref.read(backupFilesProvider);
       final place = send ? null : await files.saveOnPhone(file);
       if (place == null) await files.share(file, origin: origin);
-      if (mounted && place != null) setState(() => _message = 'Saved to $place as ${p.basename(file.path)}.');
+      if (place != null) {
+        // Straight into the phone's PDF viewer, so the report can be looked over before it is sent.
+        final opened = await files.openLastSaved();
+        if (mounted) {
+          setState(
+            () => _message =
+                'Saved to $place as ${p.basename(file.path)}.'
+                '${opened ? '' : ' Open it from your Files app.'}',
+          );
+        }
+      }
     } catch (_) {
       if (mounted) {
         setState(() {

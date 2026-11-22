@@ -47,6 +47,17 @@ class FakeFiles implements BackupFiles {
     savedOnPhone = file.copySync('${keepIn.path}/on-phone-${file.uri.pathSegments.last}');
     return place;
   }
+
+  /// Whether the phone has something that can show the file.
+  bool canOpen = true;
+  int opened = 0;
+
+  @override
+  Future<bool> openLastSaved() async {
+    if (savedOnPhone == null || !canOpen) return false;
+    opened++;
+    return true;
+  }
 }
 
 void main() {
@@ -305,6 +316,15 @@ void main() {
     final bytes = files.savedOnPhone!.readAsBytesSync();
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
     expect(files.shared, isNull);
+    // It opens in the phone's viewer straight away.
+    expect(files.opened, 1);
+
+    // A phone with nothing to show a PDF says where to find it instead.
+    files.canOpen = false;
+    await tapAndWait(tester, find.byKey(const Key('report-save')));
+    await pumpUntilFound(tester, find.textContaining('Open it from your Files app.'));
+    expect(find.textContaining('Open it from your Files app.'), findsOneWidget);
+    expect(files.opened, 1);
 
     await tapAndWait(tester, find.byKey(const Key('report-send')));
     await pumpUntilFound(tester, find.text('Send the report somewhere else'));
