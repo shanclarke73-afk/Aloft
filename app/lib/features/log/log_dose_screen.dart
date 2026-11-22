@@ -407,6 +407,8 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
       SnackBar(
         duration: const Duration(seconds: 10),
         content: Text(_isPill ? 'Dose deleted' : 'Shot deleted'),
+        // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
+        persist: false,
         action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreDose(dose)),
       ),
     );

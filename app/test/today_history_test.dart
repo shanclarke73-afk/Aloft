@@ -132,6 +132,8 @@ void main() {
     await settle(tester);
     expect(find.text('Thu, Nov 19'), findsNothing);
     expect(find.text('Shot deleted'), findsOneWidget);
+    // The message leaves on its own after a few seconds instead of waiting to be dismissed.
+    expect(tester.widget<SnackBar>(find.byType(SnackBar)).persist, isFalse);
 
     await tester.runAsync(() async {
       await tester.tap(find.text('Undo'));

@@ -83,6 +83,8 @@ class _LogWeightScreenState extends ConsumerState<LogWeightScreen> {
       SnackBar(
         duration: const Duration(seconds: 10),
         content: const Text('Weight deleted'),
+        // With an action, Flutter keeps a message up until it's dismissed; Undo should leave on its own.
+        persist: false,
         action: SnackBarAction(label: 'Undo', onPressed: () => db.restoreWeight(weight)),
       ),
     );
