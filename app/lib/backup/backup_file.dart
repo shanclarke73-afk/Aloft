@@ -118,6 +118,20 @@ extension BackupData on AloftDatabase {
     progressPhotos,
   ];
 
+  /// Deletes everything the person has entered: medications, shots, weights, side effects,
+  /// notes, photos and their files, the goal weight and height. Units, reminder switches and
+  /// the lock stay, and the welcome screens are not shown again. Cannot be undone.
+  Future<void> deleteAllData({required Directory photoFolder}) async {
+    await transaction(() async {
+      for (final table in _backupTables.reversed) {
+        if (table != appSettingsTable) await customStatement('DELETE FROM "${table.actualTableName}"');
+      }
+      await customStatement('UPDATE "app_settings" SET "goal_weight_kg" = NULL, "height_cm" = NULL');
+    });
+    markTablesUpdated(allTables);
+    if (photoFolder.existsSync()) photoFolder.deleteSync(recursive: true);
+  }
+
   /// Every row of every table, as stored. One consistent moment: nothing can change part-way.
   Future<Map<String, List<Map<String, Object?>>>> _dump() {
     return transaction(() async {

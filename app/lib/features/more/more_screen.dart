@@ -5,9 +5,11 @@ import '../about/about_screen.dart';
 import '../backup/backup_screen.dart';
 import '../body/goal_screen.dart';
 
+import '../../backup/backup_file.dart';
 import '../../data/database.dart';
 import '../../import/shotsy_import_screen.dart';
 import '../../security/app_lock.dart';
+import '../../photos/photo_picker.dart';
 import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../medications/my_medications_screen.dart';
@@ -61,6 +63,12 @@ class MoreScreen extends ConsumerWidget {
                 subtitle: const Text('Bring your shots, weights and notes from Shotsy\'s CSV export'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => pickShotsyFile(context),
+              ),
+              ListTile(
+                key: const Key('delete-all-data'),
+                title: Text('Delete all my data', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                subtitle: const Text('Remove everything you\'ve entered from this phone'),
+                onTap: () => _deleteAllData(context, ref),
               ),
             ],
           ),
@@ -256,4 +264,37 @@ class _ChoiceRow<T> extends StatelessWidget {
       },
     );
   }
+}
+
+/// Asks first, then removes everything the person has entered.
+Future<void> _deleteAllData(BuildContext context, WidgetRef ref) async {
+  final scheme = Theme.of(context).colorScheme;
+  final messenger = ScaffoldMessenger.of(context);
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Delete all your data?'),
+      content: const Text(
+        'This removes every medication, shot, weight, side effect, note and progress photo from this phone, '
+        'along with your goal weight and height.\n\n'
+        'It can\'t be undone. If you might want any of it later, save a backup file first.\n\n'
+        'Your units, reminder switches and app lock stay as they are.',
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+        TextButton(
+          key: const Key('confirm-delete-all'),
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(
+            'Delete everything',
+            style: TextStyle(color: scheme.error, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true) return;
+  await ref.read(databaseProvider).deleteAllData(photoFolder: ref.read(photoFolderProvider));
+  await ref.read(settingsProvider.notifier).reload();
+  messenger.showSnackBar(const SnackBar(content: Text('All your data was deleted from this phone.')));
 }
