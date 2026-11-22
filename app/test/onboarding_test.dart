@@ -21,6 +21,7 @@ import 'package:sqlite3/sqlite3.dart' show sqlite3;
 import 'app_lock_test.dart' show FakeAuthenticator;
 import 'medication_store_test.dart' show tirzepatideVial;
 import 'photos_test.dart' show FakePicker;
+import 'support/wait.dart';
 
 void main() {
   late Directory dir;
@@ -130,6 +131,17 @@ void main() {
     expect(find.text('Your medication'), findsOneWidget);
     expect(find.text(tirzepatideVial.name), findsOneWidget);
     expect(find.byKey(const Key('medication-later')), findsNothing);
+    // "Taking something else as well" is a second medication at once, which is Pro.
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Brand-name pen'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await pumpUntilFound(tester, find.byKey(const Key('pro-reason')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Track another medication alongside ${tirzepatideVial.name} with Pro.'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your medication'), findsOneWidget);
     await tap(tester, const Key('medication-continue'));
 
     await tap(tester, const Key('weight-continue'));

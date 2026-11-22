@@ -81,7 +81,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       Zepbound with Pro") and say that pausing the other one is the free way to switch. A Shotsy import without
       Pro keeps one medication active (one already active, else the one with the latest shot) and brings the
       others in paused with their history, and says so. Nothing is ever paused or hidden when Pro ends, and
-      restoring a backup is not limited. Tests only: not seen on a screen yet.
+      restoring a backup is not limited. The welcome screens' "Taking something else as well?" asks too.
+      Seen on an Android emulator (Nov 22): the Pro screen on Add another, on Resume and in the welcome
+      screens, and adding for free once the other is paused. The import's paused message is tests only.
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
       three products in each store (Play needs an uploaded build first), each store connected to RevenueCat and
