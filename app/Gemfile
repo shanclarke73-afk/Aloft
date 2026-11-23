@@ -1,0 +1,4 @@
+# Ruby tools for releasing. Install with `bundle install`, run with `bundle exec fastlane ...`.
+source "https://rubygems.org"
+
+gem "fastlane", "~> 2.242"
