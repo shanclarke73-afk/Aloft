@@ -150,7 +150,8 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
 - Half-life and time to peak for the level chart were read from section 12.3 of each US prescribing information on
   DailyMed on Nov 21, 2026 (semaglutide 1 week / 1–3 days; tirzepatide 5 days / median 24 h; liraglutide 13 h /
   8–12 h; dulaglutide 5 days / median 48 h). Shannon should look these over once, and they need re-checking before
-  each release. Retatrutide has no prescribing information, so it gets no curve. The numbers are built in and
+  each release. Retatrutide has no prescribing information, so it gets no curve, and since Nov 23 it is no longer on the
+  built-in list (store rules on unapproved substances); it can be typed in as a name. The numbers are built in and
   can't be edited in the app yet.
 - The Shotsy import was run with the real export on the Pixel (Nov 22) and worked; the totals were not compared
   with Shotsy's Summary PDF. Shots can be sent to a medication already in Aloft under another name. Day notes come in as notes in History; notes can't be added or
