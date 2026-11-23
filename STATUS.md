@@ -84,6 +84,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       restoring a backup is not limited. The welcome screens' "Taking something else as well?" asks too.
       Seen on an Android emulator (Nov 22): the Pro screen on Add another, on Resume and in the welcome
       screens, and adding for free once the other is paused. The import's paused message is tests only.
+- [x] **Android release signing set up** (Nov 22): the build reads the upload key from `app/android/key.properties`
+      (git-ignored) and falls back to the debug key without it. Steps are in
+      [docs/android-signing.md](docs/android-signing.md). Checked with a throwaway key, since deleted.
+      **The real upload key does not exist yet**: the owner makes it and chooses its password.
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
       three products in each store (Play needs an uploaded build first), each store connected to RevenueCat and
@@ -102,7 +106,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
 7. **Left for 1.0** (Nov 22): Pro with RevenueCat (second medication, PDF report, Manage subscription, Restore
    purchases); the PDF report itself; privacy policy, terms and support pages, linked from About; store listings,
-   screenshots and declarations (health apps, "Alarms & reminders"); Android release signing; trademark check;
+   screenshots and declarations (health apps, "Alarms & reminders"); saving the Android upload key password to 1Password; trademark check;
    closed testing, including someone with a real iPhone. Automatic backup, Health sync and the outline camera
    are now 1.5.
 
