@@ -19,10 +19,11 @@ const brandPens = [
   KnownDrug('Trulicity®', 'dulaglutide'),
 ];
 
+/// Retatrutide is deliberately not listed: it is not an approved drug, and both stores bar apps
+/// from promoting unapproved substances. Any name can still be typed in.
 const compoundedDrugs = [
   KnownDrug('Semaglutide', 'semaglutide'),
   KnownDrug('Tirzepatide', 'tirzepatide'),
-  KnownDrug('Retatrutide', 'retatrutide'),
   KnownDrug('Liraglutide', 'liraglutide'),
   KnownDrug('NAD+', 'nad', isGlp1: false),
   KnownDrug('B12 (cyanocobalamin)', 'b12', isGlp1: false),

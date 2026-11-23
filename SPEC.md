@@ -181,7 +181,8 @@ Example: tirzepatide 10 mg/mL + cyanocobalamin 0.5 mg/mL, user draws 25 units
 - **Compounded vial:** medication from a **picker** (below), concentration (mg/mL), additives (add rows: name +
   amount per mL, with common ones suggested), vial size, pharmacy, lot, opened date, beyond-use date, cost.
 - **Compounded medication picker:**
-  - GLP-1 (gets a level chart): semaglutide, tirzepatide, retatrutide, liraglutide
+  - GLP-1 (gets a level chart): semaglutide, tirzepatide, liraglutide. Retatrutide was taken off the list on
+    Nov 23, 2026 (not an approved drug; both stores bar promoting unapproved substances). It can still be typed in.
   - Add-on injections (logging + reminders, no level chart): NAD+, B12 (cyanocobalamin), L-carnitine,
     glutathione, lipo-B / MIC
   - Other: type any name
