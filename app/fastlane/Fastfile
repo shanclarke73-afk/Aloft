@@ -1,0 +1,131 @@
+# Aloft release lanes. Run from app/ (after `bundle install` once):
+#
+#   bundle exec fastlane bump                    # raise the build number (+N) in pubspec.yaml
+#   bundle exec fastlane ios check               # test the App Store Connect key, show the latest TestFlight build
+#   bundle exec fastlane ios beta                # build the prod IPA and upload it to TestFlight
+#   bundle exec fastlane android check           # test the Play key without changing anything
+#   bundle exec fastlane android internal        # build the prod AAB and release it to Internal testing
+#   bundle exec fastlane android production      # build the prod AAB and add it to a DRAFT production release
+#
+# Nothing here submits for review or touches store listings, screenshots or metadata:
+# those stay manual in App Store Connect and Play Console.
+
+require "shellwords"
+
+opt_out_usage
+
+APP_ROOT = File.expand_path("..", __dir__)
+PUBSPEC = File.join(APP_ROOT, "pubspec.yaml")
+# dart_defines.release.json (git-ignored) holds the RevenueCat platform keys for store builds.
+RELEASE_DEFINES = File.join(APP_ROOT, "dart_defines.release.json")
+DART_DEFINES = "--dart-define-from-file=#{RELEASE_DEFINES.shellescape}"
+
+def pubspec_version
+  line = File.read(PUBSPEC)[/^version:\s*(\S+)/, 1] or UI.user_error!("No version: line in pubspec.yaml")
+  name, build = line.split("+")
+  [name, build.to_i]
+end
+
+def flutter(args)
+  if args.start_with?("build") && !File.exist?(RELEASE_DEFINES)
+    UI.user_error!("app/dart_defines.release.json is missing, so the build would have no RevenueCat keys. See docs/android-signing.md.")
+  end
+  sh("cd #{APP_ROOT.shellescape} && flutter #{args}")
+end
+
+def require_env(*names)
+  missing = names.select { |n| ENV[n].to_s.strip.empty? }
+  UI.user_error!("Missing #{missing.join(', ')}. Fill in fastlane/.env (see fastlane/.env.example).") unless missing.empty?
+  names.each do |n|
+    next unless n.end_with?("_PATH")
+    UI.user_error!("#{n} points at #{ENV[n]}, which doesn't exist.") unless File.exist?(File.expand_path(ENV[n]))
+  end
+end
+
+desc "Raise the build number in pubspec.yaml by one (pass version:1.0.2 to change the version name too)"
+lane :bump do |options|
+  name, build = pubspec_version
+  name = options[:version] || name
+  new_version = "#{name}+#{build + 1}"
+  File.write(PUBSPEC, File.read(PUBSPEC).sub(/^version:.*$/, "version: #{new_version}"))
+  UI.success("pubspec.yaml version is now #{new_version}")
+end
+
+platform :ios do
+  private_lane :asc_key do
+    require_env("ASC_KEY_ID", "ASC_ISSUER_ID", "ASC_KEY_PATH")
+    app_store_connect_api_key(
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_filepath: File.expand_path(ENV["ASC_KEY_PATH"]),
+    )
+  end
+
+  desc "Check the App Store Connect key works and show the latest TestFlight build"
+  lane :check do
+    asc_key
+    build = latest_testflight_build_number
+    UI.success("App Store Connect key works. Latest TestFlight build: #{lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]} (#{build})")
+  end
+
+  desc "Build the prod IPA and upload it to TestFlight"
+  lane :beta do
+    asc_key
+    name, build = pubspec_version
+    flutter("build ipa --release #{DART_DEFINES}")
+    ipa = Dir[File.join(APP_ROOT, "build/ios/ipa/*.ipa")].max_by { |f| File.mtime(f) }
+    UI.user_error!("flutter build ipa didn't produce an .ipa") unless ipa
+    upload_to_testflight(
+      ipa: ipa,
+      skip_waiting_for_build_processing: true,
+    )
+    UI.success("Uploaded #{name} (#{build}) to App Store Connect. It shows in TestFlight once Apple finishes processing.")
+  end
+end
+
+platform :android do
+  private_lane :play_key do
+    require_env("PLAY_JSON_KEY_PATH")
+    File.expand_path(ENV["PLAY_JSON_KEY_PATH"])
+  end
+
+  private_lane :build_aab do
+    unless File.exist?(File.join(APP_ROOT, "android/key.properties"))
+      UI.user_error!("android/key.properties is missing, so the bundle would be signed with the debug key and Play would reject it. See docs/android-signing.md.")
+    end
+    flutter("build appbundle --release #{DART_DEFINES}")
+    File.join(APP_ROOT, "build/app/outputs/bundle/release/app-release.aab")
+  end
+
+  private_lane :upload_aab do |options|
+    upload_to_play_store(
+      json_key: play_key,
+      aab: options[:aab],
+      track: options[:track],
+      release_status: options[:status],
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      validate_only: options[:validate_only] || false,
+    )
+  end
+
+  desc "Check the Play key works (reads the Internal testing track, changes nothing)"
+  lane :check do
+    codes = google_play_track_version_codes(json_key: play_key, track: "internal")
+    UI.success("Play key works. Internal testing version codes: #{codes.inspect}")
+  end
+
+  desc "Build the prod AAB and release it to Internal testing"
+  lane :internal do
+    upload_aab(aab: build_aab, track: "internal", status: "completed")
+    UI.success("Released to Internal testing.")
+  end
+
+  desc "Build the prod AAB and add it to a draft production release (finish it in Play Console)"
+  lane :production do
+    upload_aab(aab: build_aab, track: "production", status: "draft")
+    UI.success("Draft production release created. Add release notes and send it for review in Play Console.")
+  end
+end
