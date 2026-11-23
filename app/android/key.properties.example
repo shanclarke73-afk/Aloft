@@ -1,0 +1,7 @@
+# Copy this file to key.properties (same folder) and fill it in. key.properties is git-ignored:
+# never commit it, and never put the real passwords in this example file.
+# See docs/android-signing.md.
+storePassword=THE-PASSWORD-YOU-CHOSE
+keyPassword=THE-PASSWORD-YOU-CHOSE
+keyAlias=upload
+storeFile=/Users/YOUR-NAME/keys/aloft-upload-keystore.jks
