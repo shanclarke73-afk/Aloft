@@ -7,7 +7,7 @@ password. Neither is in this repository, and neither should ever be.
 
 | Thing | Where | In git? |
 | --- | --- | --- |
-| The upload key file | `~/keys/aloft-upload-keystore.jks` on the Mac that makes release builds | No |
+| The upload key file | `~/AndroidKeys/aloft-upload.jks` on the Mac that makes release builds | No |
 | Its password and alias | `app/android/key.properties` | No (git-ignored) |
 | The template for that file | `app/android/key.properties.example` | Yes |
 | The build setup that reads it | `app/android/app/build.gradle.kts` | Yes |
@@ -21,7 +21,7 @@ is fine for installing on a phone over USB. Google Play rejects it.
    answers other than the password can be anything sensible.
 
    ```bash
-   mkdir -p ~/keys && "/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -genkey -v -keystore ~/keys/aloft-upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+   mkdir -p ~/AndroidKeys && "/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -genkey -v -keystore ~/AndroidKeys/aloft-upload.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
    ```
 
 2. Copy `app/android/key.properties.example` to `app/android/key.properties` and fill in the

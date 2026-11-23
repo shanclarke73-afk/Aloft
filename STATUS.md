@@ -106,7 +106,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
    Shotsy's Summary PDF (the acceptance test in SPEC 6.11).
 7. **Left for 1.0** (Nov 22): Pro with RevenueCat (second medication, PDF report, Manage subscription, Restore
    purchases); the PDF report itself; privacy policy, terms and support pages, linked from About; store listings,
-   screenshots and declarations (health apps, "Alarms & reminders"); making the Android upload key; trademark check;
+   screenshots and declarations (health apps, "Alarms & reminders"); saving the Android upload key password to 1Password; trademark check;
    closed testing, including someone with a real iPhone. Automatic backup, Health sync and the outline camera
    are now 1.5.
 

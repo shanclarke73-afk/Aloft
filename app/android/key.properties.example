@@ -4,4 +4,4 @@
 storePassword=THE-PASSWORD-YOU-CHOSE
 keyPassword=THE-PASSWORD-YOU-CHOSE
 keyAlias=upload
-storeFile=/Users/YOUR-NAME/keys/aloft-upload-keystore.jks
+storeFile=/Users/YOUR-NAME/AndroidKeys/aloft-upload.jks
