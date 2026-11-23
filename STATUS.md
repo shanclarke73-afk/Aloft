@@ -123,6 +123,16 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   when the person has switched on "Alarms & reminders" (More offers the setting); otherwise it falls back to the
   old timing. **Before release:** declare the permission on the Play Console form and confirm the current policy.
 - Nothing has run on a real iPhone. Shannon has no iPhone; a TestFlight tester or a borrowed phone is needed.
+- iPhone store-review fixes (Nov 23, 2026, seen on the simulator only):
+  - The database and photos are kept out of iCloud Backup and computer backups (guideline 5.1.3: no personal
+    health information in iCloud). **So a new or restored iPhone starts empty unless the person saved a backup
+    file**; the Today reminder to save one matters more now. Backup files saved to Files stay where they are.
+    The automatic iCloud backup planned for 1.5 conflicts with 5.1.3 as written and needs a rethink.
+  - The app no longer tells Apple it has no encryption (it uses SQLCipher, a standard algorithm that isn't
+    Apple's own). App Store Connect will ask on each upload: answer "standard encryption algorithms". Apple
+    then wants a French encryption declaration only if the app is sold in France. **To decide:** leave France
+    out of the countries, or file that declaration.
+  - A privacy manifest (`ios/Runner/PrivacyInfo.xcprivacy`) says no tracking and purchase history only.
 - The phone build is signed with the debug key, so it must be uninstalled before a Play Store build goes on.
 - To see the Android screen on an emulator, build with `--dart-define=ALOFT_ALLOW_SCREENSHOTS=true` (the normal
   build blocks screenshots while "Hide screen in app switcher" is on, which also blocks the person's own).

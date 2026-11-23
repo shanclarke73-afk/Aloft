@@ -8,8 +8,6 @@
 	<string>Aloft only receives the photos you choose, to add them to your progress photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Aloft uses Face ID to keep your health data and photos private.</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
