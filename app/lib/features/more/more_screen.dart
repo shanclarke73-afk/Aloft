@@ -60,7 +60,11 @@ class MoreScreen extends ConsumerWidget {
               ListTile(
                 key: const Key('aloft-pro'),
                 title: Text(pro ? 'You have Aloft Pro' : 'Aloft Pro'),
-                subtitle: Text(pro ? 'Manage or restore your purchase' : 'The provider report and spreadsheet export'),
+                subtitle: Text(
+                  pro
+                      ? 'Manage or restore your purchase'
+                      : 'More than one medication, the provider report and spreadsheet export',
+                ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () =>
                     Navigator.of(context)

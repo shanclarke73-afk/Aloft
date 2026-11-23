@@ -13,6 +13,7 @@ import '../../widgets/form_widgets.dart';
 import '../backup/backup_screen.dart';
 import '../body/goal_screen.dart';
 import '../about/about_screen.dart';
+import '../medications/medication_limit.dart';
 import '../medications/medication_setup_screen.dart';
 import '../progress/add_photos_screen.dart';
 
@@ -86,9 +87,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     if (date != null) setState(() => _weightDay = DateTime(date.year, date.month, date.day, 8));
   }
 
-  Future<void> _addMedication(MedicationForm form) =>
-      Navigator.of(context)
-          .push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => MedicationSetupScreen(form: form)));
+  Future<void> _addMedication(MedicationForm form) async {
+    // The first one is free; "taking something else as well" is a second active medication.
+    if (!await allowAnotherActive(context, ref) || !mounted) return;
+    await Navigator.of(context)
+        .push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => MedicationSetupScreen(form: form)));
+  }
 
   @override
   Widget build(BuildContext context) {
