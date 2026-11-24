@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 23, 2026 (1.0: features built; first build uploaded to Google Play internal testing; left are store products, RevenueCat keys, store listings, testing)_
+_Last updated: November 23, 2026 (1.0: features built; first build in Google Play internal testing and the three Play products created; left are App Store products, RevenueCat, the trial wording on the paywall, store listings, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -90,13 +90,25 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       The real upload key was made on Nov 22 (`~/AndroidKeys/aloft-upload.jks`, with `app/android/key.properties`).
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
-      three products in each store (Play needs an uploaded build first), each store connected to RevenueCat and
+      three products in the App Store (Play's are done, see below), each store connected to RevenueCat and
       its products attached to `pro` and the `default` offering, and the platform keys in release builds.
 - [x] **First Google Play upload** (Nov 23): 1.0.0 build 1, signed with the upload key, is in Internal testing as
       a **draft** release. Testers can't install it until the draft is rolled out in Play Console. It was built
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
       needs the RevenueCat Play key in that file and a higher build number (`bundle exec fastlane bump`).
+- [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
+      | Product ID | Kind | US price | Inside it |
+      |---|---|---|---|
+      | `aloft.pro.monthly` | subscription | $1.99 | base plan `monthly` |
+      | `aloft.pro.yearly` | subscription | $14.99 | base plan `yearly`; offer `free-trial`, 2 weeks, for people who never had an Aloft subscription |
+      | `aloft.pro.lifetime` | one-time product | $29.99 | purchase option `lifetime` |
+
+      Other countries' prices are Google's conversions of the US price. Made in Play Console: the fastlane Play
+      key can read products but isn't allowed to create or price them. Use the same three IDs in the App Store.
+- [ ] **The paywall doesn't mention the 14-day free trial yet.** It must say so (length, then the price and that
+      it renews) before a build with purchases is released. The `ProStore` also needs to read the trial from the
+      store rather than assume one, since only first-time subscribers get it.
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).

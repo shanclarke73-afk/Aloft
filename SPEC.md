@@ -370,7 +370,7 @@ Bottom tabs:
 | Plan | Price | Notes |
 |---|---|---|
 | Monthly | **$1.99/mo** | Auto-renews; $23.88 over a year |
-| Yearly | **$14.99/yr** | Auto-renews; ~37% less than monthly; shown as the default/highlighted plan |
+| Yearly | **$14.99/yr** | Auto-renews; ~37% less than monthly; shown as the default/highlighted plan; 14-day free trial for first-time subscribers |
 | Lifetime | **$29.99 once** | Same as 2 years of yearly; non-consumable |
 
 - Set up in RevenueCat (already used for Debt Shredder): one "pro" entitlement, two auto-renewing subscriptions in
@@ -381,7 +381,10 @@ Bottom tabs:
   Privacy, a Restore Purchases button, and "Manage subscription" in More.
 - Family Sharing on for the lifetime purchase (and subscriptions if supported); enrol in Apple's Small Business
   Program / Google's 15% tier.
-- Open: free trial on yearly (e.g. 7 days)?
+- Free trial (decided Nov 23, 2026): 14 days on the yearly plan only, for people who have never had an Aloft
+  subscription. The paywall must state the trial length and what is charged when it ends.
+- Product IDs, the same in both stores: `aloft.pro.monthly`, `aloft.pro.yearly`, `aloft.pro.lifetime`.
+- Countries: everywhere the stores offer except France for now (see STATUS.md on the encryption declaration).
 
 **Feature split (decided Nov 20, 2026):**
 
@@ -533,7 +536,7 @@ major releases.
 1. **Real label + prescription photos** (personal info blurred) to design and test the scanner.
 2. Is the user's dose prescribed in **units, mg or mL**?
 3. **Shotsy export:** does it have one, and in what format? (Sample file needed for the import preset.)
-4. Pricing decided ($1.99/mo, $14.99/yr, $29.99 lifetime). Still open: exactly which features are Pro, and a trial.
+4. Pricing decided ($1.99/mo, $14.99/yr, $29.99 lifetime). Trial decided Nov 23: 14 days on yearly.
 5. Bundle ID / developer account: same as Debt Shredder (`com.shannonsonlinebookkeeping.aloft`) or a Peace of Mind
    Apps identity?
 6. Crash reporting: none, or opt-in (e.g. Sentry with health data scrubbed)?
