@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 4 uploaded to both stores; left are testers and test purchases, store listings, testing)_
+_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 4 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -92,18 +92,29 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). The products exist
       in both stores and in RevenueCat (see below). The RevenueCat service account
       (`revenuecat@taxtote-prod`) has Aloft access in Play Console and its file is in RevenueCat (Nov 24);
-      RevenueCat reads the Play catalog, but its purchases check still says "package name not found",
-      probably until a release is rolled out. Still needed: a review screenshot on each App Store product, and
-      a test purchase on each store.
+      RevenueCat's Play credentials show as valid since Nov 25. Still needed: a review screenshot on each App
+      Store product.
 - [x] **First Google Play upload** (Nov 23): 1.0.0 build 1, signed with the upload key, is in Internal testing as
       a **draft** release. Testers can't install it until the draft is rolled out in Play Console. It was built
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
       needs the RevenueCat Play key in that file (as `ALOFT_RC_KEY_ANDROID`) and a higher build number (`bundle exec fastlane bump`).
+- [x] **Purchases tested on real devices** (Nov 25), build 4, by Shannon:
+      - Pixel (Google Play): the three plans load with real prices; she started the yearly plan and RevenueCat
+        recorded it as a trial, so the 14-day free trial is offered and applied. Her Gmail is a licence tester
+        (Play Console → License testing), so nothing was charged.
+      - iPad (TestFlight): she bought Lifetime; RevenueCat recorded a $29.99 one-time App Store purchase. The
+        plans load in testing even though the three App Store products still say "Missing metadata".
+      - Both devices switched to "You have Aloft Pro".
+      - Google real-time developer notifications are on for Aloft (Play Console → Monetization setup, topic
+        `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
+        received one.
+      Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
 - [x] **Build 4 uploaded to both stores** (Nov 25), 1.0.0 (4): build 3 plus the Save button kept above the
       phone's navigation buttons, and getting started asking about history first. Google Play: released to
       Internal testing. App Store: uploaded to TestFlight. **Answer the encryption question on this build as
-      "standard encryption algorithms", not sold in France.** Neither change has been seen on a real device yet.
+      "standard encryption algorithms", not sold in France.** The Save button was seen fixed on Shannon's Pixel (Nov 25). The new getting-started step has not been
+      seen on a real device.
 - [x] **Build 3 uploaded to both stores** (Nov 24), 1.0.0 (3): build 2 plus the iPad layout and the
       "iPad" / "tablet" wording. Google Play: released to Internal testing by `fastlane android internal`
       (no draft step needed now that the track is live). App Store: uploaded to TestFlight by
@@ -139,9 +150,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Listing no longer names Shotsy** (Nov 25): the import line in both stores now says "another tracker's
       CSV export". The name stays inside the app, where people need it to pick the right file, and About says
       Aloft isn't affiliated with it.
-- [ ] **Encryption answer for build 4.** Builds 2 and 3 were answered "none" by mistake in TestFlight. On
-      build 4, answer "standard encryption algorithms", not sold in France, and submit build 4 or later for
-      review, never 2 or 3.
+- [x] **Encryption answer** (Nov 25): on build 4 Shannon chose "standard encryption algorithms", not sold in
+      France, and Apple asked for no documents. Apple's API shows the same value on builds 2, 3 and 4 (exempt),
+      so it can't tell which option was chosen. Submit build 4 or later for review, not 2 or 3.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
@@ -202,6 +213,7 @@ On Shannon's Pixel 11 Pro (Android), Nov 22, 2026, from a release build installe
   Android gave it a one-hour delivery window, so Aloft now declares `SCHEDULE_EXACT_ALARM` and schedules exactly
   when the person has switched on "Alarms & reminders" (More offers the setting); otherwise it falls back to the
   old timing. **Before release:** declare the permission on the Play Console form and confirm the current policy.
+- Shannon's iPad runs build 4 from TestFlight (Nov 25): installed, opened, and a purchase went through.
 - Nothing has run on a real iPhone. Shannon has no iPhone; a TestFlight tester or a borrowed phone is needed.
 - iPhone store-review fixes (Nov 23, 2026, seen on the simulator only):
   - The database and photos are kept out of iCloud Backup and computer backups (guideline 5.1.3: no personal
