@@ -192,7 +192,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                     FilledButton(
                       key: const Key('pro-buy'),
                       onPressed: _busy ? null : () => _buy(chosen),
-                      child: Text(_busy ? 'Working…' : 'Continue with ${chosen.name}'),
+                      child: Text(_busy ? 'Working…' : chosen.buyLabel),
                     ),
                     const SizedBox(height: 8),
                     Text(chosen.terms, key: const Key('pro-terms'), style: muted),
@@ -247,7 +247,9 @@ class _ProScreenState extends ConsumerState<ProScreen> {
             : null,
         title: Text(plan.name, style: const TextStyle(fontWeight: FontWeight.w800)),
         subtitle: Text(switch (plan.kind) {
+          ProPlanKind.yearly when plan.trial != null => 'Best value · ${plan.trial!.length} free',
           ProPlanKind.yearly => 'Best value',
+          ProPlanKind.monthly when plan.trial != null => '${plan.trial!.length} free, then cancel any time',
           ProPlanKind.lifetime => 'Pay once, yours for good',
           ProPlanKind.monthly => 'Cancel any time',
         }),

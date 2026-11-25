@@ -96,7 +96,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       a **draft** release. Testers can't install it until the draft is rolled out in Play Console. It was built
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
-      needs the RevenueCat Play key in that file and a higher build number (`bundle exec fastlane bump`).
+      needs the RevenueCat Play key in that file (as `ALOFT_RC_KEY_ANDROID`) and a higher build number (`bundle exec fastlane bump`).
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
@@ -106,9 +106,15 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 
       Other countries' prices are Google's conversions of the US price. Made in Play Console: the fastlane Play
       key can read products but isn't allowed to create or price them. Use the same three IDs in the App Store.
-- [ ] **The paywall doesn't mention the 14-day free trial yet.** It must say so (length, then the price and that
-      it renews) before a build with purchases is released. The `ProStore` also needs to read the trial from the
-      store rather than assume one, since only first-time subscribers get it.
+- [x] **The paywall states the free trial** (Nov 24): when the store offers this person a trial, the yearly card
+      says "Best value · 14 days free", the button says "Start 14-day free trial", and the terms give the length,
+      the price after it, that it renews, and that cancelling before the trial ends costs nothing. The trial is
+      read from the store, never assumed: Google Play only reports it to people who can still use it, and on
+      iPhone RevenueCat is asked whether the person is eligible. No trial reported means no mention of one.
+      Tests only so far; not seen with a real store.
+- [x] **One key per store** (Nov 24): `app/dart_defines.release.json` now takes `ALOFT_RC_KEY_ANDROID`
+      (`goog_...`) and `ALOFT_RC_KEY_IOS` (`appl_...`), and each build picks its own. `ALOFT_RC_KEY` is still
+      the Test Store key for debug builds.
 
 ## Next time
 1. Shotsy export received (Nov 20) and its format documented in [docs/shotsy-import.md](docs/shotsy-import.md).

@@ -36,6 +36,7 @@ Future<void> main() async {
     final photoFolder = Directory(p.join((await getApplicationSupportDirectory()).path, 'photos'));
     final lock = AppLock(authenticator: DeviceAuthenticator(), enabled: settings.appLock, lockAfter: settings.lockAfter)
       ..detectMethod();
+    final storeKey = storeKeyFor(defaultTargetPlatform);
     runApp(
       ProviderScope(
         overrides: [
@@ -46,8 +47,8 @@ Future<void> main() async {
           photoPickerProvider.overrideWithValue(DevicePhotoPicker(lock)),
           backupFilesProvider.overrideWithValue(DeviceBackupFiles(lock)),
           // Only a build that was given a store key can sell Pro.
-          if (canUseStoreKey(revenueCatKey, releaseBuild: kReleaseMode))
-            proStoreProvider.overrideWithValue(RevenueCatStore(revenueCatKey, lock)),
+          if (canUseStoreKey(storeKey, releaseBuild: kReleaseMode))
+            proStoreProvider.overrideWithValue(RevenueCatStore(storeKey, lock)),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],
         child: const AloftApp(),
