@@ -11,7 +11,7 @@ bundle exec fastlane android production   # build the AAB and add it to a draft 
 
 `bundle exec fastlane ios check` and `bundle exec fastlane android check` test the store keys without changing anything. No lane submits for review or changes store listings, screenshots or descriptions. Commit the `bump` change like any other.
 
-Store builds need `app/dart_defines.release.json` (git-ignored) with the RevenueCat platform keys; the lanes stop if it is missing. See [android-signing.md](android-signing.md).
+Store builds need `app/dart_defines.release.json` (git-ignored) with the RevenueCat platform keys; the lanes stop if it is missing. The same file holds `ALOFT_REVIEW_CODE_SHA256`, the fingerprint of the access code store reviewers type to reach Aloft Pro (`shasum -a 256` of the code, with no trailing newline: `printf '%s' 'the-code' | shasum -a 256`). See [android-signing.md](android-signing.md).
 
 ## One-time setup
 
