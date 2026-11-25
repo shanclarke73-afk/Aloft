@@ -6,6 +6,7 @@ import '../theme/aloft_theme.dart';
 import '../util/links.dart';
 import '../widgets/form_widgets.dart';
 import 'pro_store.dart';
+import 'review_access.dart';
 import '../util/device.dart';
 import '../widgets/system_bar_spacer.dart';
 
@@ -20,12 +21,30 @@ const _proForTesting = bool.fromEnvironment('ALOFT_PRO');
 final proProvider = NotifierProvider<ProController, bool>(ProController.new);
 
 class ProController extends Notifier<bool> {
+  /// This install used the store reviewers' access code.
+  bool _reviewAccess = false;
+
   @override
   bool build() {
     final store = ref.watch(proStoreProvider);
+    final review = ref.watch(reviewAccessProvider);
     // After this build returns, so the store's first answer has a state to change.
-    Future.microtask(() => store.start((pro) => state = pro || _proForTesting));
+    Future.microtask(() async {
+      _reviewAccess = await review.granted();
+      if (_reviewAccess) state = true;
+      await store.start((pro) => state = pro || _proForTesting || _reviewAccess);
+    });
     return _proForTesting;
+  }
+
+  /// Switches Pro on if [code] is the access code this build accepts. Returns whether it was.
+  Future<bool> redeemAccessCode(String code) async {
+    final ok = await ref.read(reviewAccessProvider).redeem(code);
+    if (ok) {
+      _reviewAccess = true;
+      state = true;
+    }
+    return ok;
   }
 
   void set(bool pro) => state = pro;
@@ -107,6 +126,37 @@ class _ProScreenState extends ConsumerState<ProScreen> {
       _busy = false;
       _message = found ? null : 'No earlier Aloft Pro purchase was found on this store account.';
     });
+  }
+
+  Future<void> _accessCode() async {
+    final controller = TextEditingController();
+    final code = await showDialog<String>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: const Text('Access code'),
+        content: TextField(
+          key: const Key('access-code-field'),
+          controller: controller,
+          autofocus: true,
+          autocorrect: false,
+          enableSuggestions: false,
+          decoration: const InputDecoration(hintText: 'Enter your code'),
+          onSubmitted: (value) => Navigator.pop(dialog, value),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialog), child: const Text('Cancel')),
+          TextButton(
+            key: const Key('access-code-use'),
+            onPressed: () => Navigator.pop(dialog, controller.text),
+            child: const Text('Use code'),
+          ),
+        ],
+      ),
+    );
+    if (code == null || !mounted) return;
+    final ok = await ref.read(proProvider.notifier).redeemAccessCode(code);
+    if (!mounted) return;
+    setState(() => _message = ok ? null : "That code isn't right. Check it and try again.");
   }
 
   Future<void> _manage() async {
@@ -211,6 +261,13 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                 child: const Text('Restore purchases'),
               ),
             ],
+            // Only in a build that accepts a code, and only until Pro is on.
+            if (ref.watch(reviewAccessProvider).offered && !pro)
+              TextButton(
+                key: const Key('access-code-link'),
+                onPressed: _busy ? null : _accessCode,
+                child: const Text('Have an access code?'),
+              ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

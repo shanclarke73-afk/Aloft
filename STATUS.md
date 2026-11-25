@@ -197,6 +197,14 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       contact. The iPhone
       privacy file now lists Analytics beside App functionality for purchase history, and the matching
       privacy-policy sentences are in an open pull request on the website repo.
+- [x] **Access code for store reviewers** (Nov 25): Google's reviewers can't make purchases, and Play's Sign in
+      details form requires a way into everything, paid features included. A store build now accepts an access
+      code on the Aloft Pro screen ("Have an access code?"), which switches Pro on for that install. Only the
+      code's SHA-256 fingerprint is in the build (`ALOFT_REVIEW_CODE_SHA256` in `app/dart_defines.release.json`,
+      git-ignored); the code and the paste-ready text for Play Console are in `~/AppStoreKeys/aloft-review-code.txt`
+      on the Mac. A build with a different fingerprint stops honouring the old code, and a build with none
+      never shows the link. Not in a store build yet (needs build 6), and Shannon enters the code in Play
+      Console herself.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
