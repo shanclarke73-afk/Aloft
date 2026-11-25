@@ -19,9 +19,9 @@ _Shannon approved these answers, with the recommended option on all four decisio
 | Google Play | Financial features | Saved: none |
 | Google Play | Health apps | Saved: "Nutrition and weight management" and "Medication and treatment management". Play asked for no regional details |
 | Google Play | Trader status and Terms of Service | Saved: trader status applies; terms link added |
-| Google Play | Sign in details | **Not saved.** Shannon chose "answer Yes and explain", but the form won't save without a tick box that isn't true for Aloft. See below |
+| Google Play | Sign in details | **Not saved yet.** Build 6 (Nov 25) accepts an access code that switches Pro on, which makes the form's required "full access" tick box true. Shannon pastes the text from `~/AppStoreKeys/aloft-review-code.txt` into the form and saves it |
 | Google Play | Target audience and content | **Blocked** until Sign in details is saved |
-| Google Play | Content ratings | **Not started.** Completing it means agreeing to IARC's Terms of Service and giving a contact email, which need Shannon's say-so |
+| Google Play | Content ratings | Saved (Nov 25). Shannon agreed to IARC's Terms of Use; contact email is the business address. Category: All Other App Types. Every answer No except "users can purchase digital goods" (Yes; no random items). Ratings given: ESRB Everyone, PEGI 3, USK all ages, Brazil 14+, 3+ elsewhere. The questionnaire did not ask about references to medication |
 | Google Play | Data safety | **Saved as a draft**, all five steps answered: purchase history collected (not shared, not ephemeral, required; App functionality and Analytics), encrypted in transit, no accounts, deletion can be requested at `https://peaceofmindapps.com/aloft/#support`. Play won't accept it as final until Target audience is done |
 
 Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.

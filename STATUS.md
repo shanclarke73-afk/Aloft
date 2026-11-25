@@ -191,10 +191,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [ ] **Store forms** (Nov 25): answers approved by Shannon; what is entered so far is in the table at the top
       of [docs/store-forms.md](docs/store-forms.md). App Store: age rating (12+), free price, countries without
       France and content rights are in. Google Play: 7 of 11 declarations saved and Data safety saved as a draft (none sent for
-      review). Still open: Play's Sign in details, which can't be saved honestly without a way for Google's
-      reviewers to reach Pro (a reviewer code in the app is the likely answer) and which blocks Target
-      audience and the final Data safety save; Content ratings, which needs Shannon's OK to accept IARC's
-      terms and a contact email; and the App Store privacy labels and review contact. The iPhone
+      review). Content ratings saved (ESRB Everyone, PEGI 3). Still open: Play's Sign in
+      details, which Shannon fills in with the reviewer access code now that build 6 accepts one; then Target
+      audience and the final Data safety save, which wait on it; and the App Store privacy labels and review
+      contact. The iPhone
       privacy file now lists Analytics beside App functionality for purchase history, and the matching
       privacy-policy sentences are in an open pull request on the website repo.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
