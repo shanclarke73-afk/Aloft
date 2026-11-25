@@ -10,6 +10,7 @@ import '../../widgets/form_widgets.dart';
 import 'photo_image.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/device.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 const photosStayPrivate = 'Saved only inside Aloft, never to your camera roll.';
 
@@ -173,6 +174,7 @@ class _AddPhotosScreenState extends ConsumerState<AddPhotosScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         child: Column(

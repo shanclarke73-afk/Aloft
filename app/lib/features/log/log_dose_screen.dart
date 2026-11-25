@@ -10,6 +10,7 @@ import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../medications/catalog.dart';
 import '../../theme/aloft_theme.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// Opens Log shot / Log dose. [when] pre-sets the time, for a dose taken earlier.
 Future<void> openLogDose(BuildContext context, MedicationDetail detail, {DateTime? when}) async {
@@ -240,6 +241,7 @@ class _LogDoseScreenState extends ConsumerState<LogDoseScreen> {
         centerTitle: true,
       ),
       // Not a ListView: that would discard fields scrolled off screen, and what was typed in them.
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),

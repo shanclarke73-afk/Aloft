@@ -132,6 +132,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       and says what it found. The weight step shows the weights that came in and only asks for goal and height.
       The Shotsy and restore links moved here from the welcome and medication screens. Seen on the iPad
       simulator (the question screen only); the path after a real file is covered by tests, not seen on a device.
+- [x] **Listing no longer names Shotsy** (Nov 25): the import line in both stores now says "another tracker's
+      CSV export". The name stays inside the app, where people need it to pick the right file, and About says
+      Aloft isn't affiliated with it.
+- [ ] **Encryption answer for build 4.** Builds 2 and 3 were answered "none" by mistake in TestFlight. On
+      build 4, answer "standard encryption algorithms", not sold in France, and submit build 4 or later for
+      review, never 2 or 3.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|

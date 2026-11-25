@@ -7,6 +7,7 @@ import '../util/links.dart';
 import '../widgets/form_widgets.dart';
 import 'pro_store.dart';
 import '../util/device.dart';
+import '../widgets/system_bar_spacer.dart';
 
 export 'pro_store.dart';
 
@@ -137,6 +138,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
         centerTitle: true,
       ),
       // Not a lazy list: the buy button and the terms must exist even before they scroll into view.
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
         child: Column(
