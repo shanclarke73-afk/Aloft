@@ -15,6 +15,7 @@ import '../widgets/form_widgets.dart';
 import 'shotsy_file.dart';
 import 'shotsy_import.dart';
 import '../theme/aloft_theme.dart';
+import '../widgets/system_bar_spacer.dart';
 
 /// Lets the person pick Shotsy's CSV export, then shows the preview. Nothing is saved until
 /// they tap Import there.
@@ -148,6 +149,7 @@ class _ShotsyImportScreenState extends ConsumerState<ShotsyImportScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),

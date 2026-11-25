@@ -8,6 +8,7 @@ import '../../settings/settings.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 Future<void> openEditSideEffect(BuildContext context, SideEffect effect) =>
     Navigator.of(context)
@@ -91,6 +92,7 @@ class _EditSideEffectScreenState extends ConsumerState<EditSideEffectScreen> {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: _bar(context, sideEffectName(widget.effect)),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
@@ -209,6 +211,7 @@ class _NoteScreenState extends ConsumerState<NoteScreen> {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: _bar(context, 'Note'),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),

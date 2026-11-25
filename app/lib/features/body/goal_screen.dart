@@ -6,6 +6,7 @@ import '../../data/database.dart';
 import '../../dose/dose_math.dart';
 import '../../settings/settings.dart';
 import '../../widgets/form_widgets.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// What the BMI number is, in the app's own words. Shown wherever BMI is.
 const bmiNote =
@@ -214,6 +215,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
     final problems = _draft.problems(s.weightUnit, s.lengthUnit);
     return Scaffold(
       appBar: AppBar(title: const Text('Goal weight and BMI')),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
         children: [
