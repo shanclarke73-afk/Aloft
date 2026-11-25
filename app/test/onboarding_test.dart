@@ -23,6 +23,8 @@ import 'medication_store_test.dart' show tirzepatideVial;
 import 'photos_test.dart' show FakePicker;
 import 'support/wait.dart';
 
+import 'package:aloft/util/device.dart';
+
 void main() {
   late Directory dir;
   late AloftDatabase db;
@@ -88,7 +90,7 @@ void main() {
     expect(find.text('From titration to thriving.'), findsOneWidget);
     // Says only what is true today: no automatic cloud backup is promised.
     expect(find.textContaining('iCloud'), findsNothing);
-    expect(find.textContaining('It stays on this phone'), findsOneWidget);
+    expect(find.textContaining('It stays on this $deviceWord'), findsOneWidget);
     expect(find.textContaining('It never tells you how much to take.'), findsOneWidget);
 
     await tap(tester, const Key('get-started'));

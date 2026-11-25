@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart' show Database;
 
 import 'database.dart';
+import '../util/device.dart';
 
 /// Thrown when the database file exists but can't be opened. The file is never deleted or
 /// replaced automatically: it may be the only copy of someone's history.
@@ -72,8 +73,8 @@ Future<AloftDatabase> openAppDatabase({DatabaseKeyStore keyStore = const SecureD
   var key = await keyStore.read();
   if (key == null) {
     if (await file.exists()) {
-      throw const DatabaseUnavailable(
-        'Aloft found your data on this phone but not the key that opens it. '
+      throw DatabaseUnavailable(
+        'Aloft found your data on this $deviceWord but not the key that opens it. '
         'Nothing has been deleted. Contact support before reinstalling.',
       );
     }

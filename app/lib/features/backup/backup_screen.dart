@@ -13,6 +13,7 @@ import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../../theme/aloft_theme.dart';
+import '../../util/device.dart';
 
 /// Removes a temporary copy Aloft made or was handed. Files elsewhere are never touched.
 void _discardTemporary(File file) {
@@ -73,7 +74,9 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       await ref.read(settingsProvider.notifier).backupSaved();
       if (mounted && place != null) setState(() => _savedTo = 'Saved to $place as ${p.basename(file.path)}.');
     } catch (_) {
-      if (mounted) setState(() => _problem = "The backup couldn't be made. Check that your phone has free space.");
+      if (mounted) {
+        setState(() => _problem = "The backup couldn't be made. Check that your $deviceWord has free space.");
+      }
     } finally {
       // Don't leave a readable copy of someone's health data lying in temporary storage.
       try {
@@ -97,7 +100,9 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       await ref.read(databaseProvider).writeCsvExport(to: file, weightUnit: ref.read(settingsProvider).weightUnit);
       await ref.read(backupFilesProvider).share(file, origin: origin);
     } catch (_) {
-      if (mounted) setState(() => _problem = "The export couldn't be made. Check that your phone has free space.");
+      if (mounted) {
+        setState(() => _problem = "The export couldn't be made. Check that your $deviceWord has free space.");
+      }
     } finally {
       // Don't leave a readable copy of someone's health data lying in temporary storage.
       try {
@@ -207,7 +212,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
           children: [
             Text(
               'A backup file holds everything you\'ve logged in Aloft. Save it somewhere of your own, like Files, '
-              'iCloud Drive or Google Drive. It\'s also how you move to a new phone, or between iPhone and Android.',
+              'iCloud Drive or Google Drive. It\'s also how you move to a new $deviceWord, or between iPhone and Android.',
               style: TextStyle(fontSize: 15, height: 1.45, color: scheme.onSurfaceVariant),
             ),
             const SizedBox(height: 8),
@@ -242,7 +247,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             FilledButton(
               key: const Key('save-backup'),
               onPressed: _busy ? null : _save,
-              child: Text(_busy ? 'Working…' : 'Save a backup to this phone'),
+              child: Text(_busy ? 'Working…' : 'Save a backup to this $deviceWord'),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
@@ -253,7 +258,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             if (_savedTo != null) ...[const SizedBox(height: 12), InfoBox(_savedTo!, key: const Key('saved-to'))],
             const SizedBox(height: 8),
             Text(
-              'A backup kept only on this phone won\'t help if the phone is lost or broken. Every so often, '
+              'A backup kept only on this $deviceWord won\'t help if the $deviceWord is lost or broken. Every so often, '
               'send one somewhere else too: your email, a computer, or a cloud drive.',
               style: muted,
             ),
@@ -261,7 +266,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             const Text('Restore', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             const SizedBox(height: 6),
             Text(
-              'Choose a backup file. You\'ll see what\'s in it before anything on this phone changes.',
+              'Choose a backup file. You\'ll see what\'s in it before anything on this $deviceWord changes.',
               style: TextStyle(fontSize: 15, height: 1.45, color: scheme.onSurfaceVariant),
             ),
             const SizedBox(height: 12),
@@ -335,7 +340,7 @@ class _RestoreScreenState extends ConsumerState<RestoreScreen> {
       final sure = await showDialog<bool>(
         context: context,
         builder: (dialog) => AlertDialog(
-          title: const Text('Replace everything on this phone?'),
+          title: Text('Replace everything on this $deviceWord?'),
           content: const Text(
             "What's in Aloft now, including photos, is removed and the backup takes its place. This can't be undone.",
           ),
@@ -418,7 +423,7 @@ class _RestoreScreenState extends ConsumerState<RestoreScreen> {
           children: result != null
               ? [
                   InfoBox(key: const Key('restore-result'), switch (_lines((t) => result.added[t] ?? 0)) {
-                    [] => 'Everything in this backup was already on this phone. Nothing was added.',
+                    [] => 'Everything in this backup was already on this $deviceWord. Nothing was added.',
                     final added => 'Restored ${added.join(', ')}.',
                   }),
                   const SizedBox(height: 20),
@@ -453,17 +458,17 @@ class _RestoreScreenState extends ConsumerState<RestoreScreen> {
                     key: const Key('choose-add'),
                     replace: false,
                     title: 'Add what\'s missing',
-                    detail: 'Keeps everything on this phone and adds what it doesn\'t have yet.',
+                    detail: 'Keeps everything on this $deviceWord and adds what it doesn\'t have yet.',
                   ),
                   _choice(
                     key: const Key('choose-replace'),
                     replace: true,
                     title: 'Replace everything',
-                    detail: 'Removes what\'s on this phone now and puts the backup in its place.',
+                    detail: 'Removes what\'s on this $deviceWord now and puts the backup in its place.',
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'App lock stays as it\'s set on this phone.',
+                    'App lock stays as it\'s set on this $deviceWord.',
                     style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
                   ),
                   if (_problem != null)

@@ -17,6 +17,7 @@ import '../../pro/pro.dart';
 import '../../reminders/reminders.dart';
 import '../../util/format.dart';
 import '../medications/my_medications_screen.dart';
+import '../../util/device.dart';
 
 /// More tab: settings (mockups/Settings). Rows for features that aren't built yet are left out.
 class MoreScreen extends ConsumerWidget {
@@ -101,7 +102,7 @@ class MoreScreen extends ConsumerWidget {
               ListTile(
                 key: const Key('delete-all-data'),
                 title: Text('Delete all my data', style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                subtitle: const Text('Remove everything you\'ve entered from this phone'),
+                subtitle: Text('Remove everything you\'ve entered from this $deviceWord'),
                 onTap: () => _deleteAllData(context, ref),
               ),
             ],
@@ -112,11 +113,11 @@ class MoreScreen extends ConsumerWidget {
           if (hasMedication &&
               ref.watch(notificationsAllowedProvider).value == false &&
               (settings.remindShots || settings.remindReorder || settings.remindUseBy))
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(bottom: 8),
               child: InfoBox(
-                'Notifications are turned off for Aloft in your phone\'s settings, so these reminders won\'t '
-                'show. Turn them on in your phone\'s Settings → Notifications → Aloft.',
+                'Notifications are turned off for Aloft in your $deviceWord\'s settings, so these reminders won\'t '
+                'show. Turn them on in your $deviceWord\'s Settings → Notifications → Aloft.',
                 warning: true,
               ),
             ),
@@ -130,8 +131,8 @@ class MoreScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const InfoBox(
-                    'Your phone may deliver reminders late, sometimes by up to an hour. To get them on time, '
+                  InfoBox(
+                    'Your $deviceWord may deliver reminders late, sometimes by up to an hour. To get them on time, '
                     'allow "Alarms & reminders" for Aloft.',
                   ),
                   const SizedBox(height: 8),
@@ -192,7 +193,7 @@ class MoreScreen extends ConsumerWidget {
               _ChoiceRow<Appearance>(
                 title: 'Appearance',
                 value: settings.appearance,
-                labels: const {Appearance.system: 'Match phone', Appearance.light: 'Light', Appearance.dark: 'Dark'},
+                labels: {Appearance.system: 'Match $deviceWord', Appearance.light: 'Light', Appearance.dark: 'Dark'},
                 onChanged: controller.setAppearance,
               ),
             ],
@@ -346,8 +347,8 @@ Future<void> _deleteAllData(BuildContext context, WidgetRef ref) async {
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Delete all your data?'),
-      content: const Text(
-        'This removes every medication, shot, weight, side effect, note and progress photo from this phone, '
+      content: Text(
+        'This removes every medication, shot, weight, side effect, note and progress photo from this $deviceWord, '
         'along with your goal weight and height.\n\n'
         'It can\'t be undone. If you might want any of it later, save a backup file first.\n\n'
         'Your units, reminder switches and app lock stay as they are.',
@@ -368,5 +369,5 @@ Future<void> _deleteAllData(BuildContext context, WidgetRef ref) async {
   if (confirmed != true) return;
   await ref.read(databaseProvider).deleteAllData(photoFolder: ref.read(photoFolderProvider));
   await ref.read(settingsProvider.notifier).reload();
-  messenger.showSnackBar(const SnackBar(content: Text('All your data was deleted from this phone.')));
+  messenger.showSnackBar(SnackBar(content: Text('All your data was deleted from this $deviceWord.')));
 }

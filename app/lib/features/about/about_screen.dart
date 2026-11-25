@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../util/links.dart';
 import '../../theme/aloft_theme.dart';
+import '../../util/device.dart';
 
 /// The medical disclaimer (SPEC section 9). The same words are used wherever it appears.
 const medicalDisclaimer =
@@ -100,7 +101,7 @@ class AboutScreen extends ConsumerWidget {
             section(
               'Your privacy',
               'There is no Aloft account, and nothing you log is sent to us. Your records are kept in an encrypted '
-                  'database on this phone, and your photos in Aloft\'s private storage, never the camera roll. '
+                  'database on this $deviceWord, and your photos in Aloft\'s private storage, never the camera roll. '
                   'Backup files are made only when you save one, and go only where you put them.',
             ),
             section(

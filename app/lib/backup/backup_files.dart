@@ -1,4 +1,5 @@
 import '../security/app_lock.dart';
+import '../util/device.dart';
 
 import 'dart:io';
 
@@ -95,7 +96,7 @@ class DeviceBackupFiles implements BackupFiles {
           target = File(p.join(folder.path, '${p.basenameWithoutExtension(name)} ($n)${p.extension(name)}'));
         }
         file.copySync(target.path);
-        return 'Files › On My iPhone › Aloft';
+        return 'Files › On My ${deviceWord == 'iPad' ? 'iPad' : 'iPhone'} › Aloft';
       }
     } catch (_) {}
     return null;

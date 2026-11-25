@@ -11,6 +11,7 @@ import 'security/screen_privacy.dart';
 import 'settings/settings.dart';
 import 'shell/home_shell.dart';
 import 'theme/aloft_theme.dart';
+import 'widgets/wide_frame.dart';
 
 class AloftApp extends ConsumerStatefulWidget {
   const AloftApp({super.key});
@@ -82,7 +83,7 @@ class _AloftAppState extends ConsumerState<AloftApp> with WidgetsBindingObserver
         listenable: lock,
         builder: (context, _) => Stack(
           children: [
-            ?child,
+            if (child != null) WideFrame(child: child),
             if (lock.locked) Positioned.fill(child: LockScreen(lock: lock)),
             if (!_inForeground && settings.hideInAppSwitcher) const Positioned.fill(child: PrivacyCover()),
           ],

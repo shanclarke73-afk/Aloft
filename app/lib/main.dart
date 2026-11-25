@@ -16,10 +16,15 @@ import 'photos/photo_picker.dart';
 import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
 import 'settings/settings.dart';
+import 'util/device.dart';
 import 'pro/pro.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // "phone", "iPad" or "tablet" in the app's wording. The app's frame sets it again once the
+  // screen size is certain, since some Android devices report no size this early.
+  final view = WidgetsBinding.instance.platformDispatcher.views.first;
+  deviceWord = deviceWordFor(view.physicalSize / view.devicePixelRatio, ios: Platform.isIOS);
   // The bundled fonts' license texts, listed with the others under About → Open-source licenses.
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks(['Inter'], await rootBundle.loadString('assets/fonts/Inter-OFL.txt'));

@@ -18,6 +18,8 @@ import 'app_lock_test.dart' show FakeAuthenticator;
 import 'support/wait.dart';
 import 'medication_store_test.dart' show tirzepatideVial;
 
+import 'package:aloft/util/device.dart';
+
 void main() {
   testWidgets('turning on the lock from More saves it, and the app locks when it leaves the screen', (tester) async {
     final dir = Directory.systemTemp.createTempSync('aloft_widget');
@@ -133,7 +135,7 @@ void main() {
     await tap(row);
     await tap(find.byKey(const Key('confirm-delete-all')));
     expect(await weights(), 0);
-    expect(find.text('All your data was deleted from this phone.'), findsOneWidget);
+    expect(find.text('All your data was deleted from this $deviceWord.'), findsOneWidget);
     await tester.runAsync(() async => expect((await db.loadSettings()).goalWeightKg, isNull));
     // Still past the welcome screens.
     expect(find.text('Delete all my data'), findsOneWidget);

@@ -14,6 +14,7 @@ import '../../report/report_pdf.dart';
 import '../../settings/settings.dart';
 import '../../theme/aloft_theme.dart';
 import '../../widgets/form_widgets.dart';
+import '../../util/device.dart';
 
 /// How far back the report goes.
 enum ReportPeriod {
@@ -92,7 +93,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _message = "The report couldn't be made. Check that your phone has free space.";
+          _message = "The report couldn't be made. Check that your $deviceWord has free space.";
           _problem = true;
         });
       }
@@ -157,7 +158,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
             FilledButton(
               key: const Key('report-save'),
               onPressed: _busy ? null : () => _make(send: false),
-              child: Text(_busy ? 'Working…' : 'Save the report to this phone'),
+              child: Text(_busy ? 'Working…' : 'Save the report to this $deviceWord'),
             ),
             const SizedBox(height: 8),
             OutlinedButton(

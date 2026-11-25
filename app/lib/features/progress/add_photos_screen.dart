@@ -9,6 +9,7 @@ import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import 'photo_image.dart';
 import '../../theme/aloft_theme.dart';
+import '../../util/device.dart';
 
 const photosStayPrivate = 'Saved only inside Aloft, never to your camera roll.';
 
@@ -64,7 +65,7 @@ Future<void> startAddPhotos(BuildContext context) async {
   try {
     picked = choice ? [?await picker.fromCamera()] : await picker.fromLibrary();
   } on CameraUnavailable {
-    messenger.showSnackBar(const SnackBar(content: Text("Aloft can't use the camera on this phone right now.")));
+    messenger.showSnackBar(SnackBar(content: Text("Aloft can't use the camera on this $deviceWord right now.")));
     return;
   } catch (_) {
     messenger.showSnackBar(const SnackBar(content: Text("Those photos couldn't be opened.")));
@@ -240,7 +241,7 @@ class _AddPhotosScreenState extends ConsumerState<AddPhotosScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
-                  "These couldn't be saved. Check that your phone has free space, then try again.",
+                  "These couldn't be saved. Check that your $deviceWord has free space, then try again.",
                   style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600),
                 ),
               ),
