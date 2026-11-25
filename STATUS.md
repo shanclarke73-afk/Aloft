@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 3 uploaded to both stores; left are testers and test purchases, store listings, testing)_
+_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 4 uploaded to both stores; left are testers and test purchases, store listings, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -100,6 +100,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
       needs the RevenueCat Play key in that file (as `ALOFT_RC_KEY_ANDROID`) and a higher build number (`bundle exec fastlane bump`).
+- [x] **Build 4 uploaded to both stores** (Nov 25), 1.0.0 (4): build 3 plus the Save button kept above the
+      phone's navigation buttons, and getting started asking about history first. Google Play: released to
+      Internal testing. App Store: uploaded to TestFlight. **Answer the encryption question on this build as
+      "standard encryption algorithms", not sold in France.** Neither change has been seen on a real device yet.
 - [x] **Build 3 uploaded to both stores** (Nov 24), 1.0.0 (3): build 2 plus the iPad layout and the
       "iPad" / "tablet" wording. Google Play: released to Internal testing by `fastlane android internal`
       (no draft step needed now that the track is live). App Store: uploaded to TestFlight by
