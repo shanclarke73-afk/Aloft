@@ -44,7 +44,8 @@ cd app && flutter build appbundle --release --dart-define-from-file=dart_defines
 ```
 
 The result is `app/build/app/outputs/bundle/release/app-release.aab`. The defines file holds
-the RevenueCat **Google** key (`goog_...`), not the Test Store key: a release build ignores a
+the RevenueCat **Google** key (`goog_...`) as `ALOFT_RC_KEY_ANDROID` (and the Apple one as
+`ALOFT_RC_KEY_IOS`), not the Test Store key: a release build ignores a
 `test_` key. Raise the build number in `pubspec.yaml` (the part after `+`) for every upload.
 
 To confirm which key signed a bundle:

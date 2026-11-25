@@ -3,11 +3,15 @@ import 'package:aloft/util/links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:purchases_flutter/purchases_flutter.dart' show PeriodUnit;
 
 /// A store that sells nothing real: the test decides what each call answers.
 class FakeStore implements ProStore {
-  FakeStore({this.alreadyPro = false});
+  FakeStore({this.alreadyPro = false, this.yearlyTrial});
   final bool alreadyPro;
+
+  /// The trial the store offers on the yearly plan; none for someone who has subscribed before.
+  final FreeTrial? yearlyTrial;
   PurchaseOutcome next = PurchaseOutcome.bought;
   bool restoreFinds = false;
   bool reachable = true;
@@ -25,10 +29,10 @@ class FakeStore implements ProStore {
 
   @override
   Future<List<ProPlan>> plans() async => reachable
-      ? const [
-          ProPlan(kind: ProPlanKind.yearly, price: r'$14.99', handle: 'y'),
-          ProPlan(kind: ProPlanKind.lifetime, price: r'$29.99', handle: 'l'),
-          ProPlan(kind: ProPlanKind.monthly, price: r'$1.99', handle: 'm'),
+      ? [
+          ProPlan(kind: ProPlanKind.yearly, price: r'$14.99', trial: yearlyTrial, handle: 'y'),
+          const ProPlan(kind: ProPlanKind.lifetime, price: r'$29.99', handle: 'l'),
+          const ProPlan(kind: ProPlanKind.monthly, price: r'$1.99', handle: 'm'),
         ]
       : const [];
 
@@ -54,6 +58,24 @@ void main() {
     expect(canUseStoreKey('test_abc', releaseBuild: true), isFalse);
     expect(canUseStoreKey('goog_abc', releaseBuild: true), isTrue);
     expect(canUseStoreKey('appl_abc', releaseBuild: true), isTrue);
+  });
+
+  test('each store build uses its own key, and a debug build falls back to the shared one', () {
+    String key(TargetPlatform p) => storeKeyFor(p, shared: 'test_x', android: 'goog_a', ios: 'appl_i');
+    expect(key(TargetPlatform.android), 'goog_a');
+    expect(key(TargetPlatform.iOS), 'appl_i');
+    expect(storeKeyFor(TargetPlatform.android, shared: 'test_x', android: '', ios: 'appl_i'), 'test_x');
+    expect(storeKeyFor(TargetPlatform.iOS, shared: '', android: 'goog_a', ios: ''), '');
+  });
+
+  test('a trial is described in days or months, and an unusable length means no trial', () {
+    expect(FreeTrial.from(PeriodUnit.week, 2)!.length, '14 days');
+    expect(FreeTrial.from(PeriodUnit.week, 2)!.adjective, '14-day');
+    expect(FreeTrial.from(PeriodUnit.day, 1)!.length, '1 day');
+    expect(FreeTrial.from(PeriodUnit.month, 1)!.length, '1 month');
+    expect(FreeTrial.from(PeriodUnit.year, 1)!.adjective, '12-month');
+    expect(FreeTrial.from(PeriodUnit.unknown, 2), isNull);
+    expect(FreeTrial.from(PeriodUnit.day, 0), isNull);
   });
 
   Future<ProviderContainer> show(WidgetTester tester, {ProStore? store}) async {
@@ -118,6 +140,34 @@ void main() {
     // Someone who has Pro is never shown the plans again.
     expect(find.byKey(const Key('pro-buy')), findsNothing);
     expect(find.byKey(const Key('pro-manage')), findsOneWidget);
+  });
+
+  testWidgets('a free trial is stated with its length, the price after it and that it renews', (tester) async {
+    final store = FakeStore(yearlyTrial: FreeTrial.from(PeriodUnit.week, 2));
+    await show(tester, store: store);
+    expect(find.text('Start 14-day free trial'), findsOneWidget);
+    expect(find.text('Best value · 14 days free'), findsOneWidget);
+    final terms = tester.widget<Text>(find.byKey(const Key('pro-terms'))).data!;
+    expect(terms, contains(r'Free for 14 days, then $14.99 a year'));
+    expect(terms, contains(r'renews automatically at $14.99 a year'));
+    expect(terms, contains('before the trial ends'));
+
+    // The trial belongs to the yearly plan only.
+    await tap(tester, const Key('plan-monthly'));
+    expect(find.text('Continue with Monthly'), findsOneWidget);
+    expect(find.textContaining('Free for'), findsNothing);
+
+    await tap(tester, const Key('plan-yearly'));
+    await tap(tester, const Key('pro-buy'));
+    expect(store.bought!.kind, ProPlanKind.yearly);
+  });
+
+  testWidgets('someone the store offers no trial sees no mention of one', (tester) async {
+    await show(tester, store: FakeStore());
+    expect(find.text('Continue with Yearly'), findsOneWidget);
+    expect(find.text('Best value'), findsOneWidget);
+    expect(find.textContaining('free trial'), findsNothing);
+    expect(find.textContaining('Free for'), findsNothing);
   });
 
   testWidgets('backing out of a purchase says nothing; a failed one says no charge was made', (tester) async {
