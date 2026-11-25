@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 23, 2026 (1.0: features built; first build in Google Play internal testing and the three Play products created; left are App Store products, RevenueCat, the trial wording on the paywall, store listings, testing)_
+_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; left are the Play service account file in RevenueCat, new store builds, store listings, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -89,9 +89,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       [docs/android-signing.md](docs/android-signing.md). Checked with a throwaway key, since deleted.
       The real upload key was made on Nov 22 (`~/AndroidKeys/aloft-upload.jks`, with `app/android/key.properties`).
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
-      `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). Still needed: the
-      three products in the App Store (Play's are done, see below), each store connected to RevenueCat and
-      its products attached to `pro` and the `default` offering, and the platform keys in release builds.
+      `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). The products exist
+      in both stores and in RevenueCat (see below). Still needed: Google Play's service account file uploaded
+      to the Play app in RevenueCat (until then Play purchases can't be checked), a review screenshot on each
+      App Store product, and a test purchase on each store.
 - [x] **First Google Play upload** (Nov 23): 1.0.0 build 1, signed with the upload key, is in Internal testing as
       a **draft** release. Testers can't install it until the draft is rolled out in Play Console. It was built
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
@@ -106,6 +107,18 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 
       Other countries' prices are Google's conversions of the US price. Made in Play Console: the fastlane Play
       key can read products but isn't allowed to create or price them. Use the same three IDs in the App Store.
+- [x] **App Store products** (Nov 24), made with the App Store Connect key, same IDs as Play, in subscription
+      group "Aloft Pro" (yearly is level 1, monthly level 2): `aloft.pro.monthly` $1.99, `aloft.pro.yearly`
+      $14.99 with a 2-week free trial for new subscribers, `aloft.pro.lifetime` $29.99 (non-consumable). Sold in
+      174 countries, not France; other countries' prices are Apple's equivalents of the US price. All three say
+      "Missing metadata" until each has a review screenshot (a picture of the paywall), and they go to review
+      with the first app version.
+- [x] **RevenueCat set up for both stores** (Nov 24), project "Aloft": apps "Aloft (Play Store)" and "Aloft (App
+      Store)"; the App Store one uses the in-app purchase key already used by Tax Tote and Debt Shredder. All six
+      store products are on the `pro` entitlement and in the `default` offering (Monthly, Lifetime, Annual
+      packages), beside the Test Store ones. Both public keys are in `app/dart_defines.release.json` on the Mac.
+      **Not done:** the Play app in RevenueCat has no service account file yet, and RevenueCat has no App Store
+      Connect API key (optional; only for importing products and price changes).
 - [x] **The paywall states the free trial** (Nov 24): when the store offers this person a trial, the yearly card
       says "Best value · 14 days free", the button says "Start 14-day free trial", and the terms give the length,
       the price after it, that it renews, and that cancelling before the trial ends costs nothing. The trial is
