@@ -7,6 +7,7 @@ import '../../settings/settings.dart';
 import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../../theme/aloft_theme.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 Future<void> openLogWeight(BuildContext context, {Weight? editing}) =>
     Navigator.of(context)
@@ -111,6 +112,7 @@ class _LogWeightScreenState extends ConsumerState<LogWeightScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),

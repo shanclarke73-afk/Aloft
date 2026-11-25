@@ -15,6 +15,7 @@ import '../../settings/settings.dart';
 import '../../theme/aloft_theme.dart';
 import '../../widgets/form_widgets.dart';
 import '../../util/device.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// How far back the report goes.
 enum ReportPeriod {
@@ -117,6 +118,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         child: Column(

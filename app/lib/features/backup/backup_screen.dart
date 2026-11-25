@@ -14,6 +14,7 @@ import '../../util/format.dart';
 import '../../widgets/form_widgets.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/device.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// Removes a temporary copy Aloft made or was handed. Files elsewhere are never touched.
 void _discardTemporary(File file) {
@@ -204,6 +205,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
@@ -416,6 +418,7 @@ class _RestoreScreenState extends ConsumerState<RestoreScreen> {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         child: Column(

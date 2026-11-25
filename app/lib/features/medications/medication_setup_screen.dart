@@ -10,6 +10,7 @@ import '../../widgets/schedule_editor.dart';
 import 'catalog.dart';
 import 'medication_limit.dart';
 import '../../theme/aloft_theme.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// Asks which kind of medication, then opens the setup screen for it. One medication at a
 /// time is free; with one already active this shows the Pro screen first.
@@ -215,6 +216,7 @@ class _MedicationSetupScreenState extends ConsumerState<MedicationSetupScreen> {
         centerTitle: true,
       ),
       // Not a ListView: that would discard fields scrolled off screen, and what was typed in them.
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),

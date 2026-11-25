@@ -13,6 +13,7 @@ import 'catalog.dart';
 import 'medication_limit.dart';
 import 'medication_setup_screen.dart';
 import '../../theme/aloft_theme.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// More → My medications (mockups/MyMeds): usual dose, schedule, the vial in use, and the
 /// changes a person makes over time.
@@ -29,6 +30,7 @@ class MyMedicationsScreen extends ConsumerWidget {
           style: TextStyle(fontFamily: displayFont, fontSize: 22, fontWeight: FontWeight.w800),
         ),
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         children: [

@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../util/links.dart';
 import '../../theme/aloft_theme.dart';
 import '../../util/device.dart';
+import '../../widgets/system_bar_spacer.dart';
 
 /// The medical disclaimer (SPEC section 9). The same words are used wherever it appears.
 const medicalDisclaimer =
@@ -57,6 +58,7 @@ class AboutScreen extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
+      bottomNavigationBar: const SystemBarSpacer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 40),
         child: Column(
