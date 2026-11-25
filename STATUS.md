@@ -153,15 +153,22 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Encryption answer** (Nov 25): on build 4 Shannon chose "standard encryption algorithms", not sold in
       France, and Apple asked for no documents. Apple's API shows the same value on builds 2, 3 and 4 (exempt),
       so it can't tell which option was chosen. Submit build 4 or later for review, not 2 or 3.
-- [ ] **Store screenshots** (started Nov 25). A screenshot build (`flutter run --dart-define=ALOFT_DEMO=true
-      --dart-define=ALOFT_PRO=true`, debug only) opens a throwaway database with a made-up person's twelve
-      weeks of compounded semaglutide, so no real records appear. Raw captures are in
-      [store/screenshots/raw](store/screenshots/raw) and the captioned store images in
-      [store/screenshots/app-store](store/screenshots/app-store), made by `python3 store/screenshots/compose.py`
-      (captions are in that file). Done: Today, Log shot, History and Charts for the 6.9-inch iPhone
-      (1320 x 2868) and the 13-inch iPad (2064 x 2752). Not uploaded to App Store Connect. Still to do:
-      Android phone captures for Google Play, the Aloft Pro screen (also the review screenshot for each
-      App Store product), and the Play icon and feature graphic.
+- [ ] **Store screenshots** (Nov 25). A screenshot build (`flutter run --dart-define=ALOFT_DEMO=true`, debug
+      only; add `--dart-define=ALOFT_PRO=true` for everything except the Aloft Pro screen) opens a throwaway
+      database with a made-up person's twelve weeks of compounded semaglutide and a pretend store with the
+      three plans, so no real records appear and nothing can be bought. Raw captures are in
+      [store/screenshots/raw](store/screenshots/raw); `python3 store/screenshots/compose.py` turns them into
+      the captioned store images (captions are in that file).
+      - **App Store: uploaded.** Five iPhone 6.9-inch images (Today, Log shot, History, Charts, Aloft Pro) and
+        four iPad 13-inch images, in [store/screenshots/app-store](store/screenshots/app-store). The plain
+        Aloft Pro capture is also the review screenshot on all three products, which now say "Ready to
+        Submit" instead of "Missing metadata".
+      - **Google Play: made, not uploaded.** Four phone images (1080 x 1920) and the feature graphic
+        (1024 x 500) are in [store/screenshots/play](store/screenshots/play); the icon is
+        `brand/play-store-512.png`. The fastlane Play key isn't allowed to change the store listing, so these
+        go in through Play Console (Grow → Store presence → Store listings) or after that key is given
+        "Manage store presence" for Aloft.
+      - Not made: Android tablet images (optional on Play), and a Pro image for Play.
 - [x] **Level chart source line** (Nov 25): it now reads "US prescribing information for semaglutide" (and the
       same for the other three), instead of naming the brand-name products, so store images carry no other
       company's trademarks. The figures and where they came from are unchanged.
