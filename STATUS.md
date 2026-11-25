@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 2 uploaded to both stores; left are testers and test purchases, store listings, testing)_
+_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 3 uploaded to both stores; left are testers and test purchases, store listings, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -100,6 +100,11 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
       needs the RevenueCat Play key in that file (as `ALOFT_RC_KEY_ANDROID`) and a higher build number (`bundle exec fastlane bump`).
+- [x] **Build 3 uploaded to both stores** (Nov 24), 1.0.0 (3): build 2 plus the iPad layout and the
+      "iPad" / "tablet" wording. Google Play: released to Internal testing by `fastlane android internal`
+      (no draft step needed now that the track is live). App Store: uploaded to TestFlight by
+      `fastlane ios beta`, which ran end to end for the first time and worked. The TestFlight encryption
+      question is still unanswered and there are no TestFlight testers.
 - [x] **Build 2 uploaded to both stores** (Nov 24), 1.0.0 (2), the first with real purchases (RevenueCat keys
       for each store). **Google Play:** rolled out to Internal testing on Nov 24 with the "Tax Tote testers"
       list (Shannon only); it replaces build 1.
@@ -107,14 +112,14 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       there are no testers. Xcode has no Apple account on this Mac, so
       `flutter build ipa` can't sign; `fastlane ios beta` now archives with the App Store Connect key and signs
       the store copy with the profile "com.shannonsonlinebookkeeping.aloft AppStore" (made Nov 24). The steps
-      were run by hand and worked; the rewritten lane itself has not been run end to end yet.
+      were run by hand for build 2; the lane itself ran end to end for build 3.
       `fastlane android internal draft:true` makes the Play draft. Not yet done: testers on either store, and a
       test purchase.
 - [x] **iPad** (Nov 24): the iPhone project already targets iPad, so the TestFlight build installs on one. On an
       iPad or tablet the app now sits in a centred column 640 points wide instead of stretching edge to edge
       (`WideFrame`). The wording follows the device too: "this phone", "this iPad" or
       "this tablet" (`deviceWord`). Seen on the iPad Pro 13-inch simulator, welcome screen only. The other
-      screens have not been looked at on an iPad, and a real iPad has not run it. Neither change is in build 2.
+      screens have not been looked at on an iPad, and a real iPad has not run it. Both are in build 3.
 - [x] **Store listing text** (Nov 24), in [docs/store-listing.md](docs/store-listing.md): approved by Shannon and
       entered into both stores. The App Store has the subtitle, promotional text, keywords, description, links,
       category and review notes. Google Play has the short and full description as a draft store listing.
