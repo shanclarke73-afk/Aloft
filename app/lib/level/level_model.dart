@@ -44,13 +44,13 @@ class Kinetics {
 /// Re-check before each release (SPEC 6.6).
 const kineticsByIngredient = <String, Kinetics>{
   // Ozempic and Wegovy: "elimination half-life of approximately 1 week"; peak "1 to 3 days post dose".
-  'semaglutide': Kinetics(halfLifeHours: 168, tmaxHours: 48, source: 'Ozempic and Wegovy prescribing information'),
+  'semaglutide': Kinetics(halfLifeHours: 168, tmaxHours: 48, source: 'US prescribing information for semaglutide'),
   // Mounjaro: "approximately 5 days"; Zepbound: median time to peak 24 hours (range 8 to 72).
-  'tirzepatide': Kinetics(halfLifeHours: 120, tmaxHours: 24, source: 'Mounjaro and Zepbound prescribing information'),
+  'tirzepatide': Kinetics(halfLifeHours: 120, tmaxHours: 24, source: 'US prescribing information for tirzepatide'),
   // Victoza and Saxenda: "approximately 13 hours"; peak at 8 to 12 hours (Saxenda: 11 hours).
-  'liraglutide': Kinetics(halfLifeHours: 13, tmaxHours: 11, source: 'Victoza and Saxenda prescribing information'),
+  'liraglutide': Kinetics(halfLifeHours: 13, tmaxHours: 11, source: 'US prescribing information for liraglutide'),
   // Trulicity: "approximately 5 days"; time to peak 24 to 72 hours, median 48.
-  'dulaglutide': Kinetics(halfLifeHours: 120, tmaxHours: 48, source: 'Trulicity prescribing information'),
+  'dulaglutide': Kinetics(halfLifeHours: 120, tmaxHours: 48, source: 'US prescribing information for dulaglutide'),
 };
 
 class LoggedDose {

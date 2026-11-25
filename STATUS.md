@@ -153,6 +153,33 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Encryption answer** (Nov 25): on build 4 Shannon chose "standard encryption algorithms", not sold in
       France, and Apple asked for no documents. Apple's API shows the same value on builds 2, 3 and 4 (exempt),
       so it can't tell which option was chosen. Submit build 4 or later for review, not 2 or 3.
+- [ ] **Store screenshots** (Nov 25). A screenshot build (`flutter run --dart-define=ALOFT_DEMO=true`, debug
+      only; add `--dart-define=ALOFT_PRO=true` for everything except the Aloft Pro screen) opens a throwaway
+      database with a made-up person's twelve weeks of compounded semaglutide and a pretend store with the
+      three plans, so no real records appear and nothing can be bought. Raw captures are in
+      [store/screenshots/raw](store/screenshots/raw); `python3 store/screenshots/compose.py` turns them into
+      the captioned store images (captions are in that file).
+      - **App Store: uploaded.** Five iPhone 6.9-inch images (Today, Log shot, History, Charts, Aloft Pro) and
+        four iPad 13-inch images, in [store/screenshots/app-store](store/screenshots/app-store). The plain
+        Aloft Pro capture is also the review screenshot on all three products, which now say "Ready to
+        Submit" instead of "Missing metadata".
+      - **Google Play: made, not uploaded.** Four phone images (1080 x 1920) and the feature graphic
+        (1024 x 500) are in [store/screenshots/play](store/screenshots/play); the icon is
+        `brand/play-store-512.png`. On Nov 25 the fastlane Play key (`fastlane@taxtote-prod`) was given
+        "Manage store presence" for Aloft, which also covers pricing, in-app products and content ratings.
+        Uploading the images through Google's API then worked, but saving the change was still refused
+        ("The caller does not have permission") several minutes later. Either the permission needs longer to
+        take effect, or the files go in by hand through Play Console (Grow → Store presence → Store listings).
+        Google's API also shows the listing's descriptions as empty: the text entered on Nov 24 is a draft in
+        Play Console only.
+      - Not made: Android tablet images (optional on Play), and a Pro image for Play.
+- [x] **Level chart source line** (Nov 25): it now reads "US prescribing information for semaglutide" (and the
+      same for the other three), instead of naming the brand-name products, so store images carry no other
+      company's trademarks. The figures and where they came from are unchanged.
+- [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
+      saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
+      went blank. Found while making screenshots. What a release build showed was not checked. Fixed; not in
+      build 4.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
