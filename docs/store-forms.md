@@ -19,10 +19,10 @@ _Shannon approved these answers, with the recommended option on all four decisio
 | Google Play | Financial features | Saved: none |
 | Google Play | Health apps | Saved: "Nutrition and weight management" and "Medication and treatment management". Play asked for no regional details |
 | Google Play | Trader status and Terms of Service | Saved: trader status applies; terms link added |
-| Google Play | Sign in details | **Not saved: needs a decision.** See below |
+| Google Play | Sign in details | **Not saved.** Shannon chose "answer Yes and explain", but the form won't save without a tick box that isn't true for Aloft. See below |
 | Google Play | Target audience and content | **Blocked** until Sign in details is saved |
-| Google Play | Content ratings | Not started |
-| Google Play | Data safety | Not started |
+| Google Play | Content ratings | **Not started.** Completing it means agreeing to IARC's Terms of Service and giving a contact email, which need Shannon's say-so |
+| Google Play | Data safety | **Saved as a draft**, all five steps answered: purchase history collected (not shared, not ephemeral, required; App functionality and Analytics), encrypted in transit, no accounts, deletion can be requested at `https://peaceofmindapps.com/aloft/#support`. Play won't accept it as final until Target audience is done |
 
 Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.
 
@@ -30,10 +30,13 @@ Everything saved on Google Play is "saved, ready to send for review" in Publishi
 
 The draft said "all functionality is available without special access". The form words it differently: it asks whether **any part of the app is restricted**, and lists payments, subscriptions and biometric authentication as reasons to answer Yes. Aloft Pro is a paid tier, so the accurate answer is **Yes**. The form then wants instructions for reaching the restricted parts, and says Google's reviewers can't make purchases or use free trials.
 
-Options:
-1. **Answer Yes and explain.** "No account or sign-in exists. Everything except Aloft Pro is free and open. Aloft Pro (a second medication, the PDF report, CSV export) is unlocked by a Google Play purchase. The app lock is off unless the person turns it on." The reviewer sees all the free features and the Pro screen, but not the Pro features themselves.
-2. **Add a reviewer code to the app** that switches Pro on for review, and give that code in the instructions. Needs a new build. Anyone who learned the code could unlock Pro without paying.
-3. **Answer No.** Not recommended: it doesn't match the form's own wording.
+Shannon chose to answer Yes and explain (Nov 25). When the explanation was entered, the form refused to save: it has a required tick box reading "Sign in details in this declaration provide full access to all the features and content within this app, including premium or paid content". That would be untrue, because the explanation gives no way into Pro without paying, so it was not ticked and nothing was saved.
+
+What would make the tick box true:
+1. **A reviewer code in the app** that switches Pro on for review, given in these instructions. Needs a new build. The code can be set per build (kept out of git, like the store keys) so it can be changed if it leaks.
+2. **Make nothing paid at launch on Android**, which isn't the plan.
+
+Until this form is saved, Target audience and content can't be started, and Data safety can't be finalised.
 
 ## The facts the answers rest on
 
