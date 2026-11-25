@@ -572,17 +572,23 @@ class BackupReminderCard extends ConsumerWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  FilledButton.tonal(
-                    key: const Key('backup-reminder-save'),
-                    onPressed: () =>
-                        Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
-                    child: const Text('Save a backup'),
+                  // Aloft's buttons are full width by default, which a Row can't lay out: each
+                  // takes its share of the row instead.
+                  Expanded(
+                    child: FilledButton.tonal(
+                      key: const Key('backup-reminder-save'),
+                      onPressed: () =>
+                          Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
+                      child: const Text('Save a backup'),
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  OutlinedButton(
-                    key: const Key('backup-reminder-later'),
-                    onPressed: () => ref.read(settingsProvider.notifier).snoozeBackupReminder(at.add(backupSnooze)),
-                    child: const Text('Not now'),
+                  Expanded(
+                    child: OutlinedButton(
+                      key: const Key('backup-reminder-later'),
+                      onPressed: () => ref.read(settingsProvider.notifier).snoozeBackupReminder(at.add(backupSnooze)),
+                      child: const Text('Not now'),
+                    ),
                   ),
                 ],
               ),

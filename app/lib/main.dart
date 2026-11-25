@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'backup/backup_files.dart';
 import 'data/encrypted_database.dart';
+import 'demo/demo_data.dart';
 import 'photos/photo_picker.dart';
 import 'reminders/reminders.dart';
 import 'security/app_lock.dart';
@@ -33,7 +34,8 @@ Future<void> main() async {
     ], await rootBundle.loadString('assets/fonts/PlusJakartaSans-OFL.txt'));
   });
   try {
-    final database = await openAppDatabase();
+    // Screenshot builds get a throwaway database of made-up records; a release build never does.
+    final database = demoRequested && !kReleaseMode ? await openDemoDatabase() : await openAppDatabase();
     final settings = await database.loadSettings(
       countryCode: WidgetsBinding.instance.platformDispatcher.locale.countryCode,
     );

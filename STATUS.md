@@ -153,6 +153,18 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Encryption answer** (Nov 25): on build 4 Shannon chose "standard encryption algorithms", not sold in
       France, and Apple asked for no documents. Apple's API shows the same value on builds 2, 3 and 4 (exempt),
       so it can't tell which option was chosen. Submit build 4 or later for review, not 2 or 3.
+- [ ] **Store screenshots** (started Nov 25). A screenshot build (`flutter run --dart-define=ALOFT_DEMO=true
+      --dart-define=ALOFT_PRO=true`, debug only) opens a throwaway database with a made-up person's twelve
+      weeks of compounded semaglutide, so no real records appear. Four iPhone 6.9-inch captures at App Store
+      size (1320 x 2868) are in [store/screenshots/raw/iphone-6.9](store/screenshots/raw/iphone-6.9): Today,
+      Log shot, History, Charts. Still to do: iPad 13-inch, Android phone, the Aloft Pro screen, captions or
+      frames if wanted, the Play feature graphic and icon, and the review screenshot for each App Store product.
+      The Charts screen names Ozempic and Wegovy as the source of the half-life figures, which may not be
+      wanted in a store image.
+- [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
+      saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
+      went blank. Found while making screenshots. What a release build showed was not checked. Fixed; not in
+      build 4.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
