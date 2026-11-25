@@ -197,8 +197,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       France and content rights are in. Google Play: all App content declarations are saved and the page
       shows nothing needing attention (none sent for review). Content ratings saved (ESRB Everyone, PEGI 3);
       Sign in details saved by Shannon with the reviewer access code; Target audience 18 and over; Data safety
-      saved as final. Still open: the App Store privacy labels and review
-      contact. The iPhone
+      saved as final. App Store privacy labels published (Purchases, not linked, no tracking). Still open:
+      the App Store review contact. The iPhone
       privacy file now lists Analytics beside App functionality for purchase history, and the matching
       privacy-policy sentences are live on the website (POMAWebsite PR #9, merged).
 - [x] **Access code for store reviewers** (Nov 25): Google's reviewers can't make purchases, and Play's Sign in
