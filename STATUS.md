@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 4 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
+_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 5 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -110,6 +110,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
         received one.
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
+- [x] **Build 5 uploaded to both stores** (Nov 25), 1.0.0 (5): build 4 plus the Today backup-reminder fix
+      and the level chart's source line without brand names. Google Play: released to Internal testing.
+      App Store: uploaded to TestFlight. The Android bundle of build 5 is about 21 MB bigger than it should
+      be: iCloud Drive had made " 2" copies of files inside `app/build`, and an old "libapp 2.so" was packed
+      beside the real one. It is never loaded, so the app behaves the same. `app/build` on the Mac is now a
+      link to `~/Library/Caches/flutter-builds/aloft-main`, outside iCloud, and the iPhone build 5 was made
+      after that from a clean folder. The next Android build will be clean too.
 - [x] **Build 4 uploaded to both stores** (Nov 25), 1.0.0 (4): build 3 plus the Save button kept above the
       phone's navigation buttons, and getting started asking about history first. Google Play: released to
       Internal testing. App Store: uploaded to TestFlight. **Answer the encryption question on this build as
@@ -178,8 +185,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       company's trademarks. The figures and where they came from are unchanged.
 - [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
       saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
-      went blank. Found while making screenshots. What a release build showed was not checked. Fixed; not in
-      build 4.
+      went blank. Found while making screenshots. What a release build showed was not checked. Fixed in build 5.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
