@@ -106,7 +106,7 @@ void main() {
     expect(find.text('Estimated tirzepatide level'), findsOneWidget);
     expect(find.textContaining('estimate only'), findsOneWidget);
     expect(find.text(levelDisclaimer), findsOneWidget);
-    expect(find.textContaining('Mounjaro and Zepbound prescribing information'), findsOneWidget);
+    expect(find.textContaining('US prescribing information for tirzepatide'), findsOneWidget);
     expect(find.byType(LevelChart), findsOneWidget);
     await tester.scrollUntilVisible(find.byType(WeightChart), 200, scrollable: find.byType(Scrollable).first);
     expect(find.text('−12.4 lb since Sep 4'), findsOneWidget);

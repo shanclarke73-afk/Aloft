@@ -155,12 +155,16 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       so it can't tell which option was chosen. Submit build 4 or later for review, not 2 or 3.
 - [ ] **Store screenshots** (started Nov 25). A screenshot build (`flutter run --dart-define=ALOFT_DEMO=true
       --dart-define=ALOFT_PRO=true`, debug only) opens a throwaway database with a made-up person's twelve
-      weeks of compounded semaglutide, so no real records appear. Four iPhone 6.9-inch captures at App Store
-      size (1320 x 2868) are in [store/screenshots/raw/iphone-6.9](store/screenshots/raw/iphone-6.9): Today,
-      Log shot, History, Charts. Still to do: iPad 13-inch, Android phone, the Aloft Pro screen, captions or
-      frames if wanted, the Play feature graphic and icon, and the review screenshot for each App Store product.
-      The Charts screen names Ozempic and Wegovy as the source of the half-life figures, which may not be
-      wanted in a store image.
+      weeks of compounded semaglutide, so no real records appear. Raw captures are in
+      [store/screenshots/raw](store/screenshots/raw) and the captioned store images in
+      [store/screenshots/app-store](store/screenshots/app-store), made by `python3 store/screenshots/compose.py`
+      (captions are in that file). Done: Today, Log shot, History and Charts for the 6.9-inch iPhone
+      (1320 x 2868) and the 13-inch iPad (2064 x 2752). Not uploaded to App Store Connect. Still to do:
+      Android phone captures for Google Play, the Aloft Pro screen (also the review screenshot for each
+      App Store product), and the Play icon and feature graphic.
+- [x] **Level chart source line** (Nov 25): it now reads "US prescribing information for semaglutide" (and the
+      same for the other three), instead of naming the brand-name products, so store images carry no other
+      company's trademarks. The figures and where they came from are unchanged.
 - [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
       saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
       went blank. Found while making screenshots. What a release build showed was not checked. Fixed; not in
