@@ -5,6 +5,7 @@ _Approved by Shannon and entered into both stores on November 24, 2026. App Stor
 Rules this draft follows:
 - No brand names of medications (Ozempic, Wegovy, Zepbound, Mounjaro and so on) anywhere. Both stores reject other companies' trademarks in titles and keywords, and they are risky in descriptions. Generic names (semaglutide, tirzepatide) are used instead.
 - No medical claims. Aloft tracks; it never advises a dose and never promises weight loss.
+- No other apps' names. The import line says "another tracker" (changed Nov 25, 2026); the name Shotsy stays inside the app only, where people need it to pick the right file, and About says Aloft isn't affiliated with it.
 - Only features that are in 1.0. No Apple Health, no automatic cloud backup, no widgets.
 
 ## Both stores
@@ -59,7 +60,7 @@ PRIVATE BY DESIGN
 • Save your own backup file whenever you like, with an optional password
 
 MOVING FROM ANOTHER APP?
-Bring in your history from a Shotsy CSV export.
+Bring in your history from another tracker's CSV export.
 
 ALOFT PRO
 Tracking, photos, reminders and backup are free. Aloft Pro adds:

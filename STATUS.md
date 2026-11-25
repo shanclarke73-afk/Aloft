@@ -126,6 +126,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       Still missing in both: screenshots (they need made-up data and there is no demo mode), the Play icon
       and feature graphic, App Store review contact details, and all the forms (privacy labels, data safety,
       content and age ratings, health and exact-alarm declarations).
+- [x] **Listing no longer names Shotsy** (Nov 25): the import line in both stores now says "another tracker's
+      CSV export". The name stays inside the app, where people need it to pick the right file, and About says
+      Aloft isn't affiliated with it.
+- [ ] **Encryption answer for build 4.** Builds 2 and 3 were answered "none" by mistake in TestFlight. On
+      build 4, answer "standard encryption algorithms", not sold in France, and submit build 4 or later for
+      review, never 2 or 3.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
