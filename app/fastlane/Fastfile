@@ -19,6 +19,8 @@ PUBSPEC = File.join(APP_ROOT, "pubspec.yaml")
 # dart_defines.release.json (git-ignored) holds the RevenueCat platform keys for store builds.
 RELEASE_DEFINES = File.join(APP_ROOT, "dart_defines.release.json")
 DART_DEFINES = "--dart-define-from-file=#{RELEASE_DEFINES.shellescape}"
+IOS_BUNDLE_ID = "com.shannonsonlinebookkeeping.aloft"
+IOS_TEAM_ID = "F3DV378SF7"
 
 def pubspec_version
   line = File.read(PUBSPEC)[/^version:\s*(\S+)/, 1] or UI.user_error!("No version: line in pubspec.yaml")
@@ -68,15 +70,47 @@ platform :ios do
     UI.success("App Store Connect key works. Latest TestFlight build: #{lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]} (#{build})")
   end
 
+  # Xcode needs no Apple account signed in: the archive is signed through the App Store Connect
+  # key, and the store copy with an App Store profile fastlane makes (or reuses) for the
+  # Apple Distribution certificate in this Mac's keychain. `flutter build ipa` can't do this,
+  # because it has no way to hand xcodebuild the key.
   desc "Build the prod IPA and upload it to TestFlight"
   lane :beta do
     asc_key
     name, build = pubspec_version
-    flutter("build ipa --release #{DART_DEFINES}")
-    ipa = Dir[File.join(APP_ROOT, "build/ios/ipa/*.ipa")].max_by { |f| File.mtime(f) }
-    UI.user_error!("flutter build ipa didn't produce an .ipa") unless ipa
+    key = ["-allowProvisioningUpdates",
+           "-authenticationKeyPath", File.expand_path(ENV["ASC_KEY_PATH"]).shellescape,
+           "-authenticationKeyID", ENV["ASC_KEY_ID"].shellescape,
+           "-authenticationKeyIssuerID", ENV["ASC_ISSUER_ID"].shellescape].join(" ")
+    archive = File.join(APP_ROOT, "build/ios/archive/Runner.xcarchive")
+    out = File.join(APP_ROOT, "build/ios/ipa")
+    flutter("build ios --release --config-only #{DART_DEFINES}")
+    sh("rm -rf #{archive.shellescape} #{out.shellescape}")
+    sh("cd #{APP_ROOT.shellescape} && xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release " \
+       "-destination 'generic/platform=iOS' -archivePath #{archive.shellescape} archive #{key} | tail -5", log: false)
+    get_provisioning_profile(app_identifier: IOS_BUNDLE_ID, team_id: IOS_TEAM_ID, output_path: File.join(APP_ROOT, "build/ios"))
+    options = File.join(APP_ROOT, "build/ios/ExportOptions.plist")
+    File.write(options, <<~PLIST)
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0"><dict>
+      <key>method</key><string>app-store-connect</string>
+      <key>destination</key><string>export</string>
+      <key>teamID</key><string>#{IOS_TEAM_ID}</string>
+      <key>signingStyle</key><string>manual</string>
+      <key>signingCertificate</key><string>Apple Distribution</string>
+      <key>provisioningProfiles</key><dict><key>#{IOS_BUNDLE_ID}</key><string>#{lane_context[SharedValues::SIGH_NAME]}</string></dict>
+      <key>uploadSymbols</key><true/>
+      <key>manageAppVersionAndBuildNumber</key><false/>
+      </dict></plist>
+    PLIST
+    sh("xcodebuild -exportArchive -archivePath #{archive.shellescape} -exportOptionsPlist #{options.shellescape} " \
+       "-exportPath #{out.shellescape} | tail -3", log: false)
+    ipa = Dir[File.join(out, "*.ipa")].max_by { |f| File.mtime(f) }
+    UI.user_error!("The export didn't produce an .ipa") unless ipa
     upload_to_testflight(
       ipa: ipa,
+      app_identifier: IOS_BUNDLE_ID,
       skip_waiting_for_build_processing: true,
     )
     UI.success("Uploaded #{name} (#{build}) to App Store Connect. It shows in TestFlight once Apple finishes processing.")
@@ -117,10 +151,13 @@ platform :android do
     UI.success("Play key works. Internal testing version codes: #{codes.inspect}")
   end
 
-  desc "Build the prod AAB and release it to Internal testing"
-  lane :internal do
-    upload_aab(aab: build_aab, track: "internal", status: "completed")
-    UI.success("Released to Internal testing.")
+  # Until the app has been published once, Play only accepts draft releases: pass draft:true
+  # and roll the release out in Play Console.
+  desc "Build the prod AAB and release it to Internal testing (draft:true leaves it as a draft)"
+  lane :internal do |options|
+    draft = options[:draft]
+    upload_aab(aab: build_aab, track: "internal", status: draft ? "draft" : "completed")
+    UI.success(draft ? "Draft Internal testing release created. Roll it out in Play Console." : "Released to Internal testing.")
   end
 
   desc "Build the prod AAB and add it to a draft production release (finish it in Play Console)"
