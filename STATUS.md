@@ -170,7 +170,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         four iPad 13-inch images, in [store/screenshots/app-store](store/screenshots/app-store). The plain
         Aloft Pro capture is also the review screenshot on all three products, which now say "Ready to
         Submit" instead of "Missing metadata".
-      - **Google Play: made, not uploaded.** Four phone images (1080 x 1920) and the feature graphic
+      - **Google Play: uploaded by Shannon in Play Console on Nov 25** (not checked from here). The notes
+        that follow are how the automatic upload failed.
+      - **Google Play, earlier: made, not uploaded.** Four phone images (1080 x 1920) and the feature graphic
         (1024 x 500) are in [store/screenshots/play](store/screenshots/play); the icon is
         `brand/play-store-512.png`. On Nov 25 the fastlane Play key (`fastlane@taxtote-prod`) was given
         "Manage store presence" for Aloft, which also covers pricing, in-app products and content ratings.
@@ -186,6 +188,11 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
       saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
       went blank. Found while making screenshots. What a release build showed was not checked. Fixed in build 5.
+- [ ] **Store forms** (Nov 25): draft answers for every declaration are in
+      [docs/store-forms.md](docs/store-forms.md), waiting for Shannon's approval. Nothing is entered. Google
+      Play is asking for 11 declarations (App content); the App Store needs the privacy labels, age rating,
+      price and availability. Four decisions are listed at the top of that file. Shannon uploaded the Play
+      icon, feature graphic and phone screenshots herself on Nov 25.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
