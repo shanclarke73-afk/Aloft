@@ -19,12 +19,12 @@ _Shannon approved these answers, with the recommended option on all four decisio
 | Google Play | Financial features | Saved: none |
 | Google Play | Health apps | Saved: "Nutrition and weight management" and "Medication and treatment management". Play asked for no regional details |
 | Google Play | Trader status and Terms of Service | Saved: trader status applies; terms link added |
-| Google Play | Sign in details | **Not saved yet.** Build 6 (Nov 25) accepts an access code that switches Pro on, which makes the form's required "full access" tick box true. Shannon pastes the text from `~/AppStoreKeys/aloft-review-code.txt` into the form and saves it |
-| Google Play | Target audience and content | **Blocked** until Sign in details is saved |
+| Google Play | Sign in details | Saved by Shannon (Nov 25): restricted access, with the reviewer access code (kept in `~/AppStoreKeys/aloft-review-code.txt`, not in git) and the "full access" tick box, which is true now that build 6 accepts the code |
+| Google Play | Target audience and content | Saved (Nov 25): 18 and over only. With only that age group chosen, Play asked no further questions. The optional "restrict users Google determines to be minors" box was left unticked |
 | Google Play | Content ratings | Saved (Nov 25). Shannon agreed to IARC's Terms of Use; contact email is the business address. Category: All Other App Types. Every answer No except "users can purchase digital goods" (Yes; no random items). Ratings given: ESRB Everyone, PEGI 3, USK all ages, Brazil 14+, 3+ elsewhere. The questionnaire did not ask about references to medication |
-| Google Play | Data safety | **Saved as a draft**, all five steps answered: purchase history collected (not shared, not ephemeral, required; App functionality and Analytics), encrypted in transit, no accounts, deletion can be requested at `https://peaceofmindapps.com/aloft/#support`. Play won't accept it as final until Target audience is done |
+| Google Play | Data safety | Saved (Nov 25), no longer a draft: purchase history collected (not shared, not ephemeral, required; App functionality and Analytics), encrypted in transit, no accounts, deletion can be requested at `https://peaceofmindapps.com/aloft/#support`. The store preview shows "No data shared with third parties" |
 
-Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.
+Play's App content page shows nothing left needing attention (Nov 25). Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.
 
 ### The Sign in details question
 
@@ -36,7 +36,7 @@ What would make the tick box true:
 1. **A reviewer code in the app** that switches Pro on for review, given in these instructions. Needs a new build. The code can be set per build (kept out of git, like the store keys) so it can be changed if it leaks.
 2. **Make nothing paid at launch on Android**, which isn't the plan.
 
-Until this form is saved, Target audience and content can't be started, and Data safety can't be finalised.
+Shannon chose option 1. Build 6 accepts the code, and she saved the form on Nov 25; Target audience and the final Data safety save followed the same day.
 
 ## The facts the answers rest on
 

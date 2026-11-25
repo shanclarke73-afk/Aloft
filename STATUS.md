@@ -194,13 +194,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       went blank. Found while making screenshots. What a release build showed was not checked. Fixed in build 5.
 - [ ] **Store forms** (Nov 25): answers approved by Shannon; what is entered so far is in the table at the top
       of [docs/store-forms.md](docs/store-forms.md). App Store: age rating (12+), free price, countries without
-      France and content rights are in. Google Play: 7 of 11 declarations saved and Data safety saved as a draft (none sent for
-      review). Content ratings saved (ESRB Everyone, PEGI 3). Still open: Play's Sign in
-      details, which Shannon fills in with the reviewer access code now that build 6 accepts one; then Target
-      audience and the final Data safety save, which wait on it; and the App Store privacy labels and review
+      France and content rights are in. Google Play: all App content declarations are saved and the page
+      shows nothing needing attention (none sent for review). Content ratings saved (ESRB Everyone, PEGI 3);
+      Sign in details saved by Shannon with the reviewer access code; Target audience 18 and over; Data safety
+      saved as final. Still open: the App Store privacy labels and review
       contact. The iPhone
       privacy file now lists Analytics beside App functionality for purchase history, and the matching
-      privacy-policy sentences are in an open pull request on the website repo.
+      privacy-policy sentences are live on the website (POMAWebsite PR #9, merged).
 - [x] **Access code for store reviewers** (Nov 25): Google's reviewers can't make purchases, and Play's Sign in
       details form requires a way into everything, paid features included. A store build now accepts an access
       code on the Aloft Pro screen ("Have an access code?"), which switches Pro on for that install. Only the
