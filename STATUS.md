@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 5 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
+_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 6 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -110,6 +110,10 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
         received one.
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
+- [x] **Build 6 uploaded to both stores** (Nov 25), 1.0.0 (6): build 5 plus the access code for store
+      reviewers. Google Play: released to Internal testing, back to its normal size (84.6 MB, no stray
+      copies). App Store: uploaded to TestFlight. Both builds were checked to contain the code's fingerprint
+      and not the code itself. Typing the code on a device has not been tried yet.
 - [x] **Build 5 uploaded to both stores** (Nov 25), 1.0.0 (5): build 4 plus the Today backup-reminder fix
       and the level chart's source line without brand names. Google Play: released to Internal testing.
       App Store: uploaded to TestFlight. The Android bundle of build 5 is about 21 MB bigger than it should
@@ -192,8 +196,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       code's SHA-256 fingerprint is in the build (`ALOFT_REVIEW_CODE_SHA256` in `app/dart_defines.release.json`,
       git-ignored); the code and the paste-ready text for Play Console are in `~/AppStoreKeys/aloft-review-code.txt`
       on the Mac. A build with a different fingerprint stops honouring the old code, and a build with none
-      never shows the link. Not in a store build yet (needs build 6), and Shannon enters the code in Play
-      Console herself.
+      never shows the link. In build 6. Shannon enters the code in Play Console herself.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
