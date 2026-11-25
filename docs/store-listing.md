@@ -1,6 +1,6 @@
-# Store listing text (draft)
+# Store listing text
 
-_Draft of November 24, 2026. Nothing here has been entered into either store yet. Shannon approves the wording first._
+_Approved by Shannon and entered into both stores on November 24, 2026. App Store: subtitle, promotional text, keywords, description, support and privacy links, Health & Fitness category and the review notes (through the API). Google Play: short and full description, saved as a draft store listing in Play Console (the fastlane key isn't allowed to change listings). Change the text here first, then in the stores._
 
 Rules this draft follows:
 - No brand names of medications (Ozempic, Wegovy, Zepbound, Mounjaro and so on) anywhere. Both stores reject other companies' trademarks in titles and keywords, and they are risky in descriptions. Generic names (semaglutide, tirzepatide) are used instead.

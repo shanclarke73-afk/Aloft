@@ -115,9 +115,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       (`WideFrame`). Seen on the iPad Pro 13-inch simulator, welcome screen only. The other screens have not
       been looked at on an iPad, the app still says "phone" there, and a real iPad has not run it. This change
       is not in build 2.
-- [ ] **Store listing text** drafted in [docs/store-listing.md](docs/store-listing.md) (Nov 24): names, subtitle,
-      keywords, descriptions for both stores and review notes. Not approved and not entered into either store.
-      Screenshots are not started: they need made-up data and there is no demo mode.
+- [x] **Store listing text** (Nov 24), in [docs/store-listing.md](docs/store-listing.md): approved by Shannon and
+      entered into both stores. The App Store has the subtitle, promotional text, keywords, description, links,
+      category and review notes. Google Play has the short and full description as a draft store listing.
+      Still missing in both: screenshots (they need made-up data and there is no demo mode), the Play icon
+      and feature graphic, App Store review contact details, and all the forms (privacy labels, data safety,
+      content and age ratings, health and exact-alarm declarations).
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
