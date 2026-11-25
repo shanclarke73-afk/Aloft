@@ -54,7 +54,9 @@ Future<void> main() async {
           photoPickerProvider.overrideWithValue(DevicePhotoPicker(lock)),
           backupFilesProvider.overrideWithValue(DeviceBackupFiles(lock)),
           // Only a build that was given a store key can sell Pro.
-          if (canUseStoreKey(storeKey, releaseBuild: kReleaseMode))
+          if (demoRequested && !kReleaseMode)
+            proStoreProvider.overrideWithValue(const DemoProStore())
+          else if (canUseStoreKey(storeKey, releaseBuild: kReleaseMode))
             proStoreProvider.overrideWithValue(RevenueCatStore(storeKey, lock)),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],

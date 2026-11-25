@@ -10,6 +10,7 @@ import '../data/encrypted_database.dart';
 import '../data/medication_store.dart';
 import '../dose/dose_math.dart';
 import '../dose/injection_sites.dart';
+import '../pro/pro_store.dart';
 
 /// Screenshot builds only: `--dart-define=ALOFT_DEMO=true` in a debug build opens a throwaway
 /// database filled with a made-up person's twelve weeks, so store screenshots never show
@@ -109,4 +110,28 @@ Future<void> seedDemoData(AloftDatabase db, {required DateTime now}) async {
     occurredAt: weeksAgo(1).add(const Duration(days: 2, hours: 4)),
     medicationId: medication.id,
   );
+}
+
+/// Screenshot builds only: the three plans as the stores list them in the US, with the
+/// yearly free trial, so the Aloft Pro screen can be captured without a store account.
+/// Nothing can be bought from it.
+class DemoProStore implements ProStore {
+  const DemoProStore();
+
+  @override
+  bool get available => true;
+  @override
+  Future<void> start(void Function(bool pro) onChange) async {}
+  @override
+  Future<List<ProPlan>> plans() async => const [
+    ProPlan(kind: ProPlanKind.yearly, price: r'$14.99', trial: FreeTrial(14)),
+    ProPlan(kind: ProPlanKind.lifetime, price: r'$29.99'),
+    ProPlan(kind: ProPlanKind.monthly, price: r'$1.99'),
+  ];
+  @override
+  Future<PurchaseOutcome> buy(ProPlan plan) async => PurchaseOutcome.cancelled;
+  @override
+  Future<bool> restore() async => false;
+  @override
+  Future<Uri?> manageUrl() async => null;
 }
