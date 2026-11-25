@@ -16,6 +16,7 @@ import '../about/about_screen.dart';
 import '../medications/medication_limit.dart';
 import '../medications/medication_setup_screen.dart';
 import '../progress/add_photos_screen.dart';
+import '../../util/device.dart';
 
 /// First launch (SPEC 6.1, mockups/Onboarding to OnbFinish): welcome, medication, starting
 /// weight, photos, then privacy choices and the disclaimer. Everything except the disclaimer
@@ -203,7 +204,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       point(
         Icons.lock_outline,
         'Private',
-        'No account, and we never see your data. It stays on this phone, and you can save your own backup file '
+        'No account, and we never see your data. It stays on this $deviceWord, and you can save your own backup file '
             'whenever you like.',
       ),
       point(Icons.timeline, 'See how far you\'ve come', 'Shots, weight and progress photos together, from day one.'),
@@ -437,8 +438,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       const SizedBox(height: 12),
       _small(
         context,
-        'Your data stays on this phone. Save a backup file now and then in More → Backup and restore, '
-        'so a lost phone doesn\'t mean lost history.',
+        'Your data stays on this $deviceWord. Save a backup file now and then in More → Backup and restore, '
+        'so a lost $deviceWord doesn\'t mean lost history.',
         align: TextAlign.start,
       ),
       const SizedBox(height: 16),

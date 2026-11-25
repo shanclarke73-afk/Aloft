@@ -112,9 +112,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       test purchase.
 - [x] **iPad** (Nov 24): the iPhone project already targets iPad, so the TestFlight build installs on one. On an
       iPad or tablet the app now sits in a centred column 640 points wide instead of stretching edge to edge
-      (`WideFrame`). Seen on the iPad Pro 13-inch simulator, welcome screen only. The other screens have not
-      been looked at on an iPad, the app still says "phone" there, and a real iPad has not run it. This change
-      is not in build 2.
+      (`WideFrame`). The wording follows the device too: "this phone", "this iPad" or
+      "this tablet" (`deviceWord`). Seen on the iPad Pro 13-inch simulator, welcome screen only. The other
+      screens have not been looked at on an iPad, and a real iPad has not run it. Neither change is in build 2.
 - [x] **Store listing text** (Nov 24), in [docs/store-listing.md](docs/store-listing.md): approved by Shannon and
       entered into both stores. The App Store has the subtitle, promotional text, keywords, description, links,
       category and review notes. Google Play has the short and full description as a draft store listing.

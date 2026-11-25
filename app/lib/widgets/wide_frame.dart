@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../util/device.dart';
 
 /// On an iPad or tablet, keeps the app to a comfortable reading width in the middle of the
 /// screen instead of stretching the phone layout edge to edge. Phones are left alone.
@@ -18,6 +21,8 @@ class WideFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
+    // Keeps the app's wording ("this phone" / "this iPad") right for the screen it is on.
+    deviceWord = deviceWordFor(media.size, ios: defaultTargetPlatform == TargetPlatform.iOS);
     if (media.size.width < _tabletFrom) return child;
     final scheme = Theme.of(context).colorScheme;
     return ColoredBox(

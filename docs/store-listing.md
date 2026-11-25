@@ -97,7 +97,7 @@ To try Aloft Pro: More > Aloft Pro. The yearly plan has a 14-day free trial for 
 
 ## Still to decide or check
 
-- **"this phone" wording.** The app says "phone" in about 68 places. On an iPad that reads oddly. Options: leave it for 1.0, or change it to say "iPad" or "tablet" on those devices.
+- "this phone" wording: done Nov 24. The app says "iPad" or "tablet" on those devices.
 - The free trial line assumes the App Store trial is set up the same as Play's (it is: 2 weeks, new subscribers only).
 - Trademark search for "Aloft" before the name goes public.
 - Screenshots need made-up data. There is no demo mode yet: either add one for screenshot builds, or load a made-up backup file.

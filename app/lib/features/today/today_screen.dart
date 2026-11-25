@@ -20,6 +20,7 @@ import '../charts/charts_screen.dart';
 import '../body/log_weight_screen.dart';
 import '../log/log_dose_screen.dart';
 import '../medications/medication_setup_screen.dart';
+import '../../util/device.dart';
 
 /// Today tab (mockups/Main, TodayLate, MainTwoMeds). Estimated level, weight and photo cards
 /// arrive with those features.
@@ -562,10 +563,10 @@ class BackupReminderCard extends ConsumerWidget {
               const SizedBox(height: 4),
               Text(
                 nudge == BackupNudge.never
-                    ? 'Your history is only on this phone. A backup file kept somewhere else means a lost or '
-                          'broken phone doesn\'t take it with it.'
+                    ? 'Your history is only on this $deviceWord. A backup file kept somewhere else means a lost or '
+                          'broken $deviceWord doesn\'t take it with it.'
                     : 'Your last backup file was saved ${formatMonthDay(context, settings.lastBackupAt!, now: at)}. '
-                          'Anything logged since is only on this phone.',
+                          'Anything logged since is only on this $deviceWord.',
                 style: TextStyle(fontSize: 14, height: 1.4, color: scheme.onSurfaceVariant),
               ),
               const SizedBox(height: 8),

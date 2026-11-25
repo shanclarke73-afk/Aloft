@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/local_auth.dart';
 
 import '../data/database.dart';
+import '../util/device.dart';
 
 final appLockProvider = Provider<AppLock>((ref) => throw UnimplementedError('app lock not created'));
 
@@ -25,16 +26,16 @@ class DeviceAuthenticator implements Authenticator {
   Future<String?> authenticate(String reason) async {
     try {
       if (!await _auth.isDeviceSupported()) {
-        return 'Set a passcode on this phone to use the app lock.';
+        return 'Set a passcode on this $deviceWord to use the app lock.';
       }
       final ok = await _auth.authenticate(localizedReason: reason, persistAcrossBackgrounding: true);
       return ok ? null : '';
     } on LocalAuthException catch (e) {
       return switch (e.code) {
         LocalAuthExceptionCode.userCanceled || LocalAuthExceptionCode.systemCanceled => '',
-        LocalAuthExceptionCode.noCredentialsSet => 'Set a passcode on this phone to use the app lock.',
-        LocalAuthExceptionCode.temporaryLockout ||
-        LocalAuthExceptionCode.biometricLockout => 'Too many attempts. Use your phone passcode, or try again shortly.',
+        LocalAuthExceptionCode.noCredentialsSet => 'Set a passcode on this $deviceWord to use the app lock.',
+        LocalAuthExceptionCode.temporaryLockout || LocalAuthExceptionCode.biometricLockout =>
+          'Too many attempts. Use your $deviceWord passcode, or try again shortly.',
         _ => 'Couldn\'t check it\'s you (${e.code.name}). Try again.',
       };
     } catch (_) {

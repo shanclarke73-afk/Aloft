@@ -6,6 +6,7 @@ import '../theme/aloft_theme.dart';
 import '../util/links.dart';
 import '../widgets/form_widgets.dart';
 import 'pro_store.dart';
+import '../util/device.dart';
 
 export 'pro_store.dart';
 
@@ -112,7 +113,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
     if (!mounted) return;
     if (url == null || !await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (mounted) {
-        setState(() => _message = 'Subscriptions are managed in your phone\'s store app, under your account.');
+        setState(() => _message = 'Subscriptions are managed in your $deviceWord\'s store app, under your account.');
       }
     }
   }
