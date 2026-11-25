@@ -1,4 +1,5 @@
 import 'package:aloft/pro/pro.dart';
+import 'package:aloft/pro/review_access.dart';
 import 'package:aloft/util/links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,12 +79,13 @@ void main() {
     expect(FreeTrial.from(PeriodUnit.day, 0), isNull);
   });
 
-  Future<ProviderContainer> show(WidgetTester tester, {ProStore? store}) async {
+  Future<ProviderContainer> show(WidgetTester tester, {ProStore? store, ReviewAccess? review}) async {
     late ProviderContainer container;
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           if (store != null) proStoreProvider.overrideWithValue(store),
+          if (review != null) reviewAccessProvider.overrideWithValue(review),
           linkOpenerProvider.overrideWithValue((url) async {
             openedLinks.add(url);
             return true;
@@ -217,6 +219,63 @@ void main() {
     await tester.tap(find.text('Try again'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('pro-buy')), findsOneWidget);
+  });
+
+  test('only the code a build was given is accepted, and a later build with a new code forgets the old one', () async {
+    final memory = MemoryReviewAccessStore();
+    final first = ReviewAccess(fingerprint: ReviewAccess.fingerprintOf('harbor-42'), store: memory);
+    expect(await first.granted(), isFalse);
+    expect(await first.redeem('harbor-41'), isFalse);
+    expect(await first.granted(), isFalse);
+    expect(await first.redeem(' harbor-42 '), isTrue);
+    expect(await first.granted(), isTrue);
+    // The next release carries a different code: the old one no longer counts on this phone.
+    final next = ReviewAccess(fingerprint: ReviewAccess.fingerprintOf('something-else'), store: memory);
+    expect(await next.granted(), isFalse);
+    // A build with no code accepts nothing, not even an empty entry.
+    final none = ReviewAccess(fingerprint: '', store: memory);
+    expect(none.offered, isFalse);
+    expect(await none.redeem(''), isFalse);
+    expect(await none.granted(), isFalse);
+  });
+
+  testWidgets('a store reviewer\'s access code switches Pro on, and a wrong one says so', (tester) async {
+    final review = ReviewAccess(fingerprint: ReviewAccess.fingerprintOf('harbor-42'), store: MemoryReviewAccessStore());
+    final container = await show(tester, store: FakeStore(), review: review);
+
+    await tap(tester, const Key('access-code-link'));
+    await tester.enterText(find.byKey(const Key('access-code-field')), 'wrong');
+    await tester.tap(find.byKey(const Key('access-code-use')));
+    await tester.pumpAndSettle();
+    expect(container.read(proProvider), isFalse);
+    expect(find.textContaining("That code isn't right"), findsOneWidget);
+
+    await tap(tester, const Key('access-code-link'));
+    await tester.enterText(find.byKey(const Key('access-code-field')), 'harbor-42');
+    await tester.tap(find.byKey(const Key('access-code-use')));
+    await tester.pumpAndSettle();
+    expect(container.read(proProvider), isTrue);
+    expect(find.byKey(const Key('pro-active')), findsOneWidget);
+    expect(find.byKey(const Key('access-code-link')), findsNothing);
+  });
+
+  testWidgets('Pro from an access code is still on at the next launch, and outlasts the store saying no', (
+    tester,
+  ) async {
+    final memory = MemoryReviewAccessStore();
+    final review = ReviewAccess(fingerprint: ReviewAccess.fingerprintOf('harbor-42'), store: memory);
+    await review.redeem('harbor-42');
+    final store = FakeStore();
+    final container = await show(tester, store: store, review: review);
+    expect(container.read(proProvider), isTrue);
+    store.onChange!(false);
+    await tester.pumpAndSettle();
+    expect(container.read(proProvider), isTrue);
+  });
+
+  testWidgets('a build with no access code never mentions one', (tester) async {
+    await show(tester, store: FakeStore());
+    expect(find.byKey(const Key('access-code-link')), findsNothing);
   });
 
   testWidgets('the paywall links to the terms and the privacy policy, as the stores require', (tester) async {

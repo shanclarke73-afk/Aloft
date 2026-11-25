@@ -19,6 +19,7 @@ import 'security/app_lock.dart';
 import 'settings/settings.dart';
 import 'util/device.dart';
 import 'pro/pro.dart';
+import 'pro/review_access.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,10 @@ Future<void> main() async {
             proStoreProvider.overrideWithValue(const DemoProStore())
           else if (canUseStoreKey(storeKey, releaseBuild: kReleaseMode))
             proStoreProvider.overrideWithValue(RevenueCatStore(storeKey, lock)),
+          // Store builds accept the reviewers' access code; a build without one never mentions it.
+          reviewAccessProvider.overrideWithValue(
+            ReviewAccess(fingerprint: reviewCodeFingerprint, store: const SecureReviewAccessStore()),
+          ),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],
         child: const AloftApp(),
