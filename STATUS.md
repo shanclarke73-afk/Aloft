@@ -165,9 +165,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         Submit" instead of "Missing metadata".
       - **Google Play: made, not uploaded.** Four phone images (1080 x 1920) and the feature graphic
         (1024 x 500) are in [store/screenshots/play](store/screenshots/play); the icon is
-        `brand/play-store-512.png`. The fastlane Play key isn't allowed to change the store listing, so these
-        go in through Play Console (Grow → Store presence → Store listings) or after that key is given
-        "Manage store presence" for Aloft.
+        `brand/play-store-512.png`. On Nov 25 the fastlane Play key (`fastlane@taxtote-prod`) was given
+        "Manage store presence" for Aloft, which also covers pricing, in-app products and content ratings.
+        Uploading the images through Google's API then worked, but saving the change was still refused
+        ("The caller does not have permission") several minutes later. Either the permission needs longer to
+        take effect, or the files go in by hand through Play Console (Grow → Store presence → Store listings).
+        Google's API also shows the listing's descriptions as empty: the text entered on Nov 24 is a draft in
+        Play Console only.
       - Not made: Android tablet images (optional on Play), and a Pro image for Play.
 - [x] **Level chart source line** (Nov 25): it now reads "US prescribing information for semaglutide" (and the
       same for the other three), instead of naming the brand-name products, so store images carry no other
