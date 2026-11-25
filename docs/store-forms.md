@@ -11,7 +11,7 @@ _Shannon approved these answers, with the recommended option on all four decisio
 | App Store | Availability | 174 countries and regions; France off |
 | App Store | Content rights | Does not use third-party content |
 | App Store | Privacy labels | Published (Nov 25), entered in the browser: collects data; one type, Purchases (purchase history), used for Analytics and App Functionality, not linked to the user's identity, not used for tracking. Product page shows "Data Not Linked to You: Purchases" |
-| App Store | Review contact | Shannon to enter |
+| App Store | Review contact | Entered by Shannon (Nov 25); sign-in required left off |
 | Google Play | Privacy policy | Saved |
 | Google Play | Ads | Saved: no ads |
 | Google Play | Advertising ID | Saved: not used |

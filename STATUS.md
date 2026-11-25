@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 6 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
+_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 7 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -110,6 +110,11 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
         received one.
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
+- [x] **Build 7 uploaded to both stores** (Nov 25), 1.0.0 (7): build 6 plus the iPhone privacy file listing
+      Analytics beside App functionality for purchase history, so it matches the published App Store privacy
+      labels. Google Play: released to Internal testing (84.6 MB, no stray copies). App Store: uploaded to
+      TestFlight; the privacy file inside was checked. This is the build to submit. Shannon answers the
+      encryption question in TestFlight, then it gets attached to App Store version 1.0.
 - [x] **Build 6 uploaded to both stores** (Nov 25), 1.0.0 (6): build 5 plus the access code for store
       reviewers. Google Play: released to Internal testing, back to its normal size (84.6 MB, no stray
       copies). App Store: uploaded to TestFlight. Both builds were checked to contain the code's fingerprint
@@ -197,9 +202,9 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       France and content rights are in. Google Play: all App content declarations are saved and the page
       shows nothing needing attention (none sent for review). Content ratings saved (ESRB Everyone, PEGI 3);
       Sign in details saved by Shannon with the reviewer access code; Target audience 18 and over; Data safety
-      saved as final. App Store privacy labels published (Purchases, not linked, no tracking). Still open:
-      the App Store review contact. The iPhone
-      privacy file now lists Analytics beside App functionality for purchase history, and the matching
+      saved as final. App Store privacy labels published (Purchases, not linked, no tracking). Review
+      contact entered by Shannon. All forms are done on both stores. The iPhone privacy file lists Analytics
+      beside App functionality for purchase history (from build 7), and the matching
       privacy-policy sentences are live on the website (POMAWebsite PR #9, merged).
 - [x] **Access code for store reviewers** (Nov 25): Google's reviewers can't make purchases, and Play's Sign in
       details form requires a way into everything, paid features included. A store build now accepts an access
