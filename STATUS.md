@@ -188,11 +188,13 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
       saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
       went blank. Found while making screenshots. What a release build showed was not checked. Fixed in build 5.
-- [ ] **Store forms** (Nov 25): draft answers for every declaration are in
-      [docs/store-forms.md](docs/store-forms.md), waiting for Shannon's approval. Nothing is entered. Google
-      Play is asking for 11 declarations (App content); the App Store needs the privacy labels, age rating,
-      price and availability. Four decisions are listed at the top of that file. Shannon uploaded the Play
-      icon, feature graphic and phone screenshots herself on Nov 25.
+- [ ] **Store forms** (Nov 25): answers approved by Shannon; what is entered so far is in the table at the top
+      of [docs/store-forms.md](docs/store-forms.md). App Store: age rating (12+), free price, countries without
+      France and content rights are in. Google Play: 7 of 11 declarations saved (none sent for review). Still
+      open: Play's Sign in details (a decision, since Pro counts as "restricted"), which blocks Target
+      audience; Content ratings; Data safety; and the App Store privacy labels and review contact. The iPhone
+      privacy file now lists Analytics beside App functionality for purchase history, and the matching
+      privacy-policy sentences are in an open pull request on the website repo.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|

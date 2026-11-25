@@ -1,6 +1,39 @@
-# Store forms: draft answers
+# Store forms: answers
 
-_Draft of November 25, 2026. **Nothing here has been entered into either store.** These are declarations made in Shannon's name, so she approves them first. Where a form's own wording differs from this draft, the closest matching option is chosen and noted here afterwards._
+_Shannon approved these answers, with the recommended option on all four decisions, on November 25, 2026. The table below says what has been entered so far. Where a form's own wording differed from the draft, the closest matching option was chosen and is noted._
+
+## What has been entered (November 25, 2026)
+
+| Store | Form | State |
+|---|---|---|
+| App Store | Age rating questionnaire | Entered through the API. Result: 12+ |
+| App Store | Price | Free |
+| App Store | Availability | 174 countries and regions; France off |
+| App Store | Content rights | Does not use third-party content |
+| App Store | Privacy labels | **Not entered.** Apple has no API for these; they need App Store Connect in a browser |
+| App Store | Review contact | Shannon to enter |
+| Google Play | Privacy policy | Saved |
+| Google Play | Ads | Saved: no ads |
+| Google Play | Advertising ID | Saved: not used |
+| Google Play | Government apps | Saved: no |
+| Google Play | Financial features | Saved: none |
+| Google Play | Health apps | Saved: "Nutrition and weight management" and "Medication and treatment management". Play asked for no regional details |
+| Google Play | Trader status and Terms of Service | Saved: trader status applies; terms link added |
+| Google Play | Sign in details | **Not saved: needs a decision.** See below |
+| Google Play | Target audience and content | **Blocked** until Sign in details is saved |
+| Google Play | Content ratings | Not started |
+| Google Play | Data safety | Not started |
+
+Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.
+
+### The Sign in details question
+
+The draft said "all functionality is available without special access". The form words it differently: it asks whether **any part of the app is restricted**, and lists payments, subscriptions and biometric authentication as reasons to answer Yes. Aloft Pro is a paid tier, so the accurate answer is **Yes**. The form then wants instructions for reaching the restricted parts, and says Google's reviewers can't make purchases or use free trials.
+
+Options:
+1. **Answer Yes and explain.** "No account or sign-in exists. Everything except Aloft Pro is free and open. Aloft Pro (a second medication, the PDF report, CSV export) is unlocked by a Google Play purchase. The app lock is off unless the person turns it on." The reviewer sees all the free features and the Pro screen, but not the Pro features themselves.
+2. **Add a reviewer code to the app** that switches Pro on for review, and give that code in the instructions. Needs a new build. Anyone who learned the code could unlock Pro without paying.
+3. **Answer No.** Not recommended: it doesn't match the form's own wording.
 
 ## The facts the answers rest on
 
@@ -13,7 +46,7 @@ Checked against the code and the built app on November 25, 2026 (build 5):
 - **iPhone:** camera, photo library (chosen photos only) and Face ID, each with its reason shown.
 - **Audience:** adults prescribed a GLP-1 medication. Not directed at children.
 
-## Decisions needed from Shannon
+## The four decisions (all approved as recommended, Nov 25)
 
 1. **"Analytics" as a purpose for purchase history.** RevenueCat's own guidance says to tick both *App functionality* and *Analytics* for purchase history on both stores, because its dashboard shows charts of purchases. Aloft's privacy policy says "no third-party analytics or tracking tools", and the iPhone privacy manifest lists App functionality only. Recommended: tick both on the forms, add Analytics to the iPhone manifest, and add a sentence to the privacy policy ("RevenueCat also shows us totals of purchases, such as how many subscriptions are active"). The alternative is App functionality only.
 2. **Data deletion request (Google Play).** Play asks whether people can ask for their data to be deleted. Aloft holds none of their records, and "Delete all my data" in the app removes everything on the device. The only data elsewhere is the anonymous purchase record at RevenueCat. Recommended: answer that deletion can be requested, and give the support page as the way to ask.

@@ -4,7 +4,8 @@
 <dict>
 	<!-- Aloft itself: no tracking, and nothing the person logs leaves the phone. The one thing
 	     that does leave is the purchase record the store library (RevenueCat) checks for Pro;
-	     that library and the other plugins carry their own manifests for the APIs they call. -->
+	     that library and the other plugins carry their own manifests for the APIs they call.
+	     Analytics is listed because RevenueCat's dashboard shows us totals of purchases. -->
 	<key>NSPrivacyTracking</key>
 	<false/>
 	<key>NSPrivacyTrackingDomains</key>
@@ -21,6 +22,7 @@
 			<key>NSPrivacyCollectedDataTypePurposes</key>
 			<array>
 				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+				<string>NSPrivacyCollectedDataTypePurposeAnalytics</string>
 			</array>
 		</dict>
 	</array>
