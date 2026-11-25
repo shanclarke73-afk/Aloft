@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; left are the Play service account file in RevenueCat, new store builds, store listings, testing)_
+_Last updated: November 24, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 2 uploaded to both stores; left are testers and test purchases, store listings, testing)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -90,14 +90,25 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       The real upload key was made on Nov 22 (`~/AndroidKeys/aloft-upload.jks`, with `app/android/key.properties`).
 - [ ] Real stores (Nov 22: both apps now exist as **"Aloft: GLP-1 Tracker"**: Google Play app
       `4973392568712926705`, free; App Store Connect app `6838066361`, bundle ID registered). The products exist
-      in both stores and in RevenueCat (see below). Still needed: Google Play's service account file uploaded
-      to the Play app in RevenueCat (until then Play purchases can't be checked), a review screenshot on each
-      App Store product, and a test purchase on each store.
+      in both stores and in RevenueCat (see below). The RevenueCat service account
+      (`revenuecat@taxtote-prod`) has Aloft access in Play Console and its file is in RevenueCat (Nov 24);
+      RevenueCat reads the Play catalog, but its purchases check still says "package name not found",
+      probably until a release is rolled out. Still needed: a review screenshot on each App Store product, and
+      a test purchase on each store.
 - [x] **First Google Play upload** (Nov 23): 1.0.0 build 1, signed with the upload key, is in Internal testing as
       a **draft** release. Testers can't install it until the draft is rolled out in Play Console. It was built
       with an empty `ALOFT_RC_KEY` in `app/dart_defines.release.json`, so it has no purchases and the Pro screen
       says buying isn't available. Its job is to unlock creating the three products in Play. The next store build
       needs the RevenueCat Play key in that file (as `ALOFT_RC_KEY_ANDROID`) and a higher build number (`bundle exec fastlane bump`).
+- [x] **Build 2 uploaded to both stores** (Nov 24), 1.0.0 (2), the first with real purchases (RevenueCat keys
+      for each store). **Google Play:** in Internal testing as a **draft**; it replaces build 1. To roll it out,
+      Play Console still wants a tester list chosen (Internal testing → Testers) and the release confirmed.
+      **App Store:** uploaded to TestFlight for the first time. Xcode has no Apple account on this Mac, so
+      `flutter build ipa` can't sign; `fastlane ios beta` now archives with the App Store Connect key and signs
+      the store copy with the profile "com.shannonsonlinebookkeeping.aloft AppStore" (made Nov 24). The steps
+      were run by hand and worked; the rewritten lane itself has not been run end to end yet.
+      `fastlane android internal draft:true` makes the Play draft. Not yet done: testers on either store, and a
+      test purchase.
 - [x] **Google Play products** (Nov 23), all active, sold in every country Play offers except France:
       | Product ID | Kind | US price | Inside it |
       |---|---|---|---|
@@ -117,8 +128,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       Store)"; the App Store one uses the in-app purchase key already used by Tax Tote and Debt Shredder. All six
       store products are on the `pro` entitlement and in the `default` offering (Monthly, Lifetime, Annual
       packages), beside the Test Store ones. Both public keys are in `app/dart_defines.release.json` on the Mac.
-      **Not done:** the Play app in RevenueCat has no service account file yet, and RevenueCat has no App Store
-      Connect API key (optional; only for importing products and price changes).
+      **Not done:** RevenueCat has no App Store Connect API key (optional; only for importing products and
+      price changes).
 - [x] **The paywall states the free trial** (Nov 24): when the store offers this person a trial, the yearly card
       says "Best value · 14 days free", the button says "Start 14-day free trial", and the terms give the length,
       the price after it, that it renews, and that cancelling before the trial ends costs nothing. The trial is

@@ -18,4 +18,4 @@ Store builds need `app/dart_defines.release.json` (git-ignored) with the Revenue
 1. Use Homebrew's Ruby, not the one built into macOS (`brew install ruby`, with `/opt/homebrew/opt/ruby/bin` and `/opt/homebrew/lib/ruby/gems/4.0.0/bin` first on your PATH in `~/.zprofile`). Then run `bundle install` in `app/`.
 2. Copy `app/fastlane/.env.example` to `app/fastlane/.env` (git-ignored). The values are the same as Tax Tote's: the App Store Connect "fastlane" team key and the `fastlane@taxtote-prod` Google Play service account, both in `~/AppStoreKeys`. The service account needs release permission for this app in Play Console (**Users and permissions**).
 3. Android uploads need `app/android/key.properties` (the upload key); the Android lanes stop without it.
-4. Run `bundle exec fastlane ios beta` in your own Terminal: signing uses the Mac's keychain.
+4. Run `bundle exec fastlane ios beta`. Xcode needs no Apple account: the lane signs through the App Store Connect key and the Apple Distribution certificate in the Mac's keychain. If the keychain asks for permission, run it in your own Terminal.
