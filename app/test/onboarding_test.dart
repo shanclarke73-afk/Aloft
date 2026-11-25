@@ -23,7 +23,9 @@ import 'medication_store_test.dart' show tirzepatideVial;
 import 'photos_test.dart' show FakePicker;
 import 'support/wait.dart';
 
+import 'package:aloft/features/backup/backup_screen.dart';
 import 'package:aloft/util/device.dart';
+import 'package:aloft/widgets/form_widgets.dart';
 
 void main() {
   late Directory dir;
@@ -94,10 +96,16 @@ void main() {
     expect(find.textContaining('It never tells you how much to take.'), findsOneWidget);
 
     await tap(tester, const Key('get-started'));
-    expect(find.text('Step 1 of 4'), findsOneWidget);
+    // First it asks whether there is history to bring in, before asking for anything by hand.
+    expect(find.text('Step 1 of 5'), findsOneWidget);
+    expect(find.text('Bringing your history?'), findsOneWidget);
+    expect(find.byKey(const Key('shotsy-link')), findsOneWidget);
+    expect(find.byKey(const Key('restore-link')), findsOneWidget);
+    await tap(tester, const Key('start-fresh'));
+    expect(find.text('Step 2 of 5'), findsOneWidget);
     expect(find.text('What are you taking?'), findsOneWidget);
     await tap(tester, const Key('medication-later'));
-    expect(find.text('Step 2 of 4'), findsOneWidget);
+    expect(find.text('Step 3 of 5'), findsOneWidget);
     await tap(tester, const Key('weight-skip'));
     expect(find.text('Starting photos'), findsOneWidget);
     await tap(tester, const Key('onboarding-back'));
@@ -105,7 +113,7 @@ void main() {
     await tap(tester, const Key('weight-skip'));
     await tap(tester, const Key('photos-continue'));
 
-    expect(find.text('Step 4 of 4'), findsOneWidget);
+    expect(find.text('Step 5 of 5'), findsOneWidget);
     expect(find.text(medicalDisclaimer), findsOneWidget);
     expect(find.text('Lock with Face ID'), findsOneWidget);
     // The button does nothing until the box is ticked.
@@ -126,10 +134,57 @@ void main() {
     await finish(tester);
   });
 
+  testWidgets('history brought in from a file answers the medication and weight steps, which are not asked again', (
+    tester,
+  ) async {
+    await open(tester);
+    await start(tester);
+    await tap(tester, const Key('get-started'));
+    await tap(tester, const Key('restore-link'));
+    expect(find.byType(BackupScreen), findsOneWidget);
+    // Stands in for a restore: the file put a medication and two weights on the phone.
+    await tester.runAsync(() async {
+      await db.addMedication(tirzepatideVial);
+      await db.logWeight(kg: 100, measuredAt: DateTime(2026, 1, 5, 8));
+      await db.logWeight(kg: 92, measuredAt: DateTime(2026, 6, 1, 8));
+    });
+    await tester.pageBack();
+    await settle(tester);
+
+    // Straight to the first thing the file didn't cover: photos.
+    expect(find.text('Starting photos'), findsOneWidget);
+    expect(find.text('Step 4 of 5'), findsOneWidget);
+    final said = tester.widget<InfoBox>(find.byKey(const Key('brought-in'))).text;
+    expect(said, contains('1 medication, 2 weights'));
+
+    // Going back shows what came in, and never asks for the starting weight again.
+    await tap(tester, const Key('onboarding-back'));
+    expect(find.byKey(const Key('weights-here')), findsOneWidget);
+    expect(find.textContaining('2 weights are already here, starting at 220.5 lb'), findsOneWidget);
+    expect(find.byKey(const Key('start-weight')), findsNothing);
+    await tap(tester, const Key('onboarding-back'));
+    expect(find.text('Your medication'), findsOneWidget);
+    expect(find.text(tirzepatideVial.name), findsOneWidget);
+    await finish(tester);
+  });
+
+  testWidgets('backing out of the file chooser leaves the question where it was', (tester) async {
+    await open(tester);
+    await start(tester);
+    await tap(tester, const Key('get-started'));
+    await tap(tester, const Key('restore-link'));
+    await tester.pageBack();
+    await settle(tester);
+    expect(find.text('Bringing your history?'), findsOneWidget);
+    expect(find.byKey(const Key('brought-in')), findsNothing);
+    await finish(tester);
+  });
+
   testWidgets('a medication already set up is shown, and the starting weight is saved on its date', (tester) async {
     await open(tester, before: () => db.addMedication(tirzepatideVial));
     await start(tester);
     await tap(tester, const Key('get-started'));
+    await tap(tester, const Key('start-fresh'));
     expect(find.text('Your medication'), findsOneWidget);
     expect(find.text(tirzepatideVial.name), findsOneWidget);
     expect(find.byKey(const Key('medication-later')), findsNothing);

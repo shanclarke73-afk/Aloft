@@ -126,6 +126,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       Still missing in both: screenshots (they need made-up data and there is no demo mode), the Play icon
       and feature graphic, App Store review contact details, and all the forms (privacy labels, data safety,
       content and age ratings, health and exact-alarm declarations).
+- [x] **Getting started asks about history first** (Nov 25): after the welcome screen, step 1 of 5 is "Bringing
+      your history?" with Import from Shotsy, Restore an Aloft backup file, or "No, start fresh". After a file
+      comes in, Aloft goes straight to the first step it didn't answer (medication, then weight, then photos)
+      and says what it found. The weight step shows the weights that came in and only asks for goal and height.
+      The Shotsy and restore links moved here from the welcome and medication screens. Seen on the iPad
+      simulator (the question screen only); the path after a real file is covered by tests, not seen on a device.
 - [x] **Listing no longer names Shotsy** (Nov 25): the import line in both stores now says "another tracker's
       CSV export". The name stays inside the app, where people need it to pick the right file, and About says
       Aloft isn't affiliated with it.

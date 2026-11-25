@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/body_store.dart';
 import '../../data/database.dart';
 import '../../data/medication_store.dart';
+import '../../data/photo_store.dart';
+import '../../dose/dose_math.dart';
 import '../../import/shotsy_import_screen.dart';
 import '../../security/app_lock.dart';
 import '../../settings/settings.dart';
@@ -18,8 +20,10 @@ import '../medications/medication_setup_screen.dart';
 import '../progress/add_photos_screen.dart';
 import '../../util/device.dart';
 
-/// First launch (SPEC 6.1, mockups/Onboarding to OnbFinish): welcome, medication, starting
-/// weight, photos, then privacy choices and the disclaimer. Everything except the disclaimer
+/// First launch (SPEC 6.1, mockups/Onboarding to OnbFinish): welcome, bringing history in
+/// from Shotsy or a backup file, medication, starting weight, photos, then privacy choices and
+/// the disclaimer. What a file brought in is not asked for again: the steps it answers are
+/// passed over, and can still be reached with Back. Everything except the disclaimer
 /// can be skipped and done later from inside the app.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -29,8 +33,12 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  static const _lastStep = 4;
+  static const _importStep = 1, _medicationStep = 2, _weightStep = 3, _photosStep = 4, _lastStep = 5;
   int _step = 0;
+
+  /// What a Shotsy file or a backup brought in, in words, shown on the step it led to.
+  String? _broughtIn;
+  int? _broughtInStep;
 
   // Starting weight.
   final _weight = TextEditingController();
@@ -38,12 +46,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   DateTime _weightDay = DateTime.now();
   bool _weightProblem = false;
   bool _weightSaved = false;
-  late final _goal = GoalHeightDraft(
-    weightUnit: ref.read(settingsProvider).weightUnit,
-    lengthUnit: ref.read(settingsProvider).lengthUnit,
-  );
+  // Made in initState, not on first use: a file can answer the weight step so that it is never
+  // opened, and dispose must not be the first thing to touch it.
+  late final GoalHeightDraft _goal;
 
   bool _understood = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final settings = ref.read(settingsProvider);
+    _goal = GoalHeightDraft(weightUnit: settings.weightUnit, lengthUnit: settings.lengthUnit);
+  }
 
   @override
   void dispose() {
@@ -73,7 +87,58 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await settings.setWeightUnit(_unit);
     await settings.setGoalAndHeight(goalWeightKg: _goal.goalKg(_unit), heightCm: _goal.heightCm(lengthUnit));
     _weightSaved = true;
-    _go(3);
+    _go(_photosStep);
+  }
+
+  /// The weights came in with a file: only the goal and height are still to be asked.
+  Future<void> _saveGoal() async {
+    final lengthUnit = ref.read(settingsProvider).lengthUnit;
+    if (_goal.problems(_unit, lengthUnit).isNotEmpty) {
+      setState(() => _weightProblem = true);
+      return;
+    }
+    final goal = _goal.goalKg(_unit), height = _goal.heightCm(lengthUnit);
+    if (goal != null || height != null) {
+      final settings = ref.read(settingsProvider);
+      await ref
+          .read(settingsProvider.notifier)
+          .setGoalAndHeight(goalWeightKg: goal ?? settings.goalWeightKg, heightCm: height ?? settings.heightCm);
+    }
+    _go(_photosStep);
+  }
+
+  /// Opens a Shotsy file or a backup, then moves to the first step the file didn't answer.
+  Future<void> _bringIn(Future<void> Function() open) async {
+    final db = ref.read(databaseProvider);
+    Future<(int, int, int)> counts() async => (
+      (await db.watchMedications().first).length,
+      (await db.watchWeights().first).length,
+      (await db.watchPhotos().first).length,
+    );
+    final before = await counts();
+    await open();
+    if (!mounted) return;
+    final after = await counts();
+    if (!mounted || after == before) return; // Backed out, or the file added nothing.
+    final (medications, weights, photos) = after;
+    String some(int n, String one, String many) => '$n ${n == 1 ? one : many}';
+    final found = [
+      if (medications > 0) some(medications, 'medication', 'medications'),
+      if (weights > 0) some(weights, 'weight', 'weights'),
+      if (photos > 0) some(photos, 'photo', 'photos'),
+    ];
+    final step = medications == 0
+        ? _medicationStep
+        : weights == 0
+        ? _weightStep
+        : photos == 0
+        ? _photosStep
+        : _lastStep;
+    setState(() {
+      _broughtIn = 'Your history is in: ${found.join(', ')}. Aloft has set up what it could from it.';
+      _broughtInStep = step;
+      _step = step;
+    });
   }
 
   Future<void> _chooseWeightDay() async {
@@ -128,13 +193,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: switch (_step) {
-                    0 => _welcome(context),
-                    1 => _medication(context),
-                    2 => _startingWeight(context),
-                    3 => _photos(context),
-                    _ => _finish(context),
-                  },
+                  children: [
+                    if (_broughtIn != null && _step == _broughtInStep) ...[
+                      InfoBox(_broughtIn!, key: const Key('brought-in')),
+                      const SizedBox(height: 16),
+                    ],
+                    ...switch (_step) {
+                      0 => _welcome(context),
+                      _importStep => _history(context),
+                      _medicationStep => _medication(context),
+                      _weightStep => _startingWeight(context),
+                      _photosStep => _photos(context),
+                      _ => _finish(context),
+                    },
+                  ],
                 ),
               ),
             ),
@@ -209,14 +281,52 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ),
       point(Icons.timeline, 'See how far you\'ve come', 'Shots, weight and progress photos together, from day one.'),
       const SizedBox(height: 8),
-      FilledButton(key: const Key('get-started'), onPressed: () => _go(1), child: const Text('Get started')),
-      TextButton(
-        key: const Key('restore-link'),
-        onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
-        child: const Text('Have an Aloft backup file? Restore it'),
-      ),
+      FilledButton(key: const Key('get-started'), onPressed: () => _go(_importStep), child: const Text('Get started')),
       const SizedBox(height: 12),
       _small(context, 'Aloft is a tracking tool, not medical advice.\nIt never tells you how much to take.'),
+    ];
+  }
+
+  List<Widget> _history(BuildContext context) {
+    Widget choice(Key key, IconData icon, String title, String detail, Future<void> Function() open) => Card(
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        key: key,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        leading: Icon(icon, color: Theme.of(context).colorScheme.secondary),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: Text(detail),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => _bringIn(open),
+      ),
+    );
+    return [
+      _title('Bringing your history?'),
+      _lead(
+        context,
+        'If you\'ve been tracking somewhere else, start with that. Aloft sets up your medication and weights '
+        'from it, and only asks for what\'s missing.',
+      ),
+      choice(
+        const Key('shotsy-link'),
+        Icons.file_upload_outlined,
+        'Import from Shotsy',
+        'The CSV file you exported from Shotsy',
+        () => pickShotsyFile(context),
+      ),
+      choice(
+        const Key('restore-link'),
+        Icons.restore,
+        'Restore an Aloft backup file',
+        'From another $deviceWord, or one you saved earlier',
+        () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupScreen())),
+      ),
+      const SizedBox(height: 12),
+      FilledButton(
+        key: const Key('start-fresh'),
+        onPressed: () => _go(_medicationStep),
+        child: const Text('No, start fresh'),
+      ),
     ];
   }
 
@@ -252,7 +362,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
       if (medications.isNotEmpty) ...[
         const SizedBox(height: 12),
-        FilledButton(key: const Key('medication-continue'), onPressed: () => _go(2), child: const Text('Continue')),
+        FilledButton(
+          key: const Key('medication-continue'),
+          onPressed: () => _go(_weightStep),
+          child: const Text('Continue'),
+        ),
         const SizedBox(height: 16),
         _small(context, 'Taking something else as well? Add it here.', align: TextAlign.start),
         const SizedBox(height: 8),
@@ -271,18 +385,49 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ),
       choice(const Key('choose-pill'), MedicationForm.oral, 'Pill', 'Oral GLP-1s such as Rybelsus®'),
       const SizedBox(height: 8),
-      TextButton(
-        key: const Key('shotsy-link'),
-        onPressed: () => pickShotsyFile(context),
-        child: const Text('Coming from Shotsy? Import your history'),
-      ),
       if (medications.isEmpty)
-        TextButton(key: const Key('medication-later'), onPressed: () => _go(2), child: const Text('Set this up later')),
+        TextButton(
+          key: const Key('medication-later'),
+          onPressed: () => _go(_weightStep),
+          child: const Text('Set this up later'),
+        ),
     ];
   }
 
   List<Widget> _startingWeight(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    // Oldest first: the first one is where they started.
+    final had = [...?ref.watch(weightsProvider).value]..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
+    if (had.isNotEmpty && !_weightSaved) {
+      final first = had.first;
+      return [
+        _title('Where you\'re starting'),
+        InfoBox(
+          'Your ${had.length == 1 ? 'weight is' : '${had.length} weights are'} already here, starting at '
+          '${formatNumber(fromKg(first.kg, _unit), 1)} ${_unit.name} on ${formatFullDate(context, first.measuredAt)}.',
+          key: const Key('weights-here'),
+        ),
+        _lead(context, 'A goal weight and your height are optional. You can set them later in More.'),
+        GoalHeightFields(
+          draft: _goal,
+          weightUnit: _unit,
+          lengthUnit: ref.watch(settingsProvider).lengthUnit,
+          onChanged: () => setState(() {}),
+          weights: {'Starting': first.kg},
+        ),
+        if (_weightProblem)
+          for (final problem in _goal.problems(_unit, ref.watch(settingsProvider).lengthUnit))
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                problem,
+                style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600),
+              ),
+            ),
+        const SizedBox(height: 20),
+        FilledButton(key: const Key('weight-continue'), onPressed: _saveGoal, child: const Text('Continue')),
+      ];
+    }
     return [
       _title('Where you\'re starting'),
       _lead(
@@ -345,10 +490,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       const SizedBox(height: 20),
       FilledButton(
         key: const Key('weight-continue'),
-        onPressed: _weightSaved ? () => _go(3) : _saveWeight,
+        onPressed: _weightSaved ? () => _go(_photosStep) : _saveWeight,
         child: const Text('Continue'),
       ),
-      if (!_weightSaved) TextButton(key: const Key('weight-skip'), onPressed: () => _go(3), child: const Text('Skip')),
+      if (!_weightSaved)
+        TextButton(key: const Key('weight-skip'), onPressed: () => _go(_photosStep), child: const Text('Skip')),
     ];
   }
 
@@ -388,7 +534,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       const SizedBox(height: 12),
       FilledButton(
         key: const Key('photos-continue'),
-        onPressed: () => _go(4),
+        onPressed: () => _go(_lastStep),
         child: Text(count > 0 ? 'Continue' : 'Maybe later'),
       ),
       const SizedBox(height: 16),
