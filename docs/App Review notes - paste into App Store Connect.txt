@@ -1,0 +1,27 @@
+SCREEN RECORDING (iPad, latest iPadOS, TestFlight build of 1.0 (8)): <PASTE LINK HERE>
+It starts at launch and shows getting started, logging, charts, progress photos, buying Aloft Pro (sandbox) and the Pro features.
+
+1. PURPOSE AND AUDIENCE
+Aloft is a private, personal record-keeping app for adults who have been prescribed a GLP-1 medication (brand-name pens such as semaglutide or tirzepatide, compounded vials, or pills). It lets them log each dose, the injection site, weight, side effects and progress photos, and get reminders for shot days and refills. It solves a common problem for people on compounded vials: other trackers can't record a non-standard concentration or added ingredients. Users can also make a PDF summary to bring to their own healthcare provider.
+Aloft does not calculate, recommend or adjust doses. The person types in what their prescriber and label say, and the app records what they logged. It does not sell or supply medication.
+
+2. HOW TO USE IT (no login, no sample files needed)
+- There is no account or sign-in. Open the app and follow "Getting started": choose "No, start fresh", add a medication by typing it in, enter a starting weight, then accept the medical disclaimer. Every other step can be skipped.
+- Today: Log shot / Log dose, weight, side effects.
+- History: all entries, with edit and delete.
+- Charts: weight over time and an estimated medication level (clearly labelled as an estimate).
+- Progress: progress photos, stored only inside the app, never in the photo library.
+- More: My medications, reminders, app lock, Backup and restore, Delete all my data, About.
+- Paid features (Aloft Pro): More > Aloft Pro. Plans: $1.99/month, $14.99/year (14-day free trial for new subscribers) or $29.99 lifetime. A sandbox purchase unlocks a second active medication, the PDF report (More > Report for your provider) and CSV export (More > Backup and restore). Restore purchases is on the same screen.
+- The app has no user-generated content shared with others, no social features and no accounts, so there is nothing to report, block or delete beyond the person's own data (More > Delete all my data).
+
+3. EXTERNAL SERVICES
+- Apple App Store in-app purchases, handled through RevenueCat (purchase validation and entitlement only; it receives purchase history, not health data).
+- No other services: no Aloft server, no login or authentication service, no analytics or crash reporting, no ads, no AI services, no third-party data providers. Health records, photos and reminders stay on the device (encrypted with SQLCipher and excluded from iCloud Backup). Backups are files the person saves themselves.
+- The privacy policy, terms and support pages are at https://peaceofmindapps.com/aloft/
+
+4. REGIONAL DIFFERENCES
+The app works the same in every region where it is offered. Prices are Apple's local equivalents of the US prices. It is not offered in France at launch only because the French encryption declaration has not been filed yet.
+
+5. REGULATED INDUSTRY / THIRD-PARTY MATERIAL
+Aloft is a personal log, not a medical device, and it does not diagnose, treat, prescribe, dispense or give dosing advice. The disclaimer must be accepted during setup and is in More > About. Medication names are used only so people can identify what they take. The app is not affiliated with any drug manufacturer and shows no third-party logos. The estimated-level chart uses published half-life and time-to-peak figures from each medication's US prescribing information, with the source shown under the chart.
