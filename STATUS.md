@@ -1,6 +1,6 @@
 # Aloft: where we stand
 
-_Last updated: November 25, 2026 (1.0: features built; products in both stores and in RevenueCat; paywall states the trial; build 7 on both stores and purchases tested on a Pixel and an iPad; left are screenshots, store graphics and forms, and the pre-release checks)_
+_Last updated: November 25, 2026 (1.0 build 7 sent for review on both stores; waiting on Apple and Google. Pre-release checks such as the trademark search and a real-iPhone test were not done before sending)_
 
 Aloft is a private GLP-1 tracker for iPhone and Android (Flutter), for brand-name pens, compounded vials and pills,
 with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md](SPEC.md).
@@ -197,7 +197,16 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
 - [x] **Today's backup reminder no longer breaks the screen** (Nov 25): with 5 or more logs and no backup
       saved, the reminder card's two buttons could not be laid out, and in a debug build the whole Today screen
       went blank. Found while making screenshots. What a release build showed was not checked. Fixed in build 5.
-- [ ] **Store forms** (Nov 25): answers approved by Shannon; what is entered so far is in the table at the top
+- [x] **Sent for review on both stores** (Nov 25, evening). App Store: version 1.0 with build 7, the Aloft
+      Pro subscription group, both subscriptions and the lifetime purchase, submitted together (Apple says up to
+      48 hours). Release is set to automatic after approval (Apple's default). Before Apple would accept it,
+      Shannon approved: not a regulated medical device; China mainland removed from availability (it needs a
+      security assessment and AI-content filing); copyright "2026 Shannon's Online Bookkeeping, LLC".
+      Google Play: production release 7 (1.0.0) with notes "First release of Aloft.", 176 countries plus rest
+      of world (France not included), store settings set (Health & Fitness; contact email and website from the
+      Aloft web page). Managed publishing is off, so the app goes live when Google approves (Google says
+      reviews usually take up to 7 days).
+- [x] **Store forms** (Nov 25): answers approved by Shannon; what is entered so far is in the table at the top
       of [docs/store-forms.md](docs/store-forms.md). App Store: age rating (12+), free price, countries without
       France and content rights are in. Google Play: all App content declarations are saved and the page
       shows nothing needing attention (none sent for review). Content ratings saved (ESRB Everyone, PEGI 3);

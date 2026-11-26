@@ -8,10 +8,13 @@ _Shannon approved these answers, with the recommended option on all four decisio
 |---|---|---|
 | App Store | Age rating questionnaire | Entered through the API. Result: 12+ |
 | App Store | Price | Free |
-| App Store | Availability | 174 countries and regions; France off |
+| App Store | Availability | 173 countries and regions; France and China mainland off |
 | App Store | Content rights | Does not use third-party content |
+| App Store | Copyright | 2026 Shannon's Online Bookkeeping, LLC (Nov 25, same as Tax Tote) |
+| App Store | Regulated medical device | Declared not a medical device (Shannon, Nov 25) |
 | App Store | Privacy labels | Published (Nov 25), entered in the browser: collects data; one type, Purchases (purchase history), used for Analytics and App Functionality, not linked to the user's identity, not used for tracking. Product page shows "Data Not Linked to You: Purchases" |
 | App Store | Review contact | Entered by Shannon (Nov 25); sign-in required left off |
+| Google Play | Store settings | Category Health & Fitness; contact email shannon@shannonsonlinebookkeeping.com and website https://peaceofmindapps.com/aloft/ (both already public on that page); no phone |
 | Google Play | Privacy policy | Saved |
 | Google Play | Ads | Saved: no ads |
 | Google Play | Advertising ID | Saved: not used |
@@ -24,7 +27,7 @@ _Shannon approved these answers, with the recommended option on all four decisio
 | Google Play | Content ratings | Saved (Nov 25). Shannon agreed to IARC's Terms of Use; contact email is the business address. Category: All Other App Types. Every answer No except "users can purchase digital goods" (Yes; no random items). Ratings given: ESRB Everyone, PEGI 3, USK all ages, Brazil 14+, 3+ elsewhere. The questionnaire did not ask about references to medication |
 | Google Play | Data safety | Saved (Nov 25), no longer a draft: purchase history collected (not shared, not ephemeral, required; App functionality and Analytics), encrypted in transit, no accounts, deletion can be requested at `https://peaceofmindapps.com/aloft/#support`. The store preview shows "No data shared with third parties" |
 
-Play's App content page shows nothing left needing attention (Nov 25). Everything saved on Google Play is "saved, ready to send for review" in Publishing overview. Nothing has been sent for review.
+Play's App content page shows nothing left needing attention (Nov 25). All of it was sent for review on Nov 25 together with the production release (see STATUS.md).
 
 ### The Sign in details question
 
@@ -138,7 +141,7 @@ The result on the store page should read "Data Not Linked to You: Purchases".
 | Item | Draft answer |
 |---|---|
 | Price | Free, with in-app purchases |
-| Availability | All countries and regions except France (decided Nov 23) |
+| Availability | All countries and regions except France (decided Nov 23); China mainland also removed on the App Store (Nov 25) |
 | Content rights | Does not contain, show or access third-party content |
 | Encryption (each build) | Standard encryption algorithms; not available in France |
 | Regulated medical device, if asked | No |
