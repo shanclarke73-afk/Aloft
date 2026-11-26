@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -13,6 +14,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 /// A build with a different fingerprint no longer honours an old code, so changing the code in
 /// the next release switches earlier uses of it off.
 const reviewCodeFingerprint = String.fromEnvironment('ALOFT_REVIEW_CODE_SHA256');
+
+/// The fingerprint a build on [platform] uses. Apple's reviewers buy with a sandbox account, and
+/// guideline 3.1.1 doesn't allow unlocking paid features any way but in-app purchase, so iPhone
+/// and iPad builds never accept a code or show the "Have an access code?" link.
+String reviewFingerprintFor(TargetPlatform platform, String fingerprint) =>
+    platform == TargetPlatform.iOS || platform == TargetPlatform.macOS ? '' : fingerprint;
 
 /// Where "this install used the access code" is remembered.
 abstract class ReviewAccessStore {

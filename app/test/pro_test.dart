@@ -239,6 +239,16 @@ void main() {
     expect(await none.granted(), isFalse);
   });
 
+  test('iPhone and iPad builds never accept an access code; Android builds keep theirs', () {
+    final code = ReviewAccess.fingerprintOf('harbor-42');
+    expect(reviewFingerprintFor(TargetPlatform.iOS, code), isEmpty);
+    expect(reviewFingerprintFor(TargetPlatform.macOS, code), isEmpty);
+    expect(reviewFingerprintFor(TargetPlatform.android, code), code);
+    expect(reviewFingerprintFor(TargetPlatform.android, ''), isEmpty);
+    final ios = ReviewAccess(fingerprint: reviewFingerprintFor(TargetPlatform.iOS, code), store: MemoryReviewAccessStore());
+    expect(ios.offered, isFalse);
+  });
+
   testWidgets('a store reviewer\'s access code switches Pro on, and a wrong one says so', (tester) async {
     final review = ReviewAccess(fingerprint: ReviewAccess.fingerprintOf('harbor-42'), store: MemoryReviewAccessStore());
     final container = await show(tester, store: FakeStore(), review: review);

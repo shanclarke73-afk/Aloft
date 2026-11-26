@@ -59,9 +59,13 @@ Future<void> main() async {
             proStoreProvider.overrideWithValue(const DemoProStore())
           else if (canUseStoreKey(storeKey, releaseBuild: kReleaseMode))
             proStoreProvider.overrideWithValue(RevenueCatStore(storeKey, lock)),
-          // Store builds accept the reviewers' access code; a build without one never mentions it.
+          // Android store builds accept the reviewers' access code; iPhone builds and builds
+          // without one never mention it.
           reviewAccessProvider.overrideWithValue(
-            ReviewAccess(fingerprint: reviewCodeFingerprint, store: const SecureReviewAccessStore()),
+            ReviewAccess(
+              fingerprint: reviewFingerprintFor(defaultTargetPlatform, reviewCodeFingerprint),
+              store: const SecureReviewAccessStore(),
+            ),
           ),
           photoFolderProvider.overrideWithValue(photoFolder),
         ],

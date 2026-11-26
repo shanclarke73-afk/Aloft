@@ -110,6 +110,14 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
         received one.
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
+- [ ] **App Review: 2.1 Information Needed** (Nov 26): Apple held 1.0 (build 7) until it gets a screen recording
+      from a real device and answers to six questions in the App Review notes. No bug was reported. The reply
+      and recording plan are in [docs/app-review-response.md](docs/app-review-response.md). On this branch the
+      iPhone/iPad build no longer shows "Have an access code?" or accepts the code (guideline 3.1.1); Android
+      keeps it for Google's reviewers. Next: on the Mac, run the tests, `bundle exec fastlane bump`, and
+      `fastlane ios beta` for build 8. Then record the video on the iPad with build 8, paste the notes, attach
+      build 8 and resubmit. Not checked: the tests (Flutter isn't on the Windows PC) and the link actually
+      missing on the iPad.
 - [x] **Build 7 uploaded to both stores** (Nov 25), 1.0.0 (7): build 6 plus the iPhone privacy file listing
       Analytics beside App functionality for purchase history, so it matches the published App Store privacy
       labels. Google Play: released to Internal testing (84.6 MB, no stray copies). App Store: uploaded to
