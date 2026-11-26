@@ -115,10 +115,12 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       and recording plan are in [docs/app-review-response.md](docs/app-review-response.md). **Mac session:
       follow [docs/mac-handoff-build-8.md](docs/mac-handoff-build-8.md).** On this branch the
       iPhone/iPad build no longer shows "Have an access code?" or accepts the code (guideline 3.1.1); Android
-      keeps it for Google's reviewers. Next: on the Mac, run the tests, `bundle exec fastlane bump`, and
-      `fastlane ios beta` for build 8. Then record the video on the iPad with build 8, paste the notes, attach
-      build 8 and resubmit. Not checked: the tests (Flutter isn't on the Windows PC) and the link actually
-      missing on the iPad.
+      keeps it for Google's reviewers. Done on the Mac (Nov 26): `flutter analyze` clean, all 197 tests pass;
+      on the iPad simulator, More → Aloft Pro shows no "Have an access code?" link even with the real code's
+      fingerprint built in (Android not checked). Build number raised to 1.0.0 (8). The TestFlight upload
+      failed at export with `errSecInternalComponent` (the Mac's keychain is locked to Claude's session), so
+      Shannon runs `bundle exec fastlane ios beta` in her own Terminal. Then: answer the encryption question
+      for build 8, record the video on the iPad with build 8, paste the notes, attach build 8 and resubmit.
 - [x] **Build 7 uploaded to both stores** (Nov 25), 1.0.0 (7): build 6 plus the iPhone privacy file listing
       Analytics beside App functionality for purchase history, so it matches the published App Store privacy
       labels. Google Play: released to Internal testing (84.6 MB, no stray copies). App Store: uploaded to
