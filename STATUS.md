@@ -112,7 +112,8 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
 - [ ] **App Review: 2.1 Information Needed** (Nov 26): Apple held 1.0 (build 7) until it gets a screen recording
       from a real device and answers to six questions in the App Review notes. No bug was reported. The reply
-      and recording plan are in [docs/app-review-response.md](docs/app-review-response.md). On this branch the
+      and recording plan are in [docs/app-review-response.md](docs/app-review-response.md). **Mac session:
+      follow [docs/mac-handoff-build-8.md](docs/mac-handoff-build-8.md).** On this branch the
       iPhone/iPad build no longer shows "Have an access code?" or accepts the code (guideline 3.1.1); Android
       keeps it for Google's reviewers. Next: on the Mac, run the tests, `bundle exec fastlane bump`, and
       `fastlane ios beta` for build 8. Then record the video on the iPad with build 8, paste the notes, attach
