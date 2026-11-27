@@ -125,7 +125,7 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
       are pasted in App Store Connect (video link still to add; text also in
       `docs/App Review notes - paste into App Store Connect.txt`). Still to do (Shannon): answer the encryption
       question for build 8, record the video on the iPad with build 8 (planned Nov 27), add the link to the
-      notes, switch the version to build 8, reply to Apple and resubmit.
+      notes, switch the version to build 8, reply to Apple and resubmit. **Done Nov 27: video link added (public), build 8 attached, resubmitted by Shannon.**
 - [x] **Build 7 uploaded to both stores** (Nov 25), 1.0.0 (7): build 6 plus the iPhone privacy file listing
       Analytics beside App functionality for purchase history, so it matches the published App Store privacy
       labels. Google Play: released to Internal testing (84.6 MB, no stray copies). App Store: uploaded to
