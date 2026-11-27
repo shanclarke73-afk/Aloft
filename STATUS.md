@@ -110,6 +110,22 @@ with progress photos. Tagline: *From titration to thriving.* Full plan: [SPEC.md
         `projects/taxtote-prod/topics/Play-Store-Notifications`, all product types) and RevenueCat has
         received one.
       Not tested: Restore purchases, Manage subscription, a subscription ending, or the trial on the App Store.
+- [ ] **App Review: 2.1 Information Needed** (Nov 26): Apple held 1.0 (build 7) until it gets a screen recording
+      from a real device and answers to six questions in the App Review notes. No bug was reported. The reply
+      and recording plan are in [docs/app-review-response.md](docs/app-review-response.md). **Mac session:
+      follow [docs/mac-handoff-build-8.md](docs/mac-handoff-build-8.md).** On this branch the
+      iPhone/iPad build no longer shows "Have an access code?" or accepts the code (guideline 3.1.1); Android
+      keeps it for Google's reviewers. Done on the Mac (Nov 26): `flutter analyze` clean, all 197 tests pass;
+      on the iPad simulator, More → Aloft Pro shows no "Have an access code?" link even with the real code's
+      fingerprint built in (Android not checked). **Build 1.0.0 (8) is in TestFlight** (processed Nov 26). The
+      old signing keychain would not unlock, so a new Apple Distribution certificate (6JAN395BQ2) was made in
+      `~/Library/Keychains/release-signing.keychain-db` (password in `~/AppStoreKeys`) with profile
+      "Aloft AppStore 2026-11-26 1727"; build 8 was exported by hand and uploaded. **The `ios beta` lane in the
+      Fastfile still uses the old profile and must be updated before the next iOS build.** The review notes
+      are pasted in App Store Connect (video link still to add; text also in
+      `docs/App Review notes - paste into App Store Connect.txt`). Still to do (Shannon): answer the encryption
+      question for build 8, record the video on the iPad with build 8 (planned Nov 27), add the link to the
+      notes, switch the version to build 8, reply to Apple and resubmit. **Done Nov 27: video link added (public), build 8 attached, resubmitted by Shannon.**
 - [x] **Build 7 uploaded to both stores** (Nov 25), 1.0.0 (7): build 6 plus the iPhone privacy file listing
       Analytics beside App functionality for purchase history, so it matches the published App Store privacy
       labels. Google Play: released to Internal testing (84.6 MB, no stray copies). App Store: uploaded to
